@@ -1,0 +1,1032 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumina Events</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      body { font-family: 'Inter', sans-serif; }
+      /* Smooth View Transitions */
+      .view-section {
+      animation: fadeIn 0.4s ease-out;
+      }
+      @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+      }
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar { width: 6px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: #e4e4e7; border-radius: 3px; }
+      /* Glassmorphism utilities */
+      .glass {
+      background: rgba(255, 255, 255, 0.9);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      }
+      .glass-dark {
+      background: rgba(24, 24, 27, 0.8);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      }
+      /* Premium Gradient Text */
+      .text-gradient {
+      background: linear-gradient(to right, #7c3aed, #2563eb);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      }
+      .bg-gradient-premium {
+      background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
+      }
+    </style>
+  <link id="all-fonts-link-font-geist" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-geist">.font-geist { font-family: 'Geist', sans-serif !important; }</style><link id="all-fonts-link-font-roboto" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-roboto">.font-roboto { font-family: 'Roboto', sans-serif !important; }</style><link id="all-fonts-link-font-montserrat" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-montserrat">.font-montserrat { font-family: 'Montserrat', sans-serif !important; }</style><link id="all-fonts-link-font-poppins" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-poppins">.font-poppins { font-family: 'Poppins', sans-serif !important; }</style><link id="all-fonts-link-font-playfair" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&amp;display=swap"><style id="all-fonts-style-font-playfair">.font-playfair { font-family: 'Playfair Display', serif !important; }</style><link id="all-fonts-link-font-instrument-serif" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:wght@400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-instrument-serif">.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }</style><link id="all-fonts-link-font-merriweather" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&amp;display=swap"><style id="all-fonts-style-font-merriweather">.font-merriweather { font-family: 'Merriweather', serif !important; }</style><link id="all-fonts-link-font-bricolage" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-bricolage">.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }</style><link id="all-fonts-link-font-jakarta" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-jakarta">.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }</style><link id="all-fonts-link-font-manrope" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-manrope">.font-manrope { font-family: 'Manrope', sans-serif !important; }</style><link id="all-fonts-link-font-space-grotesk" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-space-grotesk">.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }</style><link id="all-fonts-link-font-work-sans" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-work-sans">.font-work-sans { font-family: 'Work Sans', sans-serif !important; }</style><link id="all-fonts-link-font-pt-serif" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&amp;display=swap"><style id="all-fonts-style-font-pt-serif">.font-pt-serif { font-family: 'PT Serif', serif !important; }</style><link id="all-fonts-link-font-geist-mono" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-geist-mono">.font-geist-mono { font-family: 'Geist Mono', monospace !important; }</style><link id="all-fonts-link-font-space-mono" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;display=swap"><style id="all-fonts-style-font-space-mono">.font-space-mono { font-family: 'Space Mono', monospace !important; }</style><link id="all-fonts-link-font-quicksand" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-quicksand">.font-quicksand { font-family: 'Quicksand', sans-serif !important; }</style><link id="all-fonts-link-font-nunito" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-nunito">.font-nunito { font-family: 'Nunito', sans-serif !important; }</style></head>
+  <body class="bg-zinc-50 text-zinc-900 antialiased selection:bg-violet-100 selection:text-violet-900">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-40 border-b border-zinc-200 glass">
+      <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-2 cursor-pointer" onclick="navigateTo('home')">
+          <div class="h-8 w-8 bg-gradient-premium text-white flex items-center justify-center rounded-lg shadow-lg shadow-indigo-500/20">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="sparkles" class="lucide lucide-sparkles w-4 h-4"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path><path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle></svg>
+          </div>
+          <span class="font-bold tracking-tight text-lg">Lumina</span>
+        </div>
+        <div class="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-500">
+          <button onclick="navigateTo('home')" class="hover:text-violet-600 transition-colors">
+            Explore
+          </button>
+          <button class="hover:text-violet-600 transition-colors" onclick="navigateTo('home'); setTimeout(function(){document.getElementById('events-grid').scrollIntoView({behavior:'smooth', block:'start'});}, 100)">
+            Venues
+          </button>
+          <button class="hover:text-violet-600 transition-colors" onclick="navigateTo('vendors')">
+            Vendors
+          </button>
+          <button class="hover:text-violet-600 transition-colors" onclick="navigateTo('bookings')">
+            My Bookings
+          </button>
+        </div>
+        <div class="flex items-center gap-3">
+          <button class="text-sm font-medium text-zinc-600 hover:text-zinc-900">
+            Sign In
+          </button>
+          <button class="bg-zinc-900 text-white text-xs font-semibold py-2 px-4 rounded-full hover:bg-zinc-800 transition-all shadow-md">
+            Get Started
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main id="app" class="pt-24 pb-20 px-6 max-w-7xl mx-auto min-h-screen">
+      <!-- VIEW: HOME PAGE -->
+      <div id="home-view" class="view-section">
+        <!-- Hero -->
+        <div class="text-center max-w-3xl mr-auto mb-16 ml-auto pt-8">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-50 text-violet-700 text-xs font-medium mb-6 border border-violet-100">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" class="lucide lucide-star w-3 h-3"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+            Premium Event Planning
+          </span>
+          <h1 class="text-4xl md:text-6xl font-bold tracking-tight text-zinc-900 mb-6 leading-tight">
+            Curated experiences,
+            <br>
+            <span class="text-gradient">flawlessly executed.</span>
+          </h1>
+          <p class="text-zinc-500 text-lg mb-8 max-w-2xl mx-auto font-light">
+            Plan weddings, corporate summits, and intimate gatherings with our
+            all-in-one platform. Choose your vibe, we handle the rest.
+          </p>
+
+          <!-- Search/Filter Bar -->
+          <div class="bg-white p-2 rounded-full shadow-lg border border-zinc-100 max-w-xl mx-auto flex items-center gap-2">
+            <div class="pl-4 text-zinc-400">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="search" class="lucide lucide-search w-5 h-5"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg>
+            </div>
+            <input type="text" placeholder="What are you planning?" class="flex-1 bg-transparent border-none focus:ring-0 text-sm py-2 px-2 text-zinc-800 placeholder:text-zinc-400 focus:outline-none">
+            <button class="bg-gradient-premium text-white rounded-full p-2.5 hover:opacity-90 transition-opacity">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" class="lucide lucide-arrow-right w-4 h-4" aria-label="Search"><title>Search</title><path d="M5 12h14" class=""></path><path d="m12 5 7 7-7 7" class=""></path></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Categories Grid -->
+        <div class="mb-8 flex items-center justify-between">
+          <h2 class="text-xl font-semibold tracking-tight">
+            Trending Collections
+          </h2>
+          <button class="text-xs font-medium text-violet-600 hover:text-violet-700 flex items-center gap-1">
+            View all
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          </button>
+        </div>
+
+        <div id="events-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div class="group bg-white rounded-xl border border-zinc-200 overflow-hidden hover:shadow-xl hover:border-violet-200 transition-all duration-300">
+                  <div class="h-48 overflow-hidden relative">
+                      <img src="https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="Royal Wedding" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                      <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-zinc-800 shadow-sm">
+                          From ₹150,000
+                      </div>
+                  </div>
+                  <div class="p-5">
+                      <h3 class="text-lg font-bold text-zinc-900 mb-2">Royal Wedding</h3>
+                      <p class="text-sm text-zinc-500 line-clamp-2 mb-4 h-10">A fairytale beginning. Full-service planning including luxury floral arrangements, gourmet catering, and live orchestration.</p>
+
+                      <div class="flex items-center gap-3 pt-4 border-t border-zinc-100">
+                          <button onclick="openDetails('wedding')" class="flex-1 text-xs font-semibold text-zinc-600 bg-zinc-100 py-2.5 rounded-lg hover:bg-zinc-200 transition-colors">
+                              View Details
+                          </button>
+                          <button onclick="quickPlan('wedding')" class="flex-1 text-xs font-semibold text-white bg-zinc-900 py-2.5 rounded-lg hover:bg-zinc-800 transition-colors shadow-md">
+                              Plan Now
+                          </button>
+                      </div>
+                  </div>
+              </div>
+          
+              <div class="group bg-white rounded-xl border border-zinc-200 overflow-hidden hover:shadow-xl hover:border-violet-200 transition-all duration-300">
+                  <div class="h-48 overflow-hidden relative">
+                      <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="Corporate Summit" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                      <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-zinc-800 shadow-sm">
+                          From ₹80,000
+                      </div>
+                  </div>
+                  <div class="p-5">
+                      <h3 class="text-lg font-bold text-zinc-900 mb-2">Corporate Summit</h3>
+                      <p class="text-sm text-zinc-500 line-clamp-2 mb-4 h-10">Professional conference setup with high-tech AV support, breakout rooms, and executive networking luncheons.</p>
+
+                      <div class="flex items-center gap-3 pt-4 border-t border-zinc-100">
+                          <button onclick="openDetails('corporate')" class="flex-1 text-xs font-semibold text-zinc-600 bg-zinc-100 py-2.5 rounded-lg hover:bg-zinc-200 transition-colors">
+                              View Details
+                          </button>
+                          <button onclick="quickPlan('corporate')" class="flex-1 text-xs font-semibold text-white bg-zinc-900 py-2.5 rounded-lg hover:bg-zinc-800 transition-colors shadow-md">
+                              Plan Now
+                          </button>
+                      </div>
+                  </div>
+              </div>
+          
+              <div class="group bg-white rounded-xl border border-zinc-200 overflow-hidden hover:shadow-xl hover:border-violet-200 transition-all duration-300">
+                    <div class="h-48 overflow-hidden relative">
+                      <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Milestone Birthday" class="group-hover:scale-105 transition-transform duration-500 w-full h-full object-cover">
+                      <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-zinc-800 shadow-sm">
+                        From ₹50,000
+                      </div>
+                    </div>
+                  <div class="p-5">
+                      <h3 class="text-lg font-bold text-zinc-900 mb-2">Milestone Birthday</h3>
+                      <p class="text-sm text-zinc-500 line-clamp-2 mb-4 h-10">Celebrate in style. Includes thematic decor, custom cake design, DJ services, and interactive photo booths.</p>
+
+                      <div class="flex items-center gap-3 pt-4 border-t border-zinc-100">
+                          <button onclick="openDetails('birthday')" class="flex-1 text-xs font-semibold text-zinc-600 bg-zinc-100 py-2.5 rounded-lg hover:bg-zinc-200 transition-colors">
+                              View Details
+                          </button>
+                          <button onclick="quickPlan('birthday')" class="flex-1 text-xs font-semibold text-white bg-zinc-900 py-2.5 rounded-lg hover:bg-zinc-800 transition-colors shadow-md">
+                              Plan Now
+                          </button>
+                      </div>
+                  </div>
+              </div>
+          
+              <div class="group bg-white rounded-xl border border-zinc-200 overflow-hidden hover:shadow-xl hover:border-violet-200 transition-all duration-300">
+                    <div class="h-48 overflow-hidden relative">
+                      <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Engagement Party" class="group-hover:scale-105 transition-transform duration-500 w-full h-full object-cover">
+                      <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-zinc-800 shadow-sm">
+                        From ₹60,000
+                      </div>
+                    </div>
+                  <div class="p-5">
+                      <h3 class="text-lg font-bold text-zinc-900 mb-2">Engagement Party</h3>
+                      <p class="text-sm text-zinc-500 line-clamp-2 mb-4 h-10">Intimate and elegant. Cocktail hour setup, ambient lighting, and acoustic music for the perfect proposal celebration.</p>
+
+                      <div class="flex items-center gap-3 pt-4 border-t border-zinc-100">
+                          <button onclick="openDetails('engagement')" class="flex-1 text-xs font-semibold text-zinc-600 bg-zinc-100 py-2.5 rounded-lg hover:bg-zinc-200 transition-colors">
+                              View Details
+                          </button>
+                          <button onclick="quickPlan('engagement')" class="flex-1 text-xs font-semibold text-white bg-zinc-900 py-2.5 rounded-lg hover:bg-zinc-800 transition-colors shadow-md">
+                              Plan Now
+                          </button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div id="details-view" class="view-section hidden pt-4">
+        <button onclick="navigateTo('home')" class="mb-8 text-sm font-medium text-zinc-500 hover:text-zinc-900 flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-left" class="lucide lucide-arrow-left w-4 h-4"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+          Back to Collections
+        </button>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          <div class="rounded-2xl overflow-hidden shadow-2xl h-[400px] lg:h-[600px] relative">
+            <img id="detail-img" src="" class="w-full h-full object-cover" alt="Event Image" title="Event Image">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+          </div>
+          <div class="flex flex-col pt-4">
+            <div class="mb-6">
+              <span class="px-3 py-1 rounded-full bg-violet-100 text-violet-700 text-xs font-bold uppercase tracking-wide">
+                Selected Experience
+              </span>
+            </div>
+            <h1 id="detail-title" class="text-4xl md:text-5xl font-bold text-zinc-900 mb-4 tracking-tight"></h1>
+            <p class="text-2xl font-light text-zinc-500 mb-8">
+              Starting from
+              <span id="detail-price" class="font-semibold text-zinc-900"></span>
+            </p>
+            <p id="detail-desc" class="text-zinc-600 leading-relaxed text-lg mb-10 font-light"></p>
+
+            <div class="grid grid-cols-2 gap-6 mb-12">
+              <div class="bg-white p-5 rounded-2xl border border-zinc-100 shadow-sm">
+                <div class="flex items-center gap-2 text-violet-600 mb-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="users" class="lucide lucide-users w-5 h-5"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                  <span class="text-xs font-bold uppercase tracking-wider">
+                    Capacity
+                  </span>
+                </div>
+                <p id="detail-capacity" class="text-zinc-900 font-semibold">
+                  0 Guests
+                </p>
+              </div>
+              <div class="bg-white p-5 rounded-2xl border border-zinc-100 shadow-sm">
+                <div class="flex items-center gap-2 text-violet-600 mb-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="clock" class="lucide lucide-clock w-5 h-5"><path d="M12 6v6l4 2"></path><circle cx="12" cy="12" r="10"></circle></svg>
+                  <span class="text-xs font-bold uppercase tracking-wider">
+                    Duration
+                  </span>
+                </div>
+                <p class="text-zinc-900 font-semibold">Flexible</p>
+              </div>
+            </div>
+
+            <button onclick="startBooking()" class="w-full bg-zinc-900 text-white text-lg font-semibold py-4 rounded-xl hover:bg-zinc-800 transition-all shadow-xl flex justify-center items-center gap-2 hover:scale-[1.01] active:scale-[0.99]">
+              Plan This Event
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" class="lucide lucide-arrow-right w-5 h-5"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW: BOOKING FORM -->
+      <div id="booking-view" class="view-section hidden max-w-3xl mx-auto">
+        <button onclick="navigateTo('details')" class="mb-6 text-xs font-medium text-zinc-500 hover:text-zinc-900 flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-left" class="lucide lucide-arrow-left w-3 h-3"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+          Back to details
+        </button>
+
+        <div class="bg-white rounded-2xl shadow-xl border border-zinc-100 overflow-hidden">
+          <div class="h-2 bg-zinc-100 w-full">
+            <div class="h-full bg-gradient-premium w-1/2 transition-all duration-500" id="progress-bar"></div>
+          </div>
+
+          <div class="p-8">
+            <!-- Event Summary Card -->
+            <div class="flex items-center gap-4 bg-zinc-50 p-4 rounded-xl border border-zinc-200 mb-8">
+              <img id="booking-img-preview" src="" alt="Event" class="w-20 h-20 rounded-lg object-cover shadow-sm">
+              <div>
+                <h3 id="booking-event-name" class="text-lg font-bold text-zinc-900">
+                  Event Name
+                </h3>
+                <p class="text-sm text-zinc-500">
+                  Base Package:
+                  <span id="booking-base-price" class="font-semibold text-violet-600">
+                    ₹0
+                  </span>
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3 mb-6">
+              <div class="h-10 w-10 rounded-full bg-violet-50 text-violet-600 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="calendar-plus" class="lucide lucide-calendar-plus w-5 h-5"><path d="M16 19h6"></path><path d="M16 2v4"></path><path d="M19 16v6"></path><path d="M21 12.598V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8.5"></path><path d="M3 10h18"></path><path d="M8 2v4"></path></svg>
+              </div>
+              <div>
+                <h2 class="text-xl font-semibold text-zinc-900">
+                  Customize Preferences
+                </h2>
+                <p class="text-xs text-zinc-500">Complete the details below</p>
+              </div>
+            </div>
+
+            <form id="booking-form" class="space-y-6">
+              <!-- User Details -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-medium text-zinc-500 mb-1.5">
+                    Full Name
+                  </label>
+                  <input type="text" id="user-name" class="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all" placeholder="Jane Doe">
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-zinc-500 mb-1.5">
+                    Mobile Number
+                  </label>
+                  <input type="tel" id="user-phone" class="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all" placeholder="+91 00000 00000">
+                </div>
+              </div>
+
+              <!-- Event Specifics -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-medium text-zinc-500 mb-1.5">
+                    Date
+                  </label>
+                  <input type="date" id="event-date" class="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all" title="Select event date" placeholder="Select date">
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-zinc-500 mb-1.5">
+                    City
+                  </label>
+                  <input type="text" id="user-city" class="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all" placeholder="Mumbai, MH">
+                </div>
+              </div>
+
+              <!-- Venue & Guests -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-medium text-zinc-500 mb-1.5">
+                    Select Venue Class
+                  </label>
+                  <select id="venue-select" class="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all" title="Select venue class">
+                    <option value="standard">Standard Hall (₹25,000)</option>
+                    <option value="premium">Premium Banquet (₹60,000)</option>
+                    <option value="luxury">Luxury Estate (₹1,50,000)</option>
+                    <option value="outdoor">Outdoor Garden (₹75,000)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-zinc-500 mb-1.5">
+                    Guest Count
+                  </label>
+                  <input type="number" id="guest-count" value="50" min="10" class="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all" title="Enter guest count" placeholder="Number of guests">
+                </div>
+              </div>
+
+              <!-- Vendors -->
+              <div>
+                <label class="block text-xs font-medium text-zinc-500 mb-3">
+                  Select Vendors &amp; Services
+                </label>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="vendor-list">
+              <label class="relative border border-zinc-200 rounded-lg p-3 flex items-center gap-3 cursor-pointer hover:border-violet-300 hover:bg-violet-50/50 transition-all select-none">
+                  <input type="checkbox" name="vendor" value="catering" class="w-4 h-4 text-violet-600 rounded focus:ring-violet-500 border-zinc-300">
+                  <div class="flex-1">
+                      <div class="flex justify-between items-center">
+                          <span class="text-sm font-medium text-zinc-800 flex items-center gap-2">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="utensils" class="lucide lucide-utensils w-3.5 h-3.5 text-zinc-400"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg> Premium Catering
+                          </span>
+                          <span class="text-xs font-semibold text-zinc-500">₹1,500/pp</span>
+                      </div>
+                  </div>
+              </label>
+          
+              <label class="relative border border-zinc-200 rounded-lg p-3 flex items-center gap-3 cursor-pointer hover:border-violet-300 hover:bg-violet-50/50 transition-all select-none">
+                  <input type="checkbox" name="vendor" value="decor" class="w-4 h-4 text-violet-600 rounded focus:ring-violet-500 border-zinc-300">
+                  <div class="flex-1">
+                      <div class="flex justify-between items-center">
+                          <span class="text-sm font-medium text-zinc-800 flex items-center gap-2">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="flower-2" class="lucide lucide-flower-2 w-3.5 h-3.5 text-zinc-400"><path d="M12 5a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3-3v1M9 8a3 3 0 1 0 3 3M9 8h1m5 0a3 3 0 1 1-3 3m3-3h-1m-2 3v-1"></path><circle cx="12" cy="8" r="2"></circle><path d="M12 10v12"></path><path d="M12 22c4.2 0 7-1.667 7-5-4.2 0-7 1.667-7 5Z"></path><path d="M12 22c-4.2 0-7-1.667-7-5 4.2 0 7 1.667 7 5Z"></path></svg> Floral &amp; Decor
+                          </span>
+                          <span class="text-xs font-semibold text-zinc-500">₹50,000</span>
+                      </div>
+                  </div>
+              </label>
+          
+              <label class="relative border border-zinc-200 rounded-lg p-3 flex items-center gap-3 cursor-pointer hover:border-violet-300 hover:bg-violet-50/50 transition-all select-none">
+                  <input type="checkbox" name="vendor" value="photo" class="w-4 h-4 text-violet-600 rounded focus:ring-violet-500 border-zinc-300">
+                  <div class="flex-1">
+                      <div class="flex justify-between items-center">
+                          <span class="text-sm font-medium text-zinc-800 flex items-center gap-2">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="camera" class="lucide lucide-camera w-3.5 h-3.5 text-zinc-400"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"></path><circle cx="12" cy="13" r="3"></circle></svg> Photography
+                          </span>
+                          <span class="text-xs font-semibold text-zinc-500">₹30,000</span>
+                      </div>
+                  </div>
+              </label>
+          
+              <label class="relative border border-zinc-200 rounded-lg p-3 flex items-center gap-3 cursor-pointer hover:border-violet-300 hover:bg-violet-50/50 transition-all select-none">
+                  <input type="checkbox" name="vendor" value="music" class="w-4 h-4 text-violet-600 rounded focus:ring-violet-500 border-zinc-300">
+                  <div class="flex-1">
+                      <div class="flex justify-between items-center">
+                          <span class="text-sm font-medium text-zinc-800 flex items-center gap-2">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="music" class="lucide lucide-music w-3.5 h-3.5 text-zinc-400"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg> DJ &amp; Sound System
+                          </span>
+                          <span class="text-xs font-semibold text-zinc-500">₹25,000</span>
+                      </div>
+                  </div>
+              </label>
+          
+              <label class="relative border border-zinc-200 rounded-lg p-3 flex items-center gap-3 cursor-pointer hover:border-violet-300 hover:bg-violet-50/50 transition-all select-none">
+                  <input type="checkbox" name="vendor" value="light" class="w-4 h-4 text-violet-600 rounded focus:ring-violet-500 border-zinc-300">
+                  <div class="flex-1">
+                      <div class="flex justify-between items-center">
+                          <span class="text-sm font-medium text-zinc-800 flex items-center gap-2">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="lightbulb" class="lucide lucide-lightbulb w-3.5 h-3.5 text-zinc-400"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg> Ambient Lighting
+                          </span>
+                          <span class="text-xs font-semibold text-zinc-500">₹15,000</span>
+                      </div>
+                  </div>
+              </label>
+          </div>
+              </div>
+
+              <div class="pt-4 border-t border-zinc-100 flex justify-end">
+                <button type="button" onclick="goToPayment()" class="bg-zinc-900 hover:bg-zinc-800 text-white text-sm font-semibold py-2.5 px-6 rounded-lg transition-all shadow-md flex items-center gap-2">
+                  Review &amp; Pay
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" class="lucide lucide-arrow-right w-4 h-4"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW: PAYMENT PAGE -->
+      <div id="payment-view" class="view-section hidden max-w-4xl mx-auto">
+        <button onclick="navigateTo('booking')" class="mb-6 text-xs font-medium text-zinc-500 hover:text-zinc-900 flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-left" class="lucide lucide-arrow-left w-3 h-3"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+          Back to customization
+        </button>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Summary Card -->
+          <div class="md:col-span-1 space-y-4">
+            <div class="bg-zinc-50 p-6 rounded-2xl border border-zinc-200">
+              <h3 class="text-sm font-semibold text-zinc-900 uppercase tracking-wider mb-4">
+                Order Summary
+              </h3>
+
+              <div class="space-y-3 mb-6">
+                <div class="flex justify-between text-sm">
+                  <span class="text-zinc-500">Base Event</span>
+                  <span class="font-medium text-zinc-900" id="summary-base-price">
+                    ₹0
+                  </span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-zinc-500">Venue Fee</span>
+                  <span class="font-medium text-zinc-900" id="summary-venue-price">
+                    ₹0
+                  </span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-zinc-500">Guest Services</span>
+                  <span class="font-medium text-zinc-900" id="summary-guest-price">
+                    ₹0
+                  </span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-zinc-500">Vendors</span>
+                  <span class="font-medium text-zinc-900" id="summary-vendor-price">
+                    ₹0
+                  </span>
+                </div>
+              </div>
+
+              <div class="border-t border-zinc-200 pt-4 flex justify-between items-center">
+                <span class="text-base font-bold text-zinc-900">Total</span>
+                <span class="text-xl font-bold text-violet-600" id="summary-total">
+                  ₹0
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Form -->
+          <div class="md:col-span-2">
+            <div class="bg-white p-8 rounded-2xl shadow-xl border border-zinc-100">
+              <h2 class="text-xl font-semibold text-zinc-900 mb-6">
+                Payment Details
+              </h2>
+
+              <!-- Tabs -->
+              <div class="flex gap-4 mb-6">
+                <button id="tab-card" onclick="switchPaymentMethod('card')" class="flex-1 py-3 px-4 rounded-lg bg-violet-50 text-violet-700 border border-violet-200 text-sm font-medium flex items-center justify-center gap-2 transition-all">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="credit-card" class="lucide lucide-credit-card w-4 h-4"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>
+                  Card
+                </button>
+                <button id="tab-upi" onclick="switchPaymentMethod('upi')" class="flex-1 py-3 px-4 rounded-lg bg-white text-zinc-500 border border-zinc-200 text-sm font-medium hover:bg-zinc-50 flex items-center justify-center gap-2 transition-all">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="smartphone" class="lucide lucide-smartphone w-4 h-4"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"></rect><path d="M12 18h.01"></path></svg>
+                  UPI / Wallets
+                </button>
+              </div>
+
+              <!-- Dummy Form -->
+              <div class="space-y-5" id="card-form">
+                <div>
+                  <label class="block text-xs font-medium text-zinc-500 mb-1.5">
+                    Card Number
+                  </label>
+                  <div class="relative">
+                    <input type="text" placeholder="0000 0000 0000 0000" class="w-full pl-10 bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="credit-card" class="lucide lucide-credit-card absolute left-3 top-2.5 w-4 h-4 text-zinc-400"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>
+                  </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs font-medium text-zinc-500 mb-1.5">
+                      Expiry
+                    </label>
+                    <input type="text" placeholder="MM/YY" class="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-medium text-zinc-500 mb-1.5">
+                      CVC
+                    </label>
+                    <input type="text" placeholder="123" class="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-zinc-500 mb-1.5">
+                    Cardholder Name
+                  </label>
+                  <input type="text" placeholder="Name on card" class="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500">
+                </div>
+              </div>
+              <div id="upi-form" class="space-y-5 hidden">
+                <div>
+                  <label class="block text-xs font-medium text-zinc-500 mb-1.5">
+                    UPI ID
+                  </label>
+                  <div class="relative">
+                    <input type="text" placeholder="username@oksbi" class="w-full pl-10 bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="smartphone" class="lucide lucide-smartphone absolute left-3 top-2.5 w-4 h-4 text-zinc-400"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"></rect><path d="M12 18h.01"></path></svg>
+                  </div>
+                  <p class="text-[10px] text-zinc-400 mt-2">
+                    Enter your VPA to receive a payment request on your phone.
+                  </p>
+                </div>
+                <div class="p-6 bg-zinc-50 rounded-xl border border-zinc-200 text-center">
+                  <p class="text-xs font-medium text-zinc-500 mb-3">
+                    Or Scan QR Code
+                  </p>
+                  <div class="w-32 h-32 bg-white mx-auto border border-zinc-200 rounded-lg flex items-center justify-center shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="qr-code" class="lucide lucide-qr-code w-16 h-16 text-zinc-800"><rect width="5" height="5" x="3" y="3" rx="1"></rect><rect width="5" height="5" x="16" y="3" rx="1"></rect><rect width="5" height="5" x="3" y="16" rx="1"></rect><path d="M21 16h-3a2 2 0 0 0-2 2v3"></path><path d="M21 21v.01"></path><path d="M12 7v3a2 2 0 0 1-2 2H7"></path><path d="M3 12h.01"></path><path d="M12 3h.01"></path><path d="M12 16v.01"></path><path d="M16 12h1"></path><path d="M21 12v.01"></path><path d="M12 21v-1"></path></svg>
+                  </div>
+                  <p class="text-[10px] text-zinc-400 mt-3">
+                    Scan with any UPI app
+                  </p>
+                </div>
+              </div>
+
+              <button onclick="processPayment()" class="w-full mt-8 bg-gradient-premium text-white font-semibold py-3 rounded-lg shadow-lg hover:opacity-90 transition-opacity flex justify-center items-center gap-2">
+                <span id="pay-btn-text">Pay Securely</span>
+                <div id="pay-spinner" class="hidden animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></div>
+              </button>
+
+              <p class="text-[10px] text-center text-zinc-400 mt-4 flex justify-center items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="lock" class="lucide lucide-lock w-3 h-3"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                Payments are encrypted and secure.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW: SUCCESS PAGE -->
+      <div id="success-view" class="view-section hidden max-w-xl mx-auto text-center pt-10">
+        <div class="h-20 w-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check" class="lucide lucide-check w-10 h-10"><path d="M20 6 9 17l-5-5"></path></svg>
+        </div>
+        <h2 class="text-3xl font-bold text-zinc-900 mb-2">
+          Booking Confirmed!
+        </h2>
+        <p class="text-zinc-500 mb-8">
+          Your event has been successfully scheduled. We've sent a confirmation
+          email.
+        </p>
+
+        <div class="bg-white rounded-xl shadow-lg border border-zinc-200 p-6 text-left relative overflow-hidden">
+          <div class="absolute top-0 right-0 h-24 w-24 bg-gradient-premium opacity-5 -translate-y-1/2 translate-x-1/2 rounded-full"></div>
+
+          <div class="flex justify-between items-start mb-6 border-b border-zinc-100 pb-4">
+            <div>
+              <p class="text-xs text-zinc-400 uppercase tracking-wider">
+                Booking ID
+              </p>
+              <p class="text-lg font-mono font-medium text-zinc-900" id="success-id">
+                #EVT-8392
+              </p>
+            </div>
+            <div class="text-right">
+              <div class="h-12 w-12 bg-zinc-100 rounded-lg flex items-center justify-center ml-auto">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="qr-code" class="lucide lucide-qr-code w-6 h-6 text-zinc-800"><rect width="5" height="5" x="3" y="3" rx="1"></rect><rect width="5" height="5" x="16" y="3" rx="1"></rect><rect width="5" height="5" x="3" y="16" rx="1"></rect><path d="M21 16h-3a2 2 0 0 0-2 2v3"></path><path d="M21 21v.01"></path><path d="M12 7v3a2 2 0 0 1-2 2H7"></path><path d="M3 12h.01"></path><path d="M12 3h.01"></path><path d="M12 16v.01"></path><path d="M16 12h1"></path><path d="M21 12v.01"></path><path d="M12 21v-1"></path></svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-4 text-sm">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <p class="text-xs text-zinc-400">Event Type</p>
+                <p class="font-medium text-zinc-900" id="success-event">
+                  Wedding
+                </p>
+              </div>
+              <div>
+                <p class="text-xs text-zinc-400">Date</p>
+                <p class="font-medium text-zinc-900" id="success-date">
+                  Oct 24, 2024
+                </p>
+              </div>
+              <div>
+                <p class="text-xs text-zinc-400">Guests</p>
+                <p class="font-medium text-zinc-900" id="success-guests">150</p>
+              </div>
+              <div>
+                <p class="text-xs text-zinc-400">Total Paid</p>
+                <p class="font-medium text-violet-600" id="success-amount">
+                  ₹4,500
+                </p>
+              </div>
+            </div>
+
+            <div class="pt-4 mt-2">
+              <p class="text-xs text-zinc-400 mb-2">Included Vendors</p>
+              <div class="flex flex-wrap gap-2" id="success-vendors">
+                <!-- Tags -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 flex gap-4 justify-center">
+          <button onclick="window.print()" class="px-6 py-2.5 border border-zinc-300 rounded-lg text-sm font-medium text-zinc-600 hover:bg-zinc-50 transition-colors flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="printer" class="lucide lucide-printer w-4 h-4"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect></svg>
+            Print Receipt
+          </button>
+          <button onclick="resetApp()" class="px-6 py-2.5 bg-zinc-900 text-white rounded-lg text-sm font-medium hover:bg-zinc-800 transition-colors shadow-lg">
+            Back to Home
+          </button>
+        </div>
+      </div>
+      <div id="vendors-view" class="view-section hidden pt-8">
+        <div class="max-w-7xl mx-auto">
+          <div class="text-center mb-12">
+            <span class="px-3 py-1 rounded-full bg-violet-100 text-violet-700 text-xs font-bold uppercase tracking-wide">
+              Our Partners
+            </span>
+            <h2 class="text-3xl font-bold text-zinc-900 mt-4">
+              Premium Vendor Network
+            </h2>
+            <p class="text-zinc-500 mt-2">
+              Handpicked services for your perfect event.
+            </p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white p-6 rounded-xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
+              <div class="h-12 w-12 bg-violet-50 text-violet-600 rounded-lg flex items-center justify-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="utensils" class="lucide lucide-utensils w-6 h-6"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg>
+              </div>
+              <h3 class="font-bold text-lg text-zinc-900">Elite Catering</h3>
+              <p class="text-sm text-zinc-500 mt-2">
+                Michelin-star rated culinary teams.
+              </p>
+            </div>
+            <div class="bg-white p-6 rounded-xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
+              <div class="h-12 w-12 bg-pink-50 text-pink-600 rounded-lg flex items-center justify-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="flower-2" class="lucide lucide-flower-2 w-6 h-6"><path d="M12 5a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3-3v1M9 8a3 3 0 1 0 3 3M9 8h1m5 0a3 3 0 1 1-3 3m3-3h-1m-2 3v-1"></path><circle cx="12" cy="8" r="2"></circle><path d="M12 10v12"></path><path d="M12 22c4.2 0 7-1.667 7-5-4.2 0-7 1.667-7 5Z"></path><path d="M12 22c-4.2 0-7-1.667-7-5 4.2 0 7 1.667 7 5Z"></path></svg>
+              </div>
+              <h3 class="font-bold text-lg text-zinc-900">Artisan Florals</h3>
+              <p class="text-sm text-zinc-500 mt-2">
+                Breathtaking arrangements and decor.
+              </p>
+            </div>
+            <div class="bg-white p-6 rounded-xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
+              <div class="h-12 w-12 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="music" class="lucide lucide-music w-6 h-6"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+              </div>
+              <h3 class="font-bold text-lg text-zinc-900">
+                Live Entertainment
+              </h3>
+              <p class="text-sm text-zinc-500 mt-2">
+                DJs, bands, and performers.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="bookings-view" class="view-section hidden pt-8">
+        <div class="max-w-md mx-auto text-center py-20">
+          <div class="h-20 w-20 bg-zinc-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="calendar-off" class="lucide lucide-calendar-off w-8 h-8 text-zinc-400"><path d="M4.2 4.2A2 2 0 0 0 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 1.82-1.18"></path><path d="M21 15.5V6a2 2 0 0 0-2-2H9.5"></path><path d="M16 2v4"></path><path d="M3 10h7"></path><path d="M21 10h-5.5"></path><path d="m2 2 20 20"></path></svg>
+          </div>
+          <h2 class="text-2xl font-bold text-zinc-900 mb-2">
+            No Upcoming Bookings
+          </h2>
+          <p class="text-zinc-500 mb-8">
+            You haven't scheduled any events yet.
+          </p>
+          <button onclick="navigateTo('home')" class="bg-zinc-900 text-white px-6 py-3 rounded-xl font-medium hover:bg-zinc-800 transition-colors shadow-lg">
+            Find an Event
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Details Modal -->
+
+    <script>
+      // Init Icons
+      lucide.createIcons();
+
+      // Data Models (Updated with Rupee pricing)
+      const events = [
+          {
+              id: 'wedding',
+              title: 'Royal Wedding',
+              price: 150000,
+              image: 'https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              desc: 'A fairytale beginning. Full-service planning including luxury floral arrangements, gourmet catering, and live orchestration.',
+              capacity: '100 - 1000 Guests'
+          },
+          {
+              id: 'corporate',
+              title: 'Corporate Summit',
+              price: 80000,
+              image: 'https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              desc: 'Professional conference setup with high-tech AV support, breakout rooms, and executive networking luncheons.',
+              capacity: '50 - 2000 Attendees'
+          },
+          {
+              id: 'birthday',
+              title: 'Milestone Birthday',
+              price: 50000,
+              image: 'https://images.unsplash.com/photo-1530103862676-de3c9a59af57?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              desc: 'Celebrate in style. Includes thematic decor, custom cake design, DJ services, and interactive photo booths.',
+              capacity: '20 - 150 Guests'
+          },
+          {
+              id: 'engagement',
+              title: 'Engagement Party',
+              price: 60000,
+              image: 'https://images.unsplash.com/photo-1522673607200-1645062cd958?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              desc: 'Intimate and elegant. Cocktail hour setup, ambient lighting, and acoustic music for the perfect proposal celebration.',
+              capacity: '30 - 100 Guests'
+          }
+      ];
+
+      const vendors = [
+          { id: 'catering', name: 'Premium Catering', price: 1500, icon: 'utensils' }, // per head
+          { id: 'decor', name: 'Floral & Decor', price: 50000, icon: 'flower-2' }, // fixed
+          { id: 'photo', name: 'Photography', price: 30000, icon: 'camera' }, // fixed
+          { id: 'music', name: 'DJ & Sound System', price: 25000, icon: 'music' }, // fixed
+          { id: 'light', name: 'Ambient Lighting', price: 15000, icon: 'lightbulb' } // fixed
+      ];
+
+      // State
+      let currentEvent = null;
+      let bookingData = {};
+
+      // DOM Elements
+      const grid = document.getElementById('events-grid');
+      const vendorList = document.getElementById('vendor-list');
+
+      // --- Initialization ---
+      function init() {
+          renderEvents();
+          renderVendors();
+      }
+
+      function renderEvents() {
+          grid.innerHTML = events.map(e => `
+              <div class="group bg-white rounded-xl border border-zinc-200 overflow-hidden hover:shadow-xl hover:border-violet-200 transition-all duration-300">
+                  <div class="h-48 overflow-hidden relative">
+                      <img src="${e.image}" alt="${e.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                      <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-zinc-800 shadow-sm">
+                          From ₹${e.price.toLocaleString()}
+                      </div>
+                  </div>
+                  <div class="p-5">
+                      <h3 class="text-lg font-bold text-zinc-900 mb-2">${e.title}</h3>
+                      <p class="text-sm text-zinc-500 line-clamp-2 mb-4 h-10">${e.desc}</p>
+
+                      <div class="flex items-center gap-3 pt-4 border-t border-zinc-100">
+                          <button onclick="openDetails('${e.id}')" class="flex-1 text-xs font-semibold text-zinc-600 bg-zinc-100 py-2.5 rounded-lg hover:bg-zinc-200 transition-colors">
+                              View Details
+                          </button>
+                          <button onclick="quickPlan('${e.id}')" class="flex-1 text-xs font-semibold text-white bg-zinc-900 py-2.5 rounded-lg hover:bg-zinc-800 transition-colors shadow-md">
+                              Plan Now
+                          </button>
+                      </div>
+                  </div>
+              </div>
+          `).join('');
+          lucide.createIcons();
+      }
+
+      function renderVendors() {
+          vendorList.innerHTML = vendors.map(v => `
+              <label class="relative border border-zinc-200 rounded-lg p-3 flex items-center gap-3 cursor-pointer hover:border-violet-300 hover:bg-violet-50/50 transition-all select-none">
+                  <input type="checkbox" name="vendor" value="${v.id}" class="w-4 h-4 text-violet-600 rounded focus:ring-violet-500 border-zinc-300">
+                  <div class="flex-1">
+                      <div class="flex justify-between items-center">
+                          <span class="text-sm font-medium text-zinc-800 flex items-center gap-2">
+                              <i data-lucide="${v.icon}" class="w-3.5 h-3.5 text-zinc-400"></i> ${v.name}
+                          </span>
+                          <span class="text-xs font-semibold text-zinc-500">₹${v.price.toLocaleString()}${v.id === 'catering' ? '/pp' : ''}</span>
+                      </div>
+                  </div>
+              </label>
+          `).join('');
+          lucide.createIcons();
+      }
+
+      // --- Navigation Logic ---
+      function navigateTo(viewId) {
+          // Hide all views
+          ['home-view', 'details-view', 'booking-view', 'payment-view', 'success-view'].forEach(id => {
+              document.getElementById(id).classList.add('hidden');
+          });
+          // Show target view
+          const target = document.getElementById(viewId + '-view');
+          target.classList.remove('hidden');
+
+          // Scroll to top
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // --- Details Logic ---
+      function openDetails(id) {
+          currentEvent = events.find(e => e.id === id);
+
+          document.getElementById('detail-img').src = currentEvent.image;
+          document.getElementById('detail-title').textContent = currentEvent.title;
+          document.getElementById('detail-price').textContent = '₹' + currentEvent.price.toLocaleString();
+          document.getElementById('detail-desc').textContent = currentEvent.desc;
+          document.getElementById('detail-capacity').textContent = currentEvent.capacity;
+
+          navigateTo('details');
+      }
+
+      // --- Booking Logic ---
+      function quickPlan(id) {
+          currentEvent = events.find(e => e.id === id);
+          startBooking();
+      }
+
+      function startBookingFromDetails() {
+          startBooking();
+      }
+
+      function startBooking() {
+          document.getElementById('booking-event-name').textContent = currentEvent.title;
+          document.getElementById('booking-base-price').textContent = '₹' + currentEvent.price.toLocaleString();
+          document.getElementById('booking-img-preview').src = currentEvent.image;
+
+          document.getElementById('progress-bar').style.width = '50%';
+
+          // Set today's date + 1 month as default
+          const d = new Date();
+          d.setMonth(d.getMonth() + 1);
+          document.getElementById('event-date').valueAsDate = d;
+
+          navigateTo('booking');
+      }
+
+      function calculateTotal() {
+          const guestCount = parseInt(document.getElementById('guest-count').value) || 0;
+          const venueSelect = document.getElementById('venue-select');
+          // Venue Prices in INR (Matched to HTML options)
+          let venueCost = 0;
+          switch(venueSelect.value) {
+              case 'standard': venueCost = 25000; break;
+              case 'premium': venueCost = 60000; break;
+              case 'luxury': venueCost = 150000; break;
+              case 'outdoor': venueCost = 75000; break;
+              default: venueCost = 25000;
+          }
+
+          let vendorTotal = 0;
+          const selectedVendors = [];
+          const checkboxes = document.querySelectorAll('input[name="vendor"]:checked');
+
+          checkboxes.forEach(cb => {
+              const vendor = vendors.find(v => v.id === cb.value);
+              if (vendor) {
+                  selectedVendors.push(vendor);
+                  if (vendor.id === 'catering') {
+                      vendorTotal += vendor.price * guestCount;
+                  } else {
+                      vendorTotal += vendor.price;
+                  }
+              }
+          });
+
+          // Base Event Price
+          const basePrice = currentEvent.price;
+          const guestServiceFee = guestCount * 500; // ₹500 service fee per head
+
+          const total = basePrice + venueCost + guestServiceFee + vendorTotal;
+
+          return {
+              basePrice,
+              venueCost,
+              guestServiceFee,
+              vendorTotal,
+              total,
+              selectedVendors,
+              venueName: venueSelect.options[venueSelect.selectedIndex].text.split('(')[0].trim(),
+              guestCount
+          };
+      }
+
+      function goToPayment() {
+          // Validation (Basic)
+          const name = document.getElementById('user-name').value;
+          if (!name) { alert('Please enter your name'); return; } // Basic check
+
+          const calculations = calculateTotal();
+          bookingData = { ...calculations };
+
+          // Update Payment UI
+          document.getElementById('summary-base-price').textContent = `₹${calculations.basePrice.toLocaleString()}`;
+          document.getElementById('summary-venue-price').textContent = `₹${calculations.venueCost.toLocaleString()}`;
+          document.getElementById('summary-guest-price').textContent = `₹${calculations.guestServiceFee.toLocaleString()}`;
+          document.getElementById('summary-vendor-price').textContent = `₹${calculations.vendorTotal.toLocaleString()}`;
+          document.getElementById('summary-total').textContent = `₹${calculations.total.toLocaleString()}`;
+
+          document.getElementById('pay-btn-text').textContent = `Pay ₹${calculations.total.toLocaleString()}`;
+          document.getElementById('progress-bar').style.width = '100%';
+
+          navigateTo('payment');
+      }
+
+      // --- Payment & Success Logic ---
+      function processPayment() {
+          const btnText = document.getElementById('pay-btn-text');
+          const spinner = document.getElementById('pay-spinner');
+
+          // Loading State
+          btnText.classList.add('hidden');
+          spinner.classList.remove('hidden');
+
+          // Simulate API call
+          setTimeout(() => {
+              // Generate Receipt Data
+              const bookingId = '#EVT-' + Math.floor(1000 + Math.random() * 9000);
+              const date = document.getElementById('event-date').value;
+
+              document.getElementById('success-id').textContent = bookingId;
+              document.getElementById('success-event').textContent = currentEvent.title;
+              document.getElementById('success-date').textContent = date;
+              document.getElementById('success-guests').textContent = bookingData.guestCount;
+              document.getElementById('success-amount').textContent = `₹${bookingData.total.toLocaleString()}`;
+
+              const vendorTags = document.getElementById('success-vendors');
+              vendorTags.innerHTML = bookingData.selectedVendors.map(v =>
+                  `<span class="px-2 py-1 bg-zinc-100 rounded text-[10px] text-zinc-600 border border-zinc-200">${v.name}</span>`
+              ).join('') || '<span class="text-xs text-zinc-400">No extras selected</span>';
+
+              // Reset Button
+              btnText.classList.remove('hidden');
+              spinner.classList.add('hidden');
+
+              navigateTo('success');
+          }, 2000);
+      }
+
+      function resetApp() {
+          // Reset Forms
+          document.getElementById('booking-form').reset();
+          document.querySelectorAll('input[name="vendor"]').forEach(cb => cb.checked = false);
+          navigateTo('home');
+      }
+
+      // Run Init
+      init();
+    </script>
+
+    <script>
+      function navigateTo(viewId){document.querySelectorAll('.view-section').forEach(el=>el.classList.add('hidden'));const t=document.getElementById(viewId+'-view');if(t){t.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});if(typeof lucide!=='undefined')lucide.createIcons();}else{console.warn('View not found:',viewId);}}
+    </script>
+
+    <script>
+      function switchPaymentMethod(method) {
+        const cardForm = document.getElementById('card-form');
+        const upiForm = document.getElementById('upi-form');
+        const cardTab = document.getElementById('tab-card');
+        const upiTab = document.getElementById('tab-upi');
+        const activeClasses = ['bg-violet-50', 'text-violet-700', 'border-violet-200'];
+        const inactiveClasses = ['bg-white', 'text-zinc-500', 'border-zinc-200', 'hover:bg-zinc-50'];
+
+        const setTabState = (tab, isActive) => {
+          tab.className = 'flex-1 py-3 px-4 rounded-lg text-sm font-medium flex items-center justify-center gap-2 transition-all border ' +
+            (isActive ? activeClasses.join(' ') : inactiveClasses.join(' '));
+        };
+
+        if (method === 'card') {
+          cardForm.classList.remove('hidden');
+          upiForm.classList.add('hidden');
+          setTabState(cardTab, true);
+          setTabState(upiTab, false);
+        } else {
+          cardForm.classList.add('hidden');
+          upiForm.classList.remove('hidden');
+          setTabState(cardTab, false);
+          setTabState(upiTab, true);
+        }
+        if (window.lucide) lucide.createIcons();
+      }
+      if (window.lucide) lucide.createIcons();
+    </script>
+  
+</body></html>
+                 
