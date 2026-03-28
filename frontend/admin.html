@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumina Events - Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-zinc-50">
+    <div id="app" class="min-h-screen">
+        <!-- Navigation -->
+        <nav class="bg-white border-b border-zinc-200 sticky top-0 z-40">
+            <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <div class="h-8 w-8 bg-gradient-to-r from-violet-600 to-blue-600 rounded text-white flex items-center justify-center">
+                        <span class="font-bold">L</span>
+                    </div>
+                    <span class="font-bold text-lg">Lumina Admin</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button onclick="location.href='/'" class="text-sm text-zinc-600 hover:text-zinc-900">
+                        Back to App
+                    </button>
+                    <button onclick="logout()" class="text-sm text-red-600 hover:text-red-700 font-medium">
+                        Sign Out
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="max-w-7xl mx-auto px-6 py-8">
+            <!-- Dashboard Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                <!-- Stat Cards -->
+                <div class="bg-white p-6 rounded-lg border border-zinc-200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-zinc-600">Total Users</p>
+                            <p class="text-3xl font-bold" id="totalUsers">0</p>
+                        </div>
+                        <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 12H9m0 0l3-3m-3 3l-3-3m9 1H9" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg border border-zinc-200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-zinc-600">Total Bookings</p>
+                            <p class="text-3xl font-bold" id="totalBookings">0</p>
+                        </div>
+                        <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2m0 0V3a2 2 0 00-2-2h-2a2 2 0 00-2 2v2z" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg border border-zinc-200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-zinc-600">Revenue</p>
+                            <p class="text-3xl font-bold" id="totalRevenue">₹0</p>
+                        </div>
+                        <svg class="w-8 h-8 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg border border-zinc-200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-zinc-600">Conversion Rate</p>
+                            <p class="text-3xl font-bold" id="conversionRate">0%</p>
+                        </div>
+                        <svg class="w-8 h-8 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bookings Management -->
+            <div class="bg-white rounded-lg border border-zinc-200 p-6 mb-8">
+                <h2 class="text-xl font-bold mb-4">Recent Bookings</h2>
+                <div id="bookingsTable" class="overflow-x-auto">
+                    <p class="text-zinc-500">Loading bookings...</p>
+                </div>
+            </div>
+
+            <!-- Users Management -->
+            <div class="bg-white rounded-lg border border-zinc-200 p-6">
+                <h2 class="text-xl font-bold mb-4">Recent Users</h2>
+                <div id="usersTable" class="overflow-x-auto">
+                    <p class="text-zinc-500">Loading users...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { apiClient } from '../js/api-enhanced.js';
+
+        // Initialize dashboard
+        async function loadDashboard() {
+            try {
+                // Check auth
+                const token = localStorage.getItem('luminaToken');
+                if (!token) {
+                    location.href = '/';
+                    return;
+                }
+
+                // Load stats
+                const stats = await apiClient.getAdminStats();
+                document.getElementById('totalUsers').textContent = stats.totalUsers;
+                document.getElementById('totalBookings').textContent = stats.totalBookings;
+                document.getElementById('totalRevenue').textContent = `₹${stats.totalRevenue.toLocaleString()}`;
+                document.getElementById('conversionRate').textContent = `${stats.conversionRate}%`;
+
+                // Load bookings
+                const bookings = await apiClient.getAdminBookings();
+                renderBookingsTable(bookings.bookings);
+
+                // Load users
+                const users = await apiClient.getAdminUsers();
+                renderUsersTable(users.users);
+
+            } catch (error) {
+                console.error('Dashboard load error:', error);
+                location.href = '/';
+            }
+        }
+
+        function renderBookingsTable(bookings) {
+            if (!bookings.length) {
+                document.getElementById('bookingsTable').innerHTML = '<p class="text-zinc-500">No bookings yet</p>';
+                return;
+            }
+
+            const html = `
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="border-b border-zinc-200">
+                            <th class="text-left py-3 px-4 font-semibold">Reference</th>
+                            <th class="text-left py-3 px-4 font-semibold">User</th>
+                            <th class="text-left py-3 px-4 font-semibold">Event</th>
+                            <th class="text-left py-3 px-4 font-semibold">Amount</th>
+                            <th class="text-left py-3 px-4 font-semibold">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${bookings.map(b => `
+                            <tr class="border-b border-zinc-100 hover:bg-zinc-50">
+                                <td class="py-3 px-4">${b.bookingRef}</td>
+                                <td class="py-3 px-4">${b.userId?.name || 'Unknown'}</td>
+                                <td class="py-3 px-4">${b.eventCategory}</td>
+                                <td class="py-3 px-4">₹${b.totalAmount.toLocaleString()}</td>
+                                <td class="py-3 px-4">
+                                    <span class="px-2 py-1 rounded text-xs font-medium ${
+                                        b.paymentStatus === 'completed' 
+                                            ? 'bg-green-100 text-green-700' 
+                                            : 'bg-yellow-100 text-yellow-700'
+                                    }">
+                                        ${b.paymentStatus.toUpperCase()}
+                                    </span>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            document.getElementById('bookingsTable').innerHTML = html;
+        }
+
+        function renderUsersTable(users) {
+            if (!users.length) {
+                document.getElementById('usersTable').innerHTML = '<p class="text-zinc-500">No users yet</p>';
+                return;
+            }
+
+            const html = `
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="border-b border-zinc-200">
+                            <th class="text-left py-3 px-4 font-semibold">Name</th>
+                            <th class="text-left py-3 px-4 font-semibold">Email</th>
+                            <th class="text-left py-3 px-4 font-semibold">Event Interest</th>
+                            <th class="text-left py-3 px-4 font-semibold">Verified</th>
+                            <th class="text-left py-3 px-4 font-semibold">Joined</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${users.map(u => `
+                            <tr class="border-b border-zinc-100 hover:bg-zinc-50">
+                                <td class="py-3 px-4">${u.name}</td>
+                                <td class="py-3 px-4">${u.email}</td>
+                                <td class="py-3 px-4">${u.eventInterest}</td>
+                                <td class="py-3 px-4">
+                                    ${u.isVerified ? '✅' : '⏳'}
+                                </td>
+                                <td class="py-3 px-4 text-xs text-zinc-500">
+                                    ${new Date(u.createdAt).toLocaleDateString()}
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            document.getElementById('usersTable').innerHTML = html;
+        }
+
+        async function logout() {
+            localStorage.removeItem('luminaToken');
+            localStorage.removeItem('luminaUser');
+            location.href = '/';
+        }
+
+        // Load dashboard on startup
+        loadDashboard();
+    </script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "lumina-events",
+  "version": "2.0.0",
+  "description": "Event Planning Platform - Frontend",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint frontend/js --ext .js"
+  },
+  "keywords": ["events", "planning", "vite"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^4.3.0"
+  },
+  "dependencies": {
+    "stripe": "^12.0.0"
+  }
+}

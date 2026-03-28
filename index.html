@@ -56,21 +56,21 @@
           <button onclick="navigateTo('home')" class="hover:text-violet-600 transition-colors">
             Explore
           </button>
-          <button class="hover:text-violet-600 transition-colors" onclick="navigateTo('home'); setTimeout(function(){document.getElementById('categories-grid').scrollIntoView({behavior:'smooth', block:'start'});}, 100)">
+          <button class="hover:text-violet-600 transition-colors" onclick="if(checkAuth('view venues')) { navigateTo('home'); setTimeout(function(){document.getElementById('categories-grid').scrollIntoView({behavior:'smooth', block:'start'});}, 100); }">
             Venues
           </button>
-          <button class="hover:text-violet-600 transition-colors" onclick="navigateTo('vendors')">
+          <button class="hover:text-violet-600 transition-colors" onclick="if(checkAuth('view vendors')) { navigateTo('vendors'); }">
             Vendors
           </button>
-          <button class="hover:text-violet-600 transition-colors" onclick="navigateTo('bookings')">
+          <button class="hover:text-violet-600 transition-colors" onclick="if(checkAuth('view bookings')) { navigateTo('bookings'); renderBookings(); }">
             My Bookings
           </button>
         </div>
         <div class="flex items-center gap-3">
-          <button class="text-sm font-medium text-zinc-600 hover:text-zinc-900">
+          <button onclick="navigateTo('signin')" class="text-sm font-medium text-zinc-600 hover:text-zinc-900">
             Sign In
           </button>
-          <button class="bg-zinc-900 text-white text-xs font-semibold py-2 px-4 rounded-full hover:bg-zinc-800 transition-all shadow-md">
+          <button onclick="navigateTo('getstarted')" class="bg-zinc-900 text-white text-xs font-semibold py-2 px-4 rounded-full hover:bg-zinc-800 transition-all shadow-md">
             Get Started
           </button>
         </div>
@@ -79,6 +79,148 @@
 
     <!-- Main Container -->
     <main id="app" class="pt-24 pb-20 px-6 max-w-7xl mx-auto min-h-screen">
+      <!-- VIEW: SIGN IN PAGE -->
+      <div id="signin-view" class="view-section hidden">
+        <div class="max-w-md mx-auto">
+          <div class="text-center mb-8">
+            <div class="h-16 w-16 bg-gradient-premium text-white flex items-center justify-center rounded-xl shadow-lg shadow-indigo-500/20 mx-auto mb-6">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="sparkles" class="lucide lucide-sparkles w-8 h-8"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path><path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle></svg>
+            </div>
+            <h1 class="text-3xl font-bold text-zinc-900 mb-2">Welcome Back</h1>
+            <p class="text-zinc-500">Sign in to your Lumina account</p>
+          </div>
+
+          <form id="signin-form" onsubmit="handleSignIn(event)" class="space-y-5">
+            <div>
+              <label class="block text-sm font-medium text-zinc-700 mb-2">Email Address</label>
+              <input type="email" id="signin-email" required placeholder="you@example.com" class="w-full px-4 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-zinc-700 mb-2">Password</label>
+              <input type="password" id="signin-password" required placeholder="••••••••" class="w-full px-4 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white">
+            </div>
+            <div class="flex items-center justify-between text-sm">
+              <label class="flex items-center gap-2 text-zinc-600">
+                <input type="checkbox" class="rounded border-zinc-300">
+                Remember me
+              </label>
+              <a href="#" class="text-violet-600 hover:text-violet-700 font-medium">Forgot password?</a>
+            </div>
+            <button type="submit" class="w-full py-3 bg-gradient-premium text-white font-semibold rounded-xl hover:opacity-90 transition-opacity shadow-lg">
+              Sign In
+            </button>
+          </form>
+
+          <div class="my-6 relative">
+            <div class="absolute inset-0 flex items-center">
+              <div class="w-full border-t border-zinc-200"></div>
+            </div>
+            <div class="relative flex justify-center text-sm">
+              <span class="px-2 bg-white text-zinc-500">Or continue with</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-3">
+            <button type="button" title="Sign in with Google" onclick="handleSocialLogin('Google')" class="py-2.5 border border-zinc-200 rounded-lg hover:bg-zinc-50 transition-colors flex items-center justify-center gap-2">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+              </svg>
+              <span class="text-xs font-medium hidden sm:inline">Google</span>
+            </button>
+            <button type="button" title="Sign in with Apple" onclick="handleSocialLogin('Apple')" class="py-2.5 border border-zinc-200 rounded-lg hover:bg-zinc-50 transition-colors flex items-center justify-center gap-2">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.05 13.5c-.91 0-1.74.56-2.08 1.42.54 1.22 1.64 2.15 2.95 2.15.89 0 1.71-.33 2.33-.87-.17-.95-.95-1.7-1.83-1.7zm-8.1 0c-.88 0-1.65.75-1.82 1.7.62.54 1.44.87 2.32.87 1.31 0 2.41-.93 2.95-2.15-.34-.86-1.17-1.42-2.08-1.42zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+              </svg>
+              <span class="text-xs font-medium hidden sm:inline">Apple</span>
+            </button>
+            <button type="button" title="Sign in with GitHub" onclick="handleSocialLogin('GitHub')" class="py-2.5 border border-zinc-200 rounded-lg hover:bg-zinc-50 transition-colors flex items-center justify-center gap-2">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.405 1.02.006 2.047.139 3.006.405 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v 3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+              <span class="text-xs font-medium hidden sm:inline">GitHub</span>
+            </button>
+          </div>
+
+          <p class="text-center text-sm text-zinc-600 mt-6">
+            Don't have an account?
+            <button onclick="navigateTo('getstarted')" class="text-violet-600 hover:text-violet-700 font-semibold">Get started free
+            </button>
+          </p>
+        </div>
+      </div>
+
+      <!-- VIEW: GET STARTED PAGE -->
+      <div id="getstarted-view" class="view-section hidden">
+        <div class="max-w-2xl mx-auto">
+          <div class="text-center mb-12">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-50 text-violet-700 text-xs font-medium mb-6 border border-violet-100">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="zap" class="lucide lucide-zap w-3 h-3"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
+              Get Started with Lumina
+            </span>
+            <h1 class="text-4xl font-bold text-zinc-900 mb-4">Plan Your Perfect Event</h1>
+            <p class="text-lg text-zinc-500 max-w-xl mx-auto">Join thousands of happy event planners. Sign up in seconds to start planning unforgettable moments.</p>
+          </div>
+
+          <form id="getstarted-form" onsubmit="handleGetStarted(event)" class="bg-white rounded-2xl border border-zinc-200 p-8 space-y-6">
+            <div>
+              <label class="block text-sm font-medium text-zinc-700 mb-2">Full Name</label>
+              <input type="text" id="fullname" required placeholder="John Doe" class="w-full px-4 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-zinc-700 mb-2">Email Address</label>
+              <input type="email" id="signup-email" required placeholder="you@example.com" class="w-full px-4 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-zinc-700 mb-2">Password</label>
+              <input type="password" id="signup-password" required placeholder="Create a strong password" class="w-full px-4 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-zinc-700 mb-2">Event Type Interest</label>
+              <select id="event-interest" aria-label="Event type interest" class="w-full px-4 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white">
+                <option value="">Select your primary interest</option>
+                <option value="wedding">Wedding Planning</option>
+                <option value="corporate">Corporate Events</option>
+                <option value="birthday">Birthday Celebrations</option>
+                <option value="engagement">Engagement Parties</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <label class="flex items-start gap-3">
+              <input type="checkbox" id="terms" required class="mt-1">
+              <span class="text-sm text-zinc-600">I agree to Lumina's <a href="#" class="text-violet-600 hover:text-violet-700">Terms of Service</a> and <a href="#" class="text-violet-600 hover:text-violet-700">Privacy Policy</a></span>
+            </label>
+            <button type="submit" class="w-full py-3 bg-gradient-premium text-white font-semibold rounded-xl hover:opacity-90 transition-opacity shadow-lg">
+              Create Free Account
+            </button>
+          </form>
+
+          <p class="text-center text-sm text-zinc-600 mt-6">
+            Already have an account?
+            <button onclick="navigateTo('signin')" class="text-violet-600 hover:text-violet-700 font-semibold">Sign in
+            </button>
+          </p>
+
+          <!-- Trust Indicators -->
+          <div class="grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-zinc-200">
+            <div class="text-center">
+              <p class="text-lg font-bold text-zinc-900">5000+</p>
+              <p class="text-sm text-zinc-500">Events Planned</p>
+            </div>
+            <div class="text-center">
+              <p class="text-lg font-bold text-zinc-900">4.9★</p>
+              <p class="text-sm text-zinc-500">Average Rating</p>
+            </div>
+            <div class="text-center">
+              <p class="text-lg font-bold text-zinc-900">24/7</p>
+              <p class="text-sm text-zinc-500">Support Available</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- VIEW: HOME PAGE -->
       <div id="home-view" class="view-section">
         <!-- Hero -->
@@ -275,13 +417,10 @@
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label class="block text-xs font-medium text-zinc-500 mb-1.5">
-                    Select Venue Class
+                    Select Venue
                   </label>
-                  <select id="venue-select" class="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all" title="Select venue class">
-                    <option value="standard">Standard Hall (₹25,000)</option>
-                    <option value="premium">Premium Banquet (₹60,000)</option>
-                    <option value="luxury">Luxury Estate (₹1,50,000)</option>
-                    <option value="outdoor">Outdoor Garden (₹75,000)</option>
+                  <select id="venue-select" class="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all" title="Select venue">
+                    <option value="">Choose a Venue</option>
                   </select>
                 </div>
                 <div>
@@ -580,10 +719,14 @@
           </div>
         </div>
 
-        <div class="mt-8 flex gap-4 justify-center">
+        <div class="mt-8 flex gap-4 justify-center flex-wrap">
           <button onclick="window.print()" class="px-6 py-2.5 border border-zinc-300 rounded-lg text-sm font-medium text-zinc-600 hover:bg-zinc-50 transition-colors flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="printer" class="lucide lucide-printer w-4 h-4"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect></svg>
             Print Receipt
+          </button>
+          <button onclick="navigateTo('bookings'); renderBookings();" class="px-6 py-2.5 border border-violet-300 bg-violet-50 text-violet-700 rounded-lg text-sm font-medium hover:bg-violet-100 transition-colors flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="calendar" class="lucide lucide-calendar w-4 h-4"><path d="M8 2v4"></path><path d="M16 2v4"></path><path d="M3 4h18a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"></path><path d="M3 10h18"></path></svg>
+            View My Bookings
           </button>
           <button onclick="resetApp()" class="px-6 py-2.5 bg-zinc-900 text-white rounded-lg text-sm font-medium hover:bg-zinc-800 transition-colors shadow-lg">
             Back to Home
@@ -592,7 +735,12 @@
       </div>
       <div id="vendors-view" class="view-section hidden pt-8">
         <div class="max-w-7xl mx-auto">
+          <!-- Header -->
           <div class="text-center mb-12">
+            <button onclick="navigateTo('home')" class="mb-6 text-sm font-medium text-zinc-500 hover:text-zinc-900 flex items-center gap-1">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-left" class="lucide lucide-arrow-left w-4 h-4"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+              Back to Home
+            </button>
             <span class="px-3 py-1 rounded-full bg-violet-100 text-violet-700 text-xs font-bold uppercase tracking-wide">
               Our Partners
             </span>
@@ -603,53 +751,75 @@
               Handpicked services for your perfect event.
             </p>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-white p-6 rounded-xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
-              <div class="h-12 w-12 bg-violet-50 text-violet-600 rounded-lg flex items-center justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="utensils" class="lucide lucide-utensils w-6 h-6"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg>
+
+          <!-- Search & Filter Panel -->
+          <div class="bg-white rounded-2xl border border-zinc-200 p-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <!-- Search -->
+              <div>
+                <label class="block text-xs font-medium text-zinc-500 mb-2">Search Vendors</label>
+                <input type="text" id="vendor-search" placeholder="Search by name..." class="w-full px-3 py-2 border border-zinc-200 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent text-sm" title="Search vendors">
               </div>
-              <h3 class="font-bold text-lg text-zinc-900">Elite Catering</h3>
-              <p class="text-sm text-zinc-500 mt-2">
-                Michelin-star rated culinary teams.
-              </p>
-            </div>
-            <div class="bg-white p-6 rounded-xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
-              <div class="h-12 w-12 bg-pink-50 text-pink-600 rounded-lg flex items-center justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="flower-2" class="lucide lucide-flower-2 w-6 h-6"><path d="M12 5a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3-3v1M9 8a3 3 0 1 0 3 3M9 8h1m5 0a3 3 0 1 1-3 3m3-3h-1m-2 3v-1"></path><circle cx="12" cy="8" r="2"></circle><path d="M12 10v12"></path><path d="M12 22c4.2 0 7-1.667 7-5-4.2 0-7 1.667-7 5Z"></path><path d="M12 22c-4.2 0-7-1.667-7-5 4.2 0 7 1.667 7 5Z"></path></svg>
+              
+              <!-- Category Filter -->
+              <div>
+                <label class="block text-xs font-medium text-zinc-500 mb-2">Category</label>
+                <select id="vendor-category" title="Filter by category" class="w-full px-3 py-2 border border-zinc-200 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent text-sm">
+                  <option value="">All Categories</option>
+                  <option value="catering">Catering</option>
+                  <option value="decor">Decor & Florals</option>
+                  <option value="photography">Photography</option>
+                  <option value="music">Music & Entertainment</option>
+                  <option value="planning">Planning & Coordination</option>
+                  <option value="lighting">Lighting</option>
+                  <option value="cake">Cake & Bakery</option>
+                </select>
               </div>
-              <h3 class="font-bold text-lg text-zinc-900">Artisan Florals</h3>
-              <p class="text-sm text-zinc-500 mt-2">
-                Breathtaking arrangements and decor.
-              </p>
-            </div>
-            <div class="bg-white p-6 rounded-xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
-              <div class="h-12 w-12 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="music" class="lucide lucide-music w-6 h-6"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+              
+              <!-- Price Range -->
+              <div>
+                <label class="block text-xs font-medium text-zinc-500 mb-2">Max Price</label>
+                <select id="vendor-price" title="Filter by price" class="w-full px-3 py-2 border border-zinc-200 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent text-sm">
+                  <option value="">Any Price</option>
+                  <option value="20000">Up to ₹20,000</option>
+                  <option value="40000">Up to ₹40,000</option>
+                  <option value="60000">Up to ₹60,000</option>
+                  <option value="100000">Up to ₹1,00,000</option>
+                </select>
               </div>
-              <h3 class="font-bold text-lg text-zinc-900">
-                Live Entertainment
-              </h3>
-              <p class="text-sm text-zinc-500 mt-2">
-                DJs, bands, and performers.
-              </p>
             </div>
+          </div>
+
+          <!-- Vendor Cards Grid -->
+          <div id="vendors-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Vendors rendered here -->
+          </div>
+
+          <!-- No Results -->
+          <div id="vendors-no-results" class="col-span-full text-center py-16 hidden">
+            <h3 class="text-xl font-semibold text-zinc-900 mb-2">No vendors found</h3>
+            <p class="text-zinc-500">Try adjusting your filters</p>
           </div>
         </div>
       </div>
       <div id="bookings-view" class="view-section hidden pt-8">
-        <div class="max-w-md mx-auto text-center py-20">
-          <div class="h-20 w-20 bg-zinc-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="calendar-off" class="lucide lucide-calendar-off w-8 h-8 text-zinc-400"><path d="M4.2 4.2A2 2 0 0 0 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 1.82-1.18"></path><path d="M21 15.5V6a2 2 0 0 0-2-2H9.5"></path><path d="M16 2v4"></path><path d="M3 10h7"></path><path d="M21 10h-5.5"></path><path d="m2 2 20 20"></path></svg>
-          </div>
-          <h2 class="text-2xl font-bold text-zinc-900 mb-2">
-            No Upcoming Bookings
-          </h2>
-          <p class="text-zinc-500 mb-8">
-            You haven't scheduled any events yet.
-          </p>
-          <button onclick="navigateTo('home')" class="bg-zinc-900 text-white px-6 py-3 rounded-xl font-medium hover:bg-zinc-800 transition-colors shadow-lg">
-            Find an Event
+        <div class="max-w-4xl mx-auto">
+          <button onclick="navigateTo('home')" class="mb-6 text-sm font-medium text-zinc-500 hover:text-zinc-900 flex items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-left" class="lucide lucide-arrow-left w-4 h-4"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+            Back to Home
           </button>
+          <h1 class="text-3xl font-bold text-zinc-900 mb-8">My Bookings</h1>
+          <div id="bookings-list" class="space-y-4"></div>
+          <div id="empty-bookings" class="text-center py-20">
+            <div class="h-20 w-20 bg-zinc-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="calendar-off" class="lucide lucide-calendar-off w-8 h-8 text-zinc-400"><path d="M4.2 4.2A2 2 0 0 0 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 1.82-1.18"></path><path d="M21 15.5V6a2 2 0 0 0-2-2H9.5"></path><path d="M16 2v4"></path><path d="M3 10h7"></path><path d="M21 10h-5.5"></path><path d="m2 2 20 20"></path></svg>
+            </div>
+            <h2 class="text-2xl font-bold text-zinc-900 mb-2">No Bookings Yet</h2>
+            <p class="text-zinc-500 mb-8">You haven't scheduled any events yet.</p>
+            <button onclick="navigateTo('home')" class="bg-zinc-900 text-white px-6 py-3 rounded-xl font-medium hover:bg-zinc-800 transition-colors shadow-lg">
+              Find an Event
+            </button>
+          </div>
         </div>
       </div>
 
@@ -722,6 +892,27 @@
       </div>
     </main>
 
+    <!-- Auth Required Modal -->
+    <div id="auth-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl max-w-sm w-full shadow-2xl animate-in fade-in zoom-in duration-300">
+        <div class="p-8 text-center">
+          <div class="h-16 w-16 bg-gradient-premium text-white flex items-center justify-center rounded-full mx-auto mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="lock" class="lucide lucide-lock w-8 h-8"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          </div>
+          <h2 class="text-2xl font-bold text-zinc-900 mb-2">Sign In Required</h2>
+          <p class="text-zinc-500 mb-8">Please sign in or create an account to access Lumina Events and start planning your perfect event.</p>
+          <div class="space-y-3">
+            <button onclick="closeAuthModal(); navigateTo('signin');" class="w-full py-3 bg-gradient-premium text-white font-semibold rounded-lg hover:opacity-90 transition-opacity">
+              Sign In
+            </button>
+            <button onclick="closeAuthModal(); navigateTo('getstarted');" class="w-full py-3 border border-zinc-300 text-zinc-900 font-semibold rounded-lg hover:bg-zinc-50 transition-colors">
+              Get Started Free
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Details Modal -->
 
     <script>
@@ -784,6 +975,20 @@
                           { author: 'Nikhil R.', rating: 5, text: 'Premium experience throughout. Highly satisfied!', date: '6 weeks ago' },
                           { author: 'Pooja V.', rating: 5, text: 'Magical wedding. Exceeded all expectations!', date: '2 months ago' }
                       ]
+                  },
+                  {
+                      id: 'wedding-deluxe',
+                      name: 'Deluxe Wedding',
+                      price: 200000,
+                      desc: 'Premium venue with luxury catering, extended services, and special entertainment',
+                      capacity: '150 - 750 Guests',
+                      rating: 4.8,
+                      reviewCount: 31,
+                      reviews: [
+                          { author: 'Kanika R.', rating: 5, text: 'Deluxe experience throughout! Absolutely wonderful!', date: '1 week ago' },
+                          { author: 'Ashok V.', rating: 5, text: 'Premium quality at every step. Highly recommend!', date: '2 weeks ago' },
+                          { author: 'Raveena M.', rating: 5, text: 'Best wedding package! Perfect planning and execution!', date: '1 month ago' }
+                      ]
                   }
               ]
           },
@@ -841,6 +1046,20 @@
                           { author: 'Sneha J.', rating: 5, text: 'Impeccable conference management!', date: '2 months ago' },
                           { author: 'Rajiv M.', rating: 4, text: 'Excellent overall. Minor room setup delays.', date: '3 months ago' }
                       ]
+                  },
+                  {
+                      id: 'corporate-excellence',
+                      name: 'Excellence Summit',
+                      price: 150000,
+                      desc: 'Ultimate conference with live streaming, advanced tech, and premium hospitality',
+                      capacity: '200 - 3000 Attendees',
+                      rating: 4.9,
+                      reviewCount: 28,
+                      reviews: [
+                          { author: 'Sanjay M.', rating: 5, text: 'Incredible conference execution! Live streaming was perfect!', date: '1 week ago' },
+                          { author: 'Priya K.', rating: 5, text: 'Ultimate corporate event experience!', date: '2 weeks ago' },
+                          { author: 'Rajesh V.', rating: 5, text: 'Exceeded all expectations. Best event ever!', date: '1 month ago' }
+                      ]
                   }
               ]
           },
@@ -897,6 +1116,20 @@
                           { author: 'Priya M.', rating: 5, text: 'Luxury catering was exceptional!', date: '3 weeks ago' },
                           { author: 'Rahul K.', rating: 5, text: 'Unforgettable celebration for my milestone birthday!', date: '1 month ago' },
                           { author: 'Deepa N.', rating: 5, text: 'Premium quality at every level. Highly recommend!', date: '2 months ago' }
+                      ]
+                  },
+                  {
+                      id: 'birthday-ultra',
+                      name: 'Ultra Celebration',
+                      price: 120000,
+                      desc: 'Celebrity entertainment, luxury everything, and pure luxury experience',
+                      capacity: '100 - 500 Guests',
+                      rating: 4.9,
+                      reviewCount: 22,
+                      reviews: [
+                          { author: 'Sonal P.', rating: 5, text: 'Ultra-luxury birthday bash! Simply magical!', date: '1 week ago' },
+                          { author: 'Arjun R.', rating: 5, text: 'Celebrity entertainment was the highlight!', date: '2 weeks ago' },
+                          { author: 'Shreya M.', rating: 5, text: 'Best milestone celebration ever! Worth every penny!', date: '1 month ago' }
                       ]
                   }
               ]
@@ -957,6 +1190,352 @@
                       ]
                   }
               ]
+          },
+          anniversary: {
+              name: 'Anniversary Celebration',
+              icon: 'heart-handshake',
+              color: 'red',
+              description: 'Celebrate your love with intimate and romantic anniversary parties.',
+              hero_image: 'https://images.unsplash.com/photo-1519046904884-53103b34b206?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              packages: [
+                  {
+                      id: 'anniversary-intimate',
+                      name: 'Intimate Anniversary',
+                      price: 35000,
+                      desc: 'Romantic dinner setup with ambient lighting and music',
+                      capacity: '10 - 50 Guests',
+                      rating: 4.6,
+                      reviewCount: 35,
+                      reviews: [
+                          { author: 'Rajesh K.', rating: 5, text: 'Incredibly romantic setup! Perfect for our 10th anniversary.', date: '5 days ago' },
+                          { author: 'Geeta S.', rating: 5, text: 'Beautiful ambiance and perfect service!', date: '2 weeks ago' },
+                          { author: 'Mohit J.', rating: 5, text: 'Made our evening unforgettable!', date: '1 month ago' }
+                      ]
+                  },
+                  {
+                      id: 'anniversary-grand',
+                      name: 'Grand Anniversary',
+                      price: 70000,
+                      desc: 'Celebration with family, special performances, and gourmet dining',
+                      capacity: '50 - 200 Guests',
+                      rating: 4.8,
+                      reviewCount: 42,
+                      reviews: [
+                          { author: 'Sunil M.', rating: 5, text: 'Absolutely wonderful! Everyone had a great time!', date: '1 week ago' },
+                          { author: 'Sunita V.', rating: 5, text: 'Professional team, excellent execution!', date: '3 weeks ago' }
+                      ]
+                  },
+                  {
+                      id: 'anniversary-ultimate',
+                      name: 'Ultimate Anniversary Bash',
+                      price: 120000,
+                      desc: 'Luxury celebration with entertainment, live music, and special surprises',
+                      capacity: '100 - 300 Guests',
+                      rating: 4.9,
+                      reviewCount: 38,
+                      reviews: [
+                          { author: 'Vikram S.', rating: 5, text: 'Best anniversary party ever! Highly recommend!', date: '10 days ago' },
+                          { author: 'Priya G.', rating: 5, text: 'Everything was perfect from start to finish!', date: '1 month ago' }
+                      ]
+                  }
+              ]
+          },
+          babySplit: {
+              name: 'Baby Shower',
+              icon: 'baby',
+              color: 'cyan',
+              description: 'Celebrate the upcoming arrival with fun-filled baby shower events.',
+              hero_image: 'https://images.unsplash.com/photo-1517331156700-3c241d2b4d83?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              packages: [
+                  {
+                      id: 'baby-casual',
+                      name: 'Casual Baby Shower',
+                      price: 25000,
+                      desc: 'Simple setup with light refreshments and fun games',
+                      capacity: '20 - 80 Guests',
+                      rating: 4.5,
+                      reviewCount: 28,
+                      reviews: [
+                          { author: 'Megha P.', rating: 5, text: 'Fun and enjoyable event! Friends loved it!', date: '2 weeks ago' },
+                          { author: 'Neha K.', rating: 5, text: 'Great games and lovely ambiance!', date: '1 month ago' }
+                      ]
+                  },
+                  {
+                      id: 'baby-themed',
+                      name: 'Themed Baby Shower',
+                      price: 45000,
+                      desc: 'Beautifully themed decorations, catering, and entertainment',
+                      capacity: '40 - 150 Guests',
+                      rating: 4.7,
+                      reviewCount: 35,
+                      reviews: [
+                          { author: 'Anjali D.', rating: 5, text: 'Absolutely delightful! Loved every bit!', date: '1 week ago' },
+                          { author: 'Priya M.', rating: 5, text: 'Beautiful theme and perfect execution!', date: '3 weeks ago' }
+                      ]
+                  },
+                  {
+                      id: 'baby-premium',
+                      name: 'Premium Baby Celebration',
+                      price: 75000,
+                      desc: 'Luxury baby shower with gourmet catering and professional coordination',
+                      capacity: '60 - 200 Guests',
+                      rating: 4.8,
+                      reviewCount: 31,
+                      reviews: [
+                          { author: 'Shreya V.', rating: 5, text: 'Premium experience throughout!', date: '5 days ago' },
+                          { author: 'Pooja S.', rating: 5, text: 'Everything was perfect and elegant!', date: '2 months ago' }
+                      ]
+                  }
+              ]
+          },
+          productLaunch: {
+              name: 'Product Launch',
+              icon: 'rocket',
+              color: 'orange',
+              description: 'Professional product launches with media coverage and brand activation.',
+              hero_image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              packages: [
+                  {
+                      id: 'launch-standard',
+                      name: 'Standard Launch',
+                      price: 80000,
+                      desc: 'Basic product launch with stage setup and media coverage',
+                      capacity: '100 - 300 Guests',
+                      rating: 4.5,
+                      reviewCount: 22,
+                      reviews: [
+                          { author: 'Arjun K.', rating: 5, text: 'Well organized event! Great turnout!', date: '1 week ago' },
+                          { author: 'Ravi M.', rating: 4, text: 'Good execution. Could have better crowd management.', date: '1 month ago' }
+                      ]
+                  },
+                  {
+                      id: 'launch-premium',
+                      name: 'Premium Launch Event',
+                      price: 150000,
+                      desc: 'Full-service launch with brand activation, influencer coverage, and catering',
+                      capacity: '200 - 500 Guests',
+                      rating: 4.7,
+                      reviewCount: 29,
+                      reviews: [
+                          { author: 'Prasad V.', rating: 5, text: 'Fantastic event! Met all our marketing goals!', date: '5 days ago' },
+                          { author: 'Divya K.', rating: 5, text: 'Professional team, excellent coordination!', date: '2 weeks ago' }
+                      ]
+                  },
+                  {
+                      id: 'launch-ultimate',
+                      name: 'Ultimate Brand Launch',
+                      price: 250000,
+                      desc: 'Luxury launch with celebrity endorsements, live streaming, and brand experience zones',
+                      capacity: '300 - 1000 Guests',
+                      rating: 4.9,
+                      reviewCount: 41,
+                      reviews: [
+                          { author: 'Vipin S.', rating: 5, text: 'Best product launch we could ask for! Exceeded targets!', date: '10 days ago' },
+                          { author: 'Sneha P.', rating: 5, text: 'World-class execution and coordination!', date: '1 month ago' }
+                      ]
+                  }
+              ]
+          },
+          concert: {
+              name: 'Concert Events',
+              icon: 'music',
+              color: 'purple',
+              description: 'Organize unforgettable concerts with professional sound, lighting, and crowd management.',
+              hero_image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              packages: [
+                  {
+                      id: 'concert-local',
+                      name: 'Local Concert',
+                      price: 150000,
+                      desc: 'Small venue concert with professional sound and lighting',
+                      capacity: '100 - 500 Attendees',
+                      rating: 4.6,
+                      reviewCount: 32,
+                      reviews: [
+                          { author: 'Arun M.', rating: 5, text: 'Great sound quality and perfect lighting setup!', date: '1 week ago' },
+                          { author: 'Priya K.', rating: 5, text: 'Excellent crowd management. Professional team!', date: '2 weeks ago' },
+                          { author: 'Rohan P.', rating: 4, text: 'Good concert. Could have better parking.', date: '1 month ago' }
+                      ]
+                  },
+                  {
+                      id: 'concert-regional',
+                      name: 'Regional Concert',
+                      price: 300000,
+                      desc: 'Medium venue with multiple artists, professional production, and ticketing',
+                      capacity: '500 - 2000 Attendees',
+                      rating: 4.7,
+                      reviewCount: 38,
+                      reviews: [
+                          { author: 'Sneha R.', rating: 5, text: 'Fantastic lineup! Professional execution throughout!', date: '5 days ago' },
+                          { author: 'Vikram S.', rating: 5, text: 'Best concert I have attended. Highly recommend!', date: '2 weeks ago' },
+                          { author: 'Meera D.', rating: 5, text: 'Amazing artists and perfect organization!', date: '3 weeks ago' }
+                      ]
+                  },
+                  {
+                      id: 'concert-mega',
+                      name: 'Mega Concert Festival',
+                      price: 800000,
+                      desc: 'Large-scale festival with international artists, multiple stages, and full amenities',
+                      capacity: '2000 - 10000 Attendees',
+                      rating: 4.8,
+                      reviewCount: 45,
+                      reviews: [
+                          { author: 'Sanjay V.', rating: 5, text: 'Epic concert experience! World-class organization!', date: '1 week ago' },
+                          { author: 'Ananya P.', rating: 5, text: 'Best festival ever! International standards!', date: '2 weeks ago' },
+                          { author: 'Rajesh M.', rating: 5, text: 'Incredible music festival! Exceeded expectations!', date: '1 month ago' }
+                      ]
+                  }
+              ]
+          },
+          standup: {
+              name: 'Standup Comedy',
+              icon: 'laugh',
+              color: 'sky',
+              description: 'Host hilarious standup comedy shows with top comedians and professional production.',
+              hero_image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              packages: [
+                  {
+                      id: 'standup-club',
+                      name: 'Comedy Club Show',
+                      price: 80000,
+                      desc: 'Intimate standup comedy show with 1-2 comedians',
+                      capacity: '50 - 300 Attendees',
+                      rating: 4.5,
+                      reviewCount: 28,
+                      reviews: [
+                          { author: 'Arjun K.', rating: 5, text: 'Hilarious comedy night! Had a great time!', date: '1 week ago' },
+                          { author: 'Geeta M.', rating: 5, text: 'Excellent comedians. Very entertaining!', date: '2 weeks ago' },
+                          { author: 'Nikhil S.', rating: 4, text: 'Good show. Could have been longer.', date: '1 month ago' }
+                      ]
+                  },
+                  {
+                      id: 'standup-theater',
+                      name: 'Theater Comedy Night',
+                      price: 150000,
+                      desc: 'Full theater show with 3-4 popular comedians',
+                      capacity: '200 - 800 Attendees',
+                      rating: 4.7,
+                      reviewCount: 35,
+                      reviews: [
+                          { author: 'Pooja V.', rating: 5, text: 'Amazing comedy night! All comedians were excellent!', date: '3 days ago' },
+                          { author: 'Siddharth R.', rating: 5, text: 'Best standup comedy show! Laughed throughout!', date: '2 weeks ago' },
+                          { author: 'Ritika P.', rating: 5, text: 'Professional production and hilarious content!', date: '3 weeks ago' }
+                      ]
+                  },
+                  {
+                      id: 'standup-festival',
+                      name: 'Comedy Festival',
+                      price: 400000,
+                      desc: 'Multi-day comedy festival with celebrity comedians and international acts',
+                      capacity: '500 - 3000 Attendees',
+                      rating: 4.9,
+                      reviewCount: 42,
+                      reviews: [
+                          { author: 'Divya K.', rating: 5, text: 'Best comedy festival! International comedians were fantastic!', date: '1 week ago' },
+                          { author: 'Varun M.', rating: 5, text: 'Epic comedy experience! Worth every penny!', date: '2 weeks ago' },
+                          { author: 'Sneha T.', rating: 5, text: 'Incredible festival! Multiple days of laughter!', date: '3 weeks ago' }
+                      ]
+                  }
+              ]
+          },
+          musicFestival: {
+              name: 'Music Festival',
+              icon: 'music-4',
+              color: 'amber',
+              description: 'Create memorable music festivals with diverse genres and world-class artists.',
+              hero_image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              packages: [
+                  {
+                      id: 'festival-indie',
+                      name: 'Indie Music Fest',
+                      price: 200000,
+                      desc: 'Indie and alternative music festival with emerging artists',
+                      capacity: '300 - 1000 Attendees',
+                      rating: 4.5,
+                      reviewCount: 24,
+                      reviews: [
+                          { author: 'Aryan P.', rating: 5, text: 'Great indie artists! Perfect atmosphere!', date: '2 weeks ago' },
+                          { author: 'Zara M.', rating: 5, text: 'Loved the music selection. Great vibe!', date: '3 weeks ago' },
+                          { author: 'Kabir S.', rating: 4, text: 'Good festival. Could have more food options.', date: '1 month ago' }
+                      ]
+                  },
+                  {
+                      id: 'festival-multi',
+                      name: 'Multi-Genre Music Festival',
+                      price: 500000,
+                      desc: 'Large music festival with multiple genres, multiple stages, and camping',
+                      capacity: '1000 - 5000 Attendees',
+                      rating: 4.7,
+                      reviewCount: 38,
+                      reviews: [
+                          { author: 'Sanya K.', rating: 5, text: 'Amazing festival! Great artist lineup!', date: '1 week ago' },
+                          { author: 'Roshan D.', rating: 5, text: 'Fantastic music festival experience!', date: '2 weeks ago' },
+                          { author: 'Isha R.', rating: 5, text: 'Perfect organization! Multiple genres rocked!', date: '3 weeks ago' }
+                      ]
+                  },
+                  {
+                      id: 'festival-mega',
+                      name: 'Mega Music Festival',
+                      price: 1200000,
+                      desc: 'International music festival with celebrity artists and luxury experience',
+                      capacity: '3000 - 15000 Attendees',
+                      rating: 4.9,
+                      reviewCount: 51,
+                      reviews: [
+                          { author: 'Vivek M.', rating: 5, text: 'World-class music festival! Incredible experience!', date: '5 days ago' },
+                          { author: 'Aditi S.', rating: 5, text: 'Best music festival ever! International artists rocked!', date: '2 weeks ago' },
+                          { author: 'Kamal P.', rating: 5, text: 'Epic festival! Exceeded all expectations!', date: '1 month ago' }
+                      ]
+                  }
+              ]
+          },
+          housewarming: {
+              name: 'Housewarming Party',
+              icon: 'home',
+              color: 'yellow',
+              description: 'Welcome family and friends to your new home with memorable celebrations.',
+              hero_image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              packages: [
+                  {
+                      id: 'housewarming-basic',
+                      name: 'Basic Housewarming',
+                      price: 20000,
+                      desc: 'Simple setup with light refreshments and decorations',
+                      capacity: '30 - 100 Guests',
+                      rating: 4.4,
+                      reviewCount: 26,
+                      reviews: [
+                          { author: 'Arun D.', rating: 5, text: 'Perfect start to our new home!', date: '2 weeks ago' },
+                          { author: 'Meera V.', rating: 4, text: 'Good setup. Could have more decoration variety.', date: '1 month ago' }
+                      ]
+                  },
+                  {
+                      id: 'housewarming-standard',
+                      name: 'Standard Housewarming',
+                      price: 45000,
+                      desc: 'Complete setup with catering, decorations, and entertainment',
+                      capacity: '50 - 200 Guests',
+                      rating: 4.6,
+                      reviewCount: 34,
+                      reviews: [
+                          { author: 'Nikhil K.', rating: 5, text: 'Wonderful party! Everyone loved it!', date: '1 week ago' },
+                          { author: 'Anjali S.', rating: 5, text: 'Beautiful setup and great management!', date: '3 weeks ago' }
+                      ]
+                  },
+                  {
+                      id: 'housewarming-luxury',
+                      name: 'Luxury Housewarming',
+                      price: 85000,
+                      desc: 'Premium celebration with gourmet catering, professional coordination, and entertainment',
+                      capacity: '100 - 300 Guests',
+                      rating: 4.8,
+                      reviewCount: 38,
+                      reviews: [
+                          { author: 'Varun P.', rating: 5, text: 'Absolutely spectacular! Home inauguration was perfect!', date: '5 days ago' },
+                          { author: 'Simran D.', rating: 5, text: 'Elegant and well-coordinated!', date: '2 months ago' }
+                      ]
+                  }
+              ]
           }
       };
 
@@ -990,6 +1569,74 @@
           ]
       };
 
+      // Comprehensive Vendor Database
+      const allVendors = [
+          // Catering
+          { id: 'v-elite-catering', name: 'Elite Catering Co.', category: 'catering', icon: 'utensils', price: 1500, priceType: '/pp', location: 'Mumbai', rating: 4.8, reviews: 156, experience: '12 years', description: 'Michelin-star rated culinary teams with international cuisine expertise' },
+          { id: 'v-gourmet-meals', name: 'Gourmet Meals Express', category: 'catering', icon: 'utensils', price: 1200, priceType: '/pp', location: 'Mumbai', rating: 4.6, reviews: 98, experience: '8 years', description: 'Premium catering with customized menus for all occasions' },
+          { id: 'v-royal-kitchen', name: 'Royal Kitchen Catering', category: 'catering', icon: 'utensils', price: 2000, priceType: '/pp', location: 'Mumbai', rating: 4.9, reviews: 203, experience: '15 years', description: 'Luxury dining experience with traditional & fusion cuisines' },
+          
+          // Florals & Decor
+          { id: 'v-artisan-florals', name: 'Artisan Florals Studio', category: 'decor', icon: 'flower-2', price: 80000, priceType: 'fixed', location: 'Mumbai', rating: 4.9, reviews: 187, experience: '10 years', description: 'Breathtaking floral arrangements and premium decor design' },
+          { id: 'v-bloom-events', name: 'Bloom Events Design', category: 'decor', icon: 'flower-2', price: 60000, priceType: 'fixed', location: 'Mumbai', rating: 4.7, reviews: 142, experience: '7 years', description: 'Elegant floral & decor with personalized themes' },
+          { id: 'v-premium-decor', name: 'Premium Decor House', category: 'decor', icon: 'flower-2', price: 50000, priceType: 'fixed', location: 'Mumbai', rating: 4.5, reviews: 95, experience: '6 years', description: 'Creative venue decoration with modern aesthetics' },
+          
+          // Photography
+          { id: 'v-pro-shutters', name: 'Pro Shutters Studio', category: 'photography', icon: 'camera', price: 40000, priceType: 'fixed', location: 'Mumbai', rating: 4.8, reviews: 178, experience: '11 years', description: 'Award-winning photography with cinematic videography' },
+          { id: 'v-lens-moments', name: 'Lens Moments Photography', category: 'photography', icon: 'camera', price: 30000, priceType: 'fixed', location: 'Mumbai', rating: 4.6, reviews: 124, experience: '8 years', description: 'Candid & traditional photography with same-day edits' },
+          { id: 'v-frame-perfect', name: 'Frame Perfect Visuals', category: 'photography', icon: 'camera', price: 35000, priceType: 'fixed', location: 'Mumbai', rating: 4.7, reviews: 156, experience: '9 years', description: 'Professional photography & drone coverage' },
+          
+          // Music & Entertainment
+          { id: 'v-groove-masters', name: 'Groove Masters DJ', category: 'music', icon: 'music', price: 25000, priceType: 'fixed', location: 'Mumbai', rating: 4.7, reviews: 201, experience: '10 years', description: 'Premium DJ services with cutting-edge sound systems' },
+          { id: 'v-live-band-events', name: 'Live Band Events', category: 'music', icon: 'music', price: 50000, priceType: 'fixed', location: 'Mumbai', rating: 4.9, reviews: 167, experience: '12 years', description: 'Live musicians & bands for unforgettable performances' },
+          { id: 'v-sound-professionals', name: 'Sound Professionals', category: 'music', icon: 'music', price: 20000, priceType: 'fixed', location: 'Mumbai', rating: 4.5, reviews: 87, experience: '6 years', description: 'Professional sound system & audio equipment rental' },
+          
+          // Planning & Coordination
+          { id: 'v-event-wizards', name: 'Event Wizards Planning', category: 'planning', icon: 'briefcase', price: 50000, priceType: 'fixed', location: 'Mumbai', rating: 4.8, reviews: 142, experience: '9 years', description: 'Full event planning & coordination from start to finish' },
+          { id: 'v-perfect-plans', name: 'Perfect Plans Coordinator', category: 'planning', icon: 'briefcase', price: 40000, priceType: 'fixed', location: 'Mumbai', rating: 4.6, reviews: 98, experience: '7 years', description: 'Stress-free event management with attention to detail' },
+          
+          // Lighting
+          { id: 'v-light-magic', name: 'Light Magic Studio', category: 'lighting', icon: 'lightbulb', price: 30000, priceType: 'fixed', location: 'Mumbai', rating: 4.7, reviews: 112, experience: '8 years', description: 'Ambient & decorative lighting with advanced LED systems' },
+          { id: 'v-glow-designs', name: 'Glow Designs', category: 'lighting', icon: 'lightbulb', price: 20000, priceType: 'fixed', location: 'Mumbai', rating: 4.5, reviews: 76, experience: '5 years', description: 'Creative lighting solutions for all event types' },
+          
+          // Cake & Bakery
+          { id: 'v-sweet-creations', name: 'Sweet Creations Bakery', category: 'cake', icon: 'cake', price: 15000, priceType: 'fixed', location: 'Mumbai', rating: 4.8, reviews: 189, experience: '10 years', description: 'Custom cake design with premium ingredients & flavors' },
+          { id: 'v-cake-artistry', name: 'Cake Artistry House', category: 'cake', icon: 'cake', price: 12000, priceType: 'fixed', location: 'Mumbai', rating: 4.6, reviews: 121, experience: '7 years', description: 'Artistic cakes with personalized designs for any occasion' }
+      ];
+
+      // Comprehensive Realistic Venue Database
+      const venues = [
+          // Budget Venues
+          { id: 'v-community-center', name: 'Community Center Hall', price: 15000, capacity: '50-150', location: 'Andheri', city: 'Mumbai', facilities: ['AC', 'Basic Lighting', 'Parking'], amenities: 'Basic', rating: 4.2, reviews: 45 },
+          { id: 'v-banquet-basic', name: 'Basic Banquet Hall', price: 20000, capacity: '40-120', location: 'Borivali', city: 'Mumbai', facilities: ['AC', 'Sound System', 'Parking'], amenities: 'Basic', rating: 4.3, reviews: 52 },
+          { id: 'v-hall-standard', name: 'Standard Event Hall', price: 25000, capacity: '60-200', location: 'Thane', city: 'Mumbai', facilities: ['AC', 'LED Screen', 'Sound System', 'Parking'], amenities: 'Basic', rating: 4.4, reviews: 67 },
+          
+          // Mid-Range Venues
+          { id: 'v-premium-banquet', name: 'Premium Banquet Hall Mumbai', price: 50000, capacity: '100-300', location: 'Powai', city: 'Mumbai', facilities: ['AC', 'Premium Sound System', 'LED Displays', 'Parking', 'Valet Service'], amenities: 'Premium', rating: 4.6, reviews: 124 },
+          { id: 'v-royal-palace', name: 'Royal Palace Venue', price: 60000, capacity: '150-400', location: 'Mahalakshmi', city: 'Mumbai', facilities: ['AC', 'Crystal Chandeliers', 'Premium Sound', 'LED Screens', 'Valet Parking', 'Green Room'], amenities: 'Premium', rating: 4.7, reviews: 156 },
+          { id: 'v-taj-garden', name: 'Taj Garden Banquets', price: 55000, capacity: '80-250', location: 'Tardeo', city: 'Mumbai', facilities: ['AC Indoor', 'Lawn', 'Fine Dining Setup', 'Parking'], amenities: 'Premium', rating: 4.6, reviews: 132 },
+          { id: 'v-ivy-hall', name: 'Ivy Convention Hall', price: 45000, capacity: '100-280', location: 'Vile Parle', city: 'Mumbai', facilities: ['AC', 'Modern Sound System', 'LED Screens', 'Portable Stage', 'Parking'], amenities: 'Premium', rating: 4.5, reviews: 98 },
+          
+          // Luxury Venues
+          { id: 'v-grand-hyatt', name: 'Grand Hyatt Ballroom', price: 150000, capacity: '200-600', location: 'Colaba', city: 'Mumbai', facilities: ['5-Star Luxury', 'Premium Sound & Lighting', 'Multiple Halls', 'Fine Dining', 'Parking', 'Security'], amenities: 'Ultra Premium', rating: 4.9, reviews: 289 },
+          { id: 'v-taj-hotel', name: 'Taj Hotel Grand Ballroom', price: 180000, capacity: '250-800', location: 'Fort', city: 'Mumbai', facilities: ['Luxury 5-Star', 'State-of-the-art AV', 'Multiple Banquet Halls', 'In-house Catering', 'Valet Parking'], amenities: 'Ultra Premium', rating: 4.9, reviews: 312 },
+          { id: 'v-oberoi-ballroom', name: 'Oberoi Grand Ballroom', price: 160000, capacity: '300-700', location: 'Nariman Point', city: 'Mumbai', facilities: ['Luxury Hotel', 'Premium AV Systems', 'Multiple Venues', 'In-house Catering', 'Premium Valet'], amenities: 'Ultra Premium', rating: 4.9, reviews: 278 },
+          { id: 'v-st-regis', name: 'St. Regis Luxury Ballroom', price: 200000, capacity: '250-900', location: 'Lower Parel', city: 'Mumbai', facilities: ['Ultra-Luxury Hotel', 'World-class AV', 'Multiple Ballrooms', 'Michelin Catering', 'Premium Everything'], amenities: 'Ultra Premium', rating: 5.0, reviews: 345 },
+          
+          // Outdoor/Garden Venues
+          { id: 'v-garden-lawn', name: 'Garden Lawn Events', price: 40000, capacity: '100-300', location: 'Navi Mumbai', city: 'Mumbai', facilities: ['Open Lawn', 'Tent Setup', 'Lighting', 'Parking'], amenities: 'Premium', rating: 4.5, reviews: 89 },
+          { id: 'v-riverside-garden', name: 'Riverside Garden Venue', price: 65000, capacity: '150-500', location: 'Kharghar', city: 'Navi Mumbai', facilities: ['Scenic Lawn', 'River View', 'Premium Lighting', 'Valet Parking', 'Green Room'], amenities: 'Premium', rating: 4.7, reviews: 167 },
+          { id: 'v-ethnic-garden', name: 'Ethnic Garden Estate', price: 75000, capacity: '200-600', location: 'Alibaug', city: 'Near Mumbai', facilities: ['Traditional Garden', 'Multiple Lawns', 'Heritage Setup', 'Valet Parking', 'Guest Rooms'], amenities: 'Premium', rating: 4.8, reviews: 203 },
+          
+          // Destination Venues
+          { id: 'v-beach-resort', name: 'Beach Resort Venue', price: 80000, capacity: '100-400', location: 'Alibaug Beach', city: 'Alibaug', facilities: ['Beach Setup', 'Water Sports', 'Resort Rooms', 'Sea View', 'Multiple Halls'], amenities: 'Premium', rating: 4.7, reviews: 156 },
+          { id: 'v-palace-heritage', name: 'Heritage Palace Venue', price: 120000, capacity: '200-800', location: 'Lonavala', city: 'Lonavala', facilities: ['Heritage Property', 'Multiple Halls', 'Scenic Views', 'Lake View', 'Guest Accommodation'], amenities: 'Ultra Premium', rating: 4.8, reviews: 234 },
+          
+          // Corporate Venues
+          { id: 'v-corporate-plaza', name: 'Corporate Plaza Convention', price: 70000, capacity: '200-500', location: 'BKC', city: 'Mumbai', facilities: ['Modern Setup', 'High-speed WiFi', 'Video Conferencing', 'Multiple Break-out Rooms', 'Parking'], amenities: 'Premium', rating: 4.6, reviews: 145 },
+          { id: 'v-tech-center', name: 'Tech Center Auditorium', price: 55000, capacity: '100-300', location: 'SEEPZ', city: 'Mumbai', facilities: ['Tech Setup', 'Advanced AV', 'Multiple Zones', 'Parking', 'WiFi'], amenities: 'Premium', rating: 4.5, reviews: 112 }
+      ];
+
       // Generic vendors (fallback)
       const vendors = [
           { id: 'catering', name: 'Premium Catering', price: 1500, icon: 'utensils' },
@@ -1021,6 +1668,7 @@
       let bookingData = {};
       let currentCategory = null;
       let currentVendors = vendors;
+      let bookings = JSON.parse(localStorage.getItem('eventPlannerBookings')) || [];
 
       // Search & Filter State
       let searchQuery = '';
@@ -1038,6 +1686,113 @@
           currentVendors = vendors;
           renderVendors();
           initSearchFilters();
+          initVendorPage();
+          updateNavBar();
+      }
+
+      function initVendorPage() {
+          const searchInput = document.getElementById('vendor-search');
+          const categoryFilter = document.getElementById('vendor-category');
+          const priceFilter = document.getElementById('vendor-price');
+
+          if (searchInput) {
+              searchInput.addEventListener('input', () => renderVendorsList());
+          }
+          if (categoryFilter) {
+              categoryFilter.addEventListener('change', () => renderVendorsList());
+          }
+          if (priceFilter) {
+              priceFilter.addEventListener('change', () => renderVendorsList());
+          }
+
+          // Initial render
+          renderVendorsList();
+      }
+
+      function renderVendorsList() {
+          const searchInput = document.getElementById('vendor-search');
+          const categoryFilter = document.getElementById('vendor-category');
+          const priceFilter = document.getElementById('vendor-price');
+          const grid = document.getElementById('vendors-grid');
+          const noResults = document.getElementById('vendors-no-results');
+
+          if (!grid) return;
+
+          // Get filter values
+          const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+          const selectedCategory = categoryFilter ? categoryFilter.value : '';
+          const maxPrice = priceFilter ? parseInt(priceFilter.value) : Infinity;
+
+          // Filter vendors
+          const filtered = allVendors.filter(vendor => {
+              const matchesSearch = vendor.name.toLowerCase().includes(searchTerm) || vendor.description.toLowerCase().includes(searchTerm);
+              const matchesCategory = !selectedCategory || vendor.category === selectedCategory;
+              const matchesPrice = vendor.price <= maxPrice;
+              return matchesSearch && matchesCategory && matchesPrice;
+          });
+
+          // Render
+          if (filtered.length === 0) {
+              grid.classList.add('hidden');
+              noResults.classList.remove('hidden');
+              return;
+          }
+
+          grid.classList.remove('hidden');
+          noResults.classList.add('hidden');
+
+          grid.innerHTML = filtered.map(vendor => `
+              <div class="bg-white rounded-xl border border-zinc-200 overflow-hidden hover:shadow-lg transition-all">
+                  <div class="bg-gradient-to-r from-violet-50 to-violet-100 p-4 border-b border-zinc-200">
+                      <div class="flex items-start justify-between mb-2">
+                          <h3 class="font-bold text-lg text-zinc-900">${vendor.name}</h3>
+                          <span class="px-2 py-1 bg-violet-100 text-violet-700 rounded text-[10px] font-bold uppercase">${vendor.category}</span>
+                      </div>
+                      <p class="text-sm text-zinc-600 leading-relaxed">${vendor.description}</p>
+                  </div>
+                  
+                  <div class="p-5 space-y-4">
+                      <!-- Rating -->
+                      <div class="flex items-center gap-2">
+                          <span class="flex gap-0.5 text-sm">
+                              ${Array(Math.floor(vendor.rating)).fill('★').map(() => '<span class="text-yellow-400">★</span>').join('')}${vendor.rating % 1 >= 0.5 ? '<span class="text-yellow-400">★</span>' : ''}${Array(5 - Math.ceil(vendor.rating)).fill('<span class="text-gray-300">☆</span>').join('')}
+                          </span>
+                          <span class="text-sm font-semibold text-zinc-700">${vendor.rating.toFixed(1)}</span>
+                          <span class="text-xs text-zinc-500">(${vendor.reviews} reviews)</span>
+                      </div>
+
+                      <!-- Details Grid -->
+                      <div class="grid grid-cols-2 gap-3 text-sm">
+                          <div class="bg-zinc-50 p-3 rounded-lg">
+                              <p class="text-xs text-zinc-500 mb-1">Location</p>
+                              <p class="font-semibold text-zinc-900">${vendor.location}</p>
+                          </div>
+                          <div class="bg-zinc-50 p-3 rounded-lg">
+                              <p class="text-xs text-zinc-500 mb-1">Experience</p>
+                              <p class="font-semibold text-zinc-900">${vendor.experience}</p>
+                          </div>
+                      </div>
+
+                      <!-- Price -->
+                      <div class="border-t border-zinc-200 pt-3 flex items-center justify-between">
+                          <span class="text-xs text-zinc-500">From</span>
+                          <span class="text-2xl font-bold text-violet-600">₹${vendor.price.toLocaleString()}<span class="text-xs text-zinc-500">${vendor.priceType}</span></span>
+                      </div>
+
+                      <!-- Actions -->
+                      <div class="flex gap-2 pt-2">
+                          <button class="flex-1 px-3 py-2 bg-violet-100 text-violet-600 rounded-lg text-xs font-semibold hover:bg-violet-200 transition-colors">
+                              View Profile
+                          </button>
+                          <button class="flex-1 px-3 py-2 bg-zinc-900 text-white rounded-lg text-xs font-semibold hover:bg-zinc-800 transition-colors">
+                              Inquire Now
+                          </button>
+                      </div>
+                  </div>
+              </div>
+          `).join('');
+
+          lucide.createIcons();
       }
 
       function renderEvents() {
@@ -1163,6 +1918,11 @@
       }
 
       function navigateToCategory(categoryId) {
+          // Check authentication
+          if (!checkAuth('view event packages')) {
+              return;
+          }
+
           currentCategory = categoryId;
           const cat = categories[categoryId];
           
@@ -1441,7 +2201,7 @@
       // --- Navigation Logic ---
       function navigateTo(viewId) {
           // Hide all views
-          ['home-view', 'details-view', 'booking-view', 'payment-view', 'success-view', 'vendors-view', 'bookings-view', 'search-view'].forEach(id => {
+          ['signin-view', 'getstarted-view', 'home-view', 'details-view', 'booking-view', 'payment-view', 'success-view', 'vendors-view', 'bookings-view', 'search-view'].forEach(id => {
               const el = document.getElementById(id);
               if (el) el.classList.add('hidden');
           });
@@ -1504,6 +2264,11 @@
 
       // --- Details Logic ---
       function openDetails(id) {
+          // Check authentication
+          if (!checkAuth('view event details')) {
+              return;
+          }
+
           currentEvent = events.find(e => e.id === id);
 
           if (!currentEvent) return;
@@ -1543,6 +2308,11 @@
       }
 
       function startBooking() {
+          // Check authentication
+          if (!checkAuth('book an event')) {
+              return;
+          }
+
           const name = currentEvent.name || currentEvent.title || 'Event';
           const image = currentEvent.image || (currentEvent.category && categories[currentEvent.category] ? categories[currentEvent.category].hero_image : 'https://via.placeholder.com/200');
 
@@ -1561,6 +2331,9 @@
           }
           renderVendors();
 
+          // Populate venue select with all venues
+          renderVenueSelect();
+
           // Set today's date + 1 month as default
           const d = new Date();
           d.setMonth(d.getMonth() + 1);
@@ -1569,17 +2342,36 @@
           navigateTo('booking');
       }
 
+      function renderVenueSelect() {
+          const venueSelect = document.getElementById('venue-select');
+          if (!venueSelect) return;
+
+          venueSelect.innerHTML = '<option value="">Choose a Venue</option>' + venues.map(venue => `
+              <option value="${venue.id}">${venue.name} - ${venue.capacity} Guests (${venue.location}) - ₹${venue.price.toLocaleString()}</option>
+          `).join('');
+
+          // Add change event listener to recalculate
+          venueSelect.addEventListener('change', () => {
+              // Recalculate total whenever venue changes
+              if (document.getElementById('guest-count')) {
+                  // Trigger calculation update (you can add a visual update here)
+              }
+          });
+      }
+
       function calculateTotal() {
           const guestCount = parseInt(document.getElementById('guest-count').value) || 0;
           const venueSelect = document.getElementById('venue-select');
-          // Venue Prices in INR (Matched to HTML options)
+          const selectedVenueId = venueSelect.value;
+
+          // Find venue from database
           let venueCost = 0;
-          switch(venueSelect.value) {
-              case 'standard': venueCost = 25000; break;
-              case 'premium': venueCost = 60000; break;
-              case 'luxury': venueCost = 150000; break;
-              case 'outdoor': venueCost = 75000; break;
-              default: venueCost = 25000;
+          let venueName = 'No Venue Selected';
+          
+          const selectedVenue = venues.find(v => v.id === selectedVenueId);
+          if (selectedVenue) {
+              venueCost = selectedVenue.price;
+              venueName = selectedVenue.name;
           }
 
           let vendorTotal = 0;
@@ -1613,7 +2405,7 @@
               vendorTotal,
               total,
               selectedVendors,
-              venueName: venueSelect.options[venueSelect.selectedIndex].text.split('(')[0].trim(),
+              venueName: venueName,
               guestCount
           };
       }
@@ -1665,6 +2457,23 @@
                   `<span class="px-2 py-1 bg-zinc-100 rounded text-[10px] text-zinc-600 border border-zinc-200">${v.name}</span>`
               ).join('') || '<span class="text-xs text-zinc-400">No extras selected</span>';
 
+              // Save booking to bookings array
+              const newBooking = {
+                  bookingId: bookingId,
+                  eventType: currentEvent.name,
+                  eventId: currentEvent.id,
+                  date: date,
+                  guestCount: bookingData.guestCount,
+                  totalAmount: bookingData.total,
+                  selectedVendors: bookingData.selectedVendors,
+                  bookedAt: new Date().toLocaleDateString(),
+                  venue: bookingData.venueName || 'Selected Venue',
+                  status: 'Confirmed'
+              };
+              
+              bookings.push(newBooking);
+              localStorage.setItem('eventPlannerBookings', JSON.stringify(bookings));
+
               // Reset Button
               btnText.classList.remove('hidden');
               spinner.classList.add('hidden');
@@ -1673,11 +2482,376 @@
           }, 2000);
       }
 
+      function getBookingProgress(booking) {
+          // Calculate progress based on booking timeline
+          const bookedDate = new Date(booking.bookedAt);
+          const eventDate = booking.date ? new Date(booking.date) : null;
+          const now = new Date();
+          
+          if (!eventDate) {
+              return { percentage: 25, stage: 'Booking Confirmed', substage: 'Waiting for event date' };
+          }
+          
+          const daysUntilEvent = Math.ceil((eventDate - now) / (1000 * 60 * 60 * 24));
+          
+          if (daysUntilEvent > 14) {
+              return { percentage: 25, stage: 'Booking Confirmed', substage: `Event in ${daysUntilEvent} days` };
+          } else if (daysUntilEvent > 7) {
+              return { percentage: 50, stage: 'Vendors Confirmed', substage: `Event in ${daysUntilEvent} days` };
+          } else if (daysUntilEvent > 0) {
+              return { percentage: 75, stage: 'Final Preparation', substage: `Event in ${daysUntilEvent} day${daysUntilEvent !== 1 ? 's' : ''}` };
+          } else if (daysUntilEvent === 0) {
+              return { percentage: 90, stage: 'Event in Progress', substage: 'Today!' };
+          } else {
+              return { percentage: 100, stage: 'Completed', substage: 'Event finished' };
+          }
+      }
+
+      function renderBookings() {
+          const bookingsList = document.getElementById('bookings-list');
+          const emptyBookings = document.getElementById('empty-bookings');
+
+          if (!bookings || bookings.length === 0) {
+              bookingsList.innerHTML = '';
+              emptyBookings.classList.remove('hidden');
+              return;
+          }
+
+          emptyBookings.classList.add('hidden');
+          bookingsList.innerHTML = bookings.map((booking, idx) => {
+              const progress = getBookingProgress(booking);
+              return `
+              <div class="bg-white rounded-xl border border-zinc-200 p-6 hover:shadow-lg transition-all">
+                  <div class="flex justify-between items-start mb-4 pb-4 border-b border-zinc-100">
+                      <div>
+                          <p class="text-xs text-zinc-400 uppercase tracking-wider">Booking ID</p>
+                          <p class="text-lg font-mono font-medium text-zinc-900">${booking.bookingId}</p>
+                      </div>
+                      <div class="text-right">
+                          <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">${booking.status}</span>
+                      </div>
+                  </div>
+
+                  <!-- Progress Section -->
+                  <div class="mb-6 p-4 bg-gradient-to-r from-violet-50 to-blue-50 rounded-lg border border-violet-100">
+                      <div class="flex justify-between items-center mb-3">
+                          <div>
+                              <p class="text-sm font-semibold text-zinc-900">${progress.stage}</p>
+                              <p class="text-xs text-zinc-500">${progress.substage}</p>
+                          </div>
+                          <div class="text-right">
+                              <p class="text-2xl font-bold text-violet-600">${progress.percentage}%</p>
+                          </div>
+                      </div>
+                      <!-- Progress Bar -->
+                      <div class="w-full h-2 bg-zinc-200 rounded-full overflow-hidden">
+                          <div class="h-full bg-gradient-to-r from-violet-500 to-blue-500 rounded-full transition-all duration-500" style="width: ${progress.percentage}%"></div>
+                      </div>
+                      <!-- Progress Steps -->
+                      <div class="grid grid-cols-4 gap-2 mt-4">
+                          <div class="flex flex-col items-center">
+                              <div class="h-8 w-8 rounded-full ${progress.percentage >= 25 ? 'bg-violet-500 text-white' : 'bg-zinc-300 text-zinc-600'} flex items-center justify-center text-xs font-bold mb-1">✓</div>
+                              <p class="text-[10px] text-center text-zinc-600">Confirmed</p>
+                          </div>
+                          <div class="flex flex-col items-center">
+                              <div class="h-8 w-8 rounded-full ${progress.percentage >= 50 ? 'bg-violet-500 text-white' : 'bg-zinc-300 text-zinc-600'} flex items-center justify-center text-xs font-bold mb-1">${progress.percentage >= 50 ? '✓' : '2'}</div>
+                              <p class="text-[10px] text-center text-zinc-600">Vendors</p>
+                          </div>
+                          <div class="flex flex-col items-center">
+                              <div class="h-8 w-8 rounded-full ${progress.percentage >= 75 ? 'bg-violet-500 text-white' : 'bg-zinc-300 text-zinc-600'} flex items-center justify-center text-xs font-bold mb-1">${progress.percentage >= 75 ? '✓' : '3'}</div>
+                              <p class="text-[10px] text-center text-zinc-600">Prep</p>
+                          </div>
+                          <div class="flex flex-col items-center">
+                              <div class="h-8 w-8 rounded-full ${progress.percentage >= 100 ? 'bg-green-500 text-white' : 'bg-zinc-300 text-zinc-600'} flex items-center justify-center text-xs font-bold mb-1">${progress.percentage >= 100 ? '✓' : '4'}</div>
+                              <p class="text-[10px] text-center text-zinc-600">Complete</p>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                      <div>
+                          <p class="text-xs text-zinc-400">Event Type</p>
+                          <p class="font-medium text-zinc-900">${booking.eventType}</p>
+                      </div>
+                      <div>
+                          <p class="text-xs text-zinc-400">Date</p>
+                          <p class="font-medium text-zinc-900">${booking.date || 'TBD'}</p>
+                      </div>
+                      <div>
+                          <p class="text-xs text-zinc-400">Guests</p>
+                          <p class="font-medium text-zinc-900">${booking.guestCount}</p>
+                      </div>
+                      <div>
+                          <p class="text-xs text-zinc-400">Total Amount</p>
+                          <p class="font-medium text-violet-600">₹${booking.totalAmount.toLocaleString()}</p>
+                      </div>
+                  </div>
+                  <div class="mb-4">
+                      <p class="text-xs text-zinc-400 mb-2">Venue</p>
+                      <p class="text-sm text-zinc-700">${booking.venue}</p>
+                  </div>
+                  ${booking.selectedVendors && booking.selectedVendors.length > 0 ? `
+                  <div class="pt-3 border-t border-zinc-100">
+                      <p class="text-xs text-zinc-400 mb-2">Included Vendors</p>
+                      <div class="flex flex-wrap gap-2">
+                          ${booking.selectedVendors.map(v => `<span class="px-2 py-1 bg-zinc-100 rounded text-[10px] text-zinc-600 border border-zinc-200">${v.name}</span>`).join('')}
+                      </div>
+                  </div>
+                  ` : ''}
+                  <div class="mt-4 text-xs text-zinc-400">Booked on: ${booking.bookedAt}</div>
+              </div>
+          `;
+          }).join('');
+      }
+
       function resetApp() {
           // Reset Forms
           document.getElementById('booking-form').reset();
           document.querySelectorAll('input[name="vendor"]').forEach(cb => cb.checked = false);
           navigateTo('home');
+      }
+
+      // Authentication Functions
+      function showAlert(message) {
+          alert(message);
+      }
+
+      function clearFormErrors() {
+          const errorElements = document.querySelectorAll('.form-error');
+          errorElements.forEach(el => {
+              el.remove();
+          });
+      }
+
+      function showFormError(fieldId, message) {
+          clearFormErrors();
+          const field = document.getElementById(fieldId);
+          if (field) {
+              const errorDiv = document.createElement('div');
+              errorDiv.className = 'form-error text-red-600 text-sm font-medium mt-2 p-2 bg-red-50 rounded';
+              errorDiv.textContent = message;
+              field.parentElement.appendChild(errorDiv);
+          }
+      }
+
+      function validateEmail(email) {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          return emailRegex.test(email);
+      }
+
+      function handleSignIn(event) {
+          event.preventDefault();
+          clearFormErrors();
+          
+          const email = document.getElementById('signin-email').value.trim();
+          const password = document.getElementById('signin-password').value;
+          
+          // Validation
+          if (!email) {
+              showFormError('signin-email', 'Email is required');
+              return;
+          }
+          
+          if (!validateEmail(email)) {
+              showFormError('signin-email', 'Please enter a valid email address');
+              return;
+          }
+          
+          if (!password) {
+              showFormError('signin-password', 'Password is required');
+              return;
+          }
+          
+          if (password.length < 6) {
+              showFormError('signin-password', 'Password must be at least 6 characters');
+              return;
+          }
+          
+          // Store user session
+          const user = {
+              email: email,
+              name: email.split('@')[0],
+              signedIn: true,
+              loginMethod: 'email',
+              signInTime: new Date().toISOString()
+          };
+          localStorage.setItem('luminaUser', JSON.stringify(user));
+          
+          // Update UI
+          updateNavBar();
+          
+          // Show success message
+          showAlert('Successfully signed in! Welcome to Lumina.');
+          navigateTo('home');
+          
+          // Reset form
+          document.getElementById('signin-form').reset();
+      }
+
+      function handleSocialLogin(provider) {
+          const email = prompt(`Enter your email for ${provider} Sign In:`);
+          
+          if (!email) {
+              return;
+          }
+          
+          if (!validateEmail(email)) {
+              showAlert('Please enter a valid email address');
+              return;
+          }
+          
+          // Store user session with social provider
+          const user = {
+              email: email,
+              name: email.split('@')[0],
+              signedIn: true,
+              loginMethod: provider,
+              signInTime: new Date().toISOString()
+          };
+          localStorage.setItem('luminaUser', JSON.stringify(user));
+          
+          // Update UI
+          updateNavBar();
+          
+          // Show success message
+          showAlert(`Successfully signed in with ${provider}! Welcome to Lumina.`);
+          navigateTo('home');
+          
+          // Reset form
+          if (document.getElementById('signin-form')) {
+              document.getElementById('signin-form').reset();
+          }
+      }
+
+      function handleGetStarted(event) {
+          event.preventDefault();
+          clearFormErrors();
+          
+          const fullname = document.getElementById('fullname').value.trim();
+          const email = document.getElementById('signup-email').value.trim();
+          const password = document.getElementById('signup-password').value;
+          const eventInterest = document.getElementById('event-interest').value;
+          const termsAccepted = document.getElementById('terms').checked;
+          
+          // Validation
+          if (!fullname) {
+              showFormError('fullname', 'Full name is required');
+              return;
+          }
+          
+          if (fullname.length < 2) {
+              showFormError('fullname', 'Name must be at least 2 characters');
+              return;
+          }
+          
+          if (!email) {
+              showFormError('signup-email', 'Email is required');
+              return;
+          }
+          
+          if (!validateEmail(email)) {
+              showFormError('signup-email', 'Please enter a valid email address');
+              return;
+          }
+          
+          if (!password) {
+              showFormError('signup-password', 'Password is required');
+              return;
+          }
+          
+          if (password.length < 6) {
+              showFormError('signup-password', 'Password must be at least 6 characters');
+              return;
+          }
+          
+          if (!eventInterest) {
+              showFormError('event-interest', 'Please select your event type interest');
+              return;
+          }
+          
+          if (!termsAccepted) {
+              showAlert('You must agree to the Terms of Service and Privacy Policy');
+              return;
+          }
+          
+          // Create new user
+          const user = {
+              name: fullname,
+              email: email,
+              eventInterest: eventInterest,
+              signedIn: true,
+              loginMethod: 'email',
+              createdAt: new Date().toISOString()
+          };
+          localStorage.setItem('luminaUser', JSON.stringify(user));
+          
+          // Update UI
+          updateNavBar();
+          
+          // Show success message
+          showAlert('Welcome to Lumina, ' + fullname + '! Your account has been created.');
+          navigateTo('home');
+          
+          // Reset form
+          document.getElementById('getstarted-form').reset();
+      }
+
+      function updateNavBar() {
+          const user = JSON.parse(localStorage.getItem('luminaUser'));
+          const navButtons = document.querySelector('.flex.items-center.gap-3');
+          
+          if (user && user.signedIn) {
+              // User is signed in
+              navButtons.innerHTML = `
+                  <div class="flex items-center gap-4">
+                      <span class="text-sm text-zinc-600">Welcome, <span class="font-semibold">${user.name || user.email.split('@')[0]}</span></span>
+                      <button onclick="handleSignOut()" class="text-sm font-medium text-zinc-600 hover:text-zinc-900">
+                          Sign Out
+                      </button>
+                  </div>
+              `;
+          } else {
+              // User is not signed in
+              navButtons.innerHTML = `
+                  <button onclick="navigateTo('signin')" class="text-sm font-medium text-zinc-600 hover:text-zinc-900">
+                      Sign In
+                  </button>
+                  <button onclick="navigateTo('getstarted')" class="bg-zinc-900 text-white text-xs font-semibold py-2 px-4 rounded-full hover:bg-zinc-800 transition-all shadow-md">
+                      Get Started
+                  </button>
+              `;
+          }
+      }
+
+      function handleSignOut() {
+          if (confirm('Are you sure you want to sign out?')) {
+              localStorage.removeItem('luminaUser');
+              updateNavBar();
+              navigateTo('home');
+              showAlert('You have been signed out.');
+          }
+      }
+
+      // Authentication Check Functions
+      function isUserLoggedIn() {
+          const user = JSON.parse(localStorage.getItem('luminaUser'));
+          return user && user.signedIn === true;
+      }
+
+      function showAuthModal() {
+          document.getElementById('auth-modal').classList.remove('hidden');
+      }
+
+      function closeAuthModal() {
+          document.getElementById('auth-modal').classList.add('hidden');
+      }
+
+      function checkAuth(actionName = 'access this feature') {
+          if (!isUserLoggedIn()) {
+              showAuthModal();
+              return false;
+          }
+          return true;
       }
 
       // Run Init
