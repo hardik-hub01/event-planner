@@ -6,13 +6,13 @@
 
 ## 🌐 Live Demo
 
-👉 https://your-live-link.com *(add after deployment)*
+👉 https://live-link.com *(adding  after deployment)*
 
 ---
 
 ## 📸 Screenshots
 
-*(Add UI screenshots here)*
+*(adding screenshots soon )*
 
 ---
 
@@ -114,8 +114,8 @@ event-planner/
 ### 1️⃣ Clone
 
 ```bash
-git clone https://github.com/your-username/lumina-events.git
-cd lumina-events
+git clone https://github.com/hardik-hub01/event-planner.git
+cd event-planner
 ```
 
 ---
