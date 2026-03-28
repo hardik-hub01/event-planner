@@ -56,7 +56,7 @@
           <button onclick="navigateTo('home')" class="hover:text-violet-600 transition-colors">
             Explore
           </button>
-          <button class="hover:text-violet-600 transition-colors" onclick="navigateTo('home'); setTimeout(function(){document.getElementById('events-grid').scrollIntoView({behavior:'smooth', block:'start'});}, 100)">
+          <button class="hover:text-violet-600 transition-colors" onclick="navigateTo('home'); setTimeout(function(){document.getElementById('categories-grid').scrollIntoView({behavior:'smooth', block:'start'});}, 100)">
             Venues
           </button>
           <button class="hover:text-violet-600 transition-colors" onclick="navigateTo('vendors')">
@@ -103,7 +103,7 @@
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="search" class="lucide lucide-search w-5 h-5"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg>
             </div>
             <input type="text" placeholder="What are you planning?" class="flex-1 bg-transparent border-none focus:ring-0 text-sm py-2 px-2 text-zinc-800 placeholder:text-zinc-400 focus:outline-none">
-            <button class="bg-gradient-premium text-white rounded-full p-2.5 hover:opacity-90 transition-opacity">
+            <button onclick="handleSearchSubmit()" class="bg-gradient-premium text-white rounded-full p-2.5 hover:opacity-90 transition-opacity">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" class="lucide lucide-arrow-right w-4 h-4" aria-label="Search"><title>Search</title><path d="M5 12h14" class=""></path><path d="m12 5 7 7-7 7" class=""></path></svg>
             </button>
           </div>
@@ -112,103 +112,13 @@
         <!-- Categories Grid -->
         <div class="mb-8 flex items-center justify-between">
           <h2 class="text-xl font-semibold tracking-tight">
-            Trending Collections
+            Choose Your Event Type
           </h2>
-          <button class="text-xs font-medium text-violet-600 hover:text-violet-700 flex items-center gap-1">
-            View all
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" class="lucide lucide-arrow-right w-3 h-3"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-          </button>
         </div>
 
-        <div id="events-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div class="group bg-white rounded-xl border border-zinc-200 overflow-hidden hover:shadow-xl hover:border-violet-200 transition-all duration-300">
-                  <div class="h-48 overflow-hidden relative">
-                      <img src="https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="Royal Wedding" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                      <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-zinc-800 shadow-sm">
-                          From ₹150,000
-                      </div>
-                  </div>
-                  <div class="p-5">
-                      <h3 class="text-lg font-bold text-zinc-900 mb-2">Royal Wedding</h3>
-                      <p class="text-sm text-zinc-500 line-clamp-2 mb-4 h-10">A fairytale beginning. Full-service planning including luxury floral arrangements, gourmet catering, and live orchestration.</p>
-
-                      <div class="flex items-center gap-3 pt-4 border-t border-zinc-100">
-                          <button onclick="openDetails('wedding')" class="flex-1 text-xs font-semibold text-zinc-600 bg-zinc-100 py-2.5 rounded-lg hover:bg-zinc-200 transition-colors">
-                              View Details
-                          </button>
-                          <button onclick="quickPlan('wedding')" class="flex-1 text-xs font-semibold text-white bg-zinc-900 py-2.5 rounded-lg hover:bg-zinc-800 transition-colors shadow-md">
-                              Plan Now
-                          </button>
-                      </div>
-                  </div>
-              </div>
-          
-              <div class="group bg-white rounded-xl border border-zinc-200 overflow-hidden hover:shadow-xl hover:border-violet-200 transition-all duration-300">
-                  <div class="h-48 overflow-hidden relative">
-                      <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="Corporate Summit" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                      <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-zinc-800 shadow-sm">
-                          From ₹80,000
-                      </div>
-                  </div>
-                  <div class="p-5">
-                      <h3 class="text-lg font-bold text-zinc-900 mb-2">Corporate Summit</h3>
-                      <p class="text-sm text-zinc-500 line-clamp-2 mb-4 h-10">Professional conference setup with high-tech AV support, breakout rooms, and executive networking luncheons.</p>
-
-                      <div class="flex items-center gap-3 pt-4 border-t border-zinc-100">
-                          <button onclick="openDetails('corporate')" class="flex-1 text-xs font-semibold text-zinc-600 bg-zinc-100 py-2.5 rounded-lg hover:bg-zinc-200 transition-colors">
-                              View Details
-                          </button>
-                          <button onclick="quickPlan('corporate')" class="flex-1 text-xs font-semibold text-white bg-zinc-900 py-2.5 rounded-lg hover:bg-zinc-800 transition-colors shadow-md">
-                              Plan Now
-                          </button>
-                      </div>
-                  </div>
-              </div>
-          
-              <div class="group bg-white rounded-xl border border-zinc-200 overflow-hidden hover:shadow-xl hover:border-violet-200 transition-all duration-300">
-                    <div class="h-48 overflow-hidden relative">
-                      <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Milestone Birthday" class="group-hover:scale-105 transition-transform duration-500 w-full h-full object-cover">
-                      <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-zinc-800 shadow-sm">
-                        From ₹50,000
-                      </div>
-                    </div>
-                  <div class="p-5">
-                      <h3 class="text-lg font-bold text-zinc-900 mb-2">Milestone Birthday</h3>
-                      <p class="text-sm text-zinc-500 line-clamp-2 mb-4 h-10">Celebrate in style. Includes thematic decor, custom cake design, DJ services, and interactive photo booths.</p>
-
-                      <div class="flex items-center gap-3 pt-4 border-t border-zinc-100">
-                          <button onclick="openDetails('birthday')" class="flex-1 text-xs font-semibold text-zinc-600 bg-zinc-100 py-2.5 rounded-lg hover:bg-zinc-200 transition-colors">
-                              View Details
-                          </button>
-                          <button onclick="quickPlan('birthday')" class="flex-1 text-xs font-semibold text-white bg-zinc-900 py-2.5 rounded-lg hover:bg-zinc-800 transition-colors shadow-md">
-                              Plan Now
-                          </button>
-                      </div>
-                  </div>
-              </div>
-          
-              <div class="group bg-white rounded-xl border border-zinc-200 overflow-hidden hover:shadow-xl hover:border-violet-200 transition-all duration-300">
-                    <div class="h-48 overflow-hidden relative">
-                      <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Engagement Party" class="group-hover:scale-105 transition-transform duration-500 w-full h-full object-cover">
-                      <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-zinc-800 shadow-sm">
-                        From ₹60,000
-                      </div>
-                    </div>
-                  <div class="p-5">
-                      <h3 class="text-lg font-bold text-zinc-900 mb-2">Engagement Party</h3>
-                      <p class="text-sm text-zinc-500 line-clamp-2 mb-4 h-10">Intimate and elegant. Cocktail hour setup, ambient lighting, and acoustic music for the perfect proposal celebration.</p>
-
-                      <div class="flex items-center gap-3 pt-4 border-t border-zinc-100">
-                          <button onclick="openDetails('engagement')" class="flex-1 text-xs font-semibold text-zinc-600 bg-zinc-100 py-2.5 rounded-lg hover:bg-zinc-200 transition-colors">
-                              View Details
-                          </button>
-                          <button onclick="quickPlan('engagement')" class="flex-1 text-xs font-semibold text-white bg-zinc-900 py-2.5 rounded-lg hover:bg-zinc-800 transition-colors shadow-md">
-                              Plan Now
-                          </button>
-                      </div>
-                  </div>
-              </div>
-          </div>
+        <div id="categories-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Category cards will be rendered here by JavaScript -->
+        </div>
       </div>
       <div id="details-view" class="view-section hidden pt-4">
         <button onclick="navigateTo('home')" class="mb-8 text-sm font-medium text-zinc-500 hover:text-zinc-900 flex items-center gap-1">
@@ -260,6 +170,29 @@
               Plan This Event
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" class="lucide lucide-arrow-right w-5 h-5"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
             </button>
+          </div>
+        </div>
+
+        <!-- REVIEWS SECTION -->
+        <div class="mt-16 max-w-4xl">
+          <!-- Rating Summary Box -->
+          <div class="bg-gradient-to-r from-yellow-50 to-amber-50 rounded-2xl p-8 border border-yellow-200 mb-8">
+            <h2 class="text-2xl font-bold text-zinc-900 mb-6">Customer Reviews</h2>
+            <div class="flex items-center gap-8">
+              <div class="text-center">
+                <div class="text-5xl font-bold text-yellow-600" id="detail-rating">4.7</div>
+                <div class="text-sm text-zinc-600">out of 5</div>
+              </div>
+              <div class="flex-1">
+                <div id="detail-rating-stars" class="flex gap-1 mb-3"></div>
+                <div class="text-sm text-zinc-600" id="detail-review-count">24 verified reviews</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Reviews List -->
+          <div id="detail-reviews-list" class="space-y-4">
+            <!-- Reviews will be rendered here by displayReviews() function -->
           </div>
         </div>
       </div>
@@ -719,6 +652,74 @@
           </button>
         </div>
       </div>
+
+      <!-- VIEW: SEARCH RESULTS -->
+      <div id="search-view" class="view-section hidden">
+        <!-- Back Button -->
+        <button onclick="navigateTo('home')" class="mb-8 text-sm font-medium text-zinc-500 hover:text-zinc-900 flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-left" class="lucide lucide-arrow-left w-4 h-4"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+          Back to Home
+        </button>
+
+        <!-- Filter Panel -->
+        <div class="bg-white rounded-2xl border border-zinc-200 p-8 mb-8">
+          <h2 class="text-2xl font-bold text-zinc-900 mb-8">Refine Your Search</h2>
+
+          <!-- Price Range Slider -->
+          <div class="mb-8">
+            <label class="block text-sm font-semibold text-zinc-900 mb-4">Price Range</label>
+            <div class="flex gap-4 items-end">
+              <div class="flex-1">
+                <label for="price-min" class="text-xs text-zinc-500 block mb-1">Min Price</label>
+                <input type="number" id="price-min" title="Minimum price" value="30000" min="30000" max="250000" class="w-full px-4 py-2 border border-zinc-200 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent text-sm">
+              </div>
+              <div class="flex-1">
+                <label for="price-max" class="text-xs text-zinc-500 block mb-1">Max Price</label>
+                <input type="number" id="price-max" title="Maximum price" value="250000" min="30000" max="250000" class="w-full px-4 py-2 border border-zinc-200 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent text-sm">
+              </div>
+              <div class="flex-1">
+                <div class="text-xs text-zinc-500 block mb-1 font-medium">Range (in INR)</div>
+                <div class="px-4 py-2 bg-violet-50 rounded-lg">
+                  <span class="text-sm font-semibold text-violet-700">₹30k-250k</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Capacity Filter -->
+          <div class="mb-8">
+            <label for="capacity-filter" class="block text-sm font-semibold text-zinc-900 mb-4">Minimum Guest Capacity</label>
+            <select id="capacity-filter" title="Guest capacity filter" class="w-full px-4 py-2 border border-zinc-200 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent text-sm">
+              <option value="0">Any Capacity</option>
+              <option value="15">15+ Guests</option>
+              <option value="20">20+ Guests</option>
+              <option value="50">50+ Guests</option>
+              <option value="100">100+ Guests</option>
+              <option value="200">200+ Guests</option>
+            </select>
+          </div>
+
+          <!-- Clear Filters Button -->
+          <button onclick="clearFilters()" class="w-full px-4 py-2 border border-zinc-300 text-zinc-700 rounded-lg hover:bg-zinc-50 transition-colors text-sm font-medium">
+            Clear All Filters
+          </button>
+        </div>
+
+        <!-- Results Section -->
+        <div>
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="text-xl font-bold text-zinc-900">
+              All Available Packages
+              <span id="result-count" class="text-zinc-500 font-normal ml-2">(12 packages)</span>
+            </h3>
+          </div>
+
+          <!-- Results Grid -->
+          <div id="search-results-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Search results rendered here -->
+          </div>
+        </div>
+      </div>
     </main>
 
     <!-- Details Modal -->
@@ -727,62 +728,316 @@
       // Init Icons
       lucide.createIcons();
 
-      // Data Models (Updated with Rupee pricing)
-      const events = [
-          {
-              id: 'wedding',
-              title: 'Royal Wedding',
-              price: 150000,
-              image: 'https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-              desc: 'A fairytale beginning. Full-service planning including luxury floral arrangements, gourmet catering, and live orchestration.',
-              capacity: '100 - 1000 Guests'
+      // Category Data with Packages
+      const categories = {
+          wedding: {
+              name: 'Royal Wedding',
+              icon: 'heart',
+              color: 'rose',
+              description: 'Create unforgettable moments with elegant celebrations. Perfect for your special day.',
+              hero_image: 'https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              packages: [
+                  {
+                      id: 'wedding-classic',
+                      name: 'Classic Wedding',
+                      price: 100000,
+                      desc: 'Elegant setup with essential services',
+                      capacity: '50 - 200 Guests',
+                      rating: 4.6,
+                      reviewCount: 24,
+                      reviews: [
+                          { author: 'Priya S.', rating: 5, text: 'Beautiful setup and excellent coordination. Made our day special!', date: '3 weeks ago' },
+                          { author: 'Rahul M.', rating: 5, text: 'Professional team, very responsive and helpful throughout.', date: '2 months ago' },
+                          { author: 'Anjali P.', rating: 4, text: 'Great service overall. Could have offered more customization options.', date: '3 months ago' },
+                          { author: 'Vikram K.', rating: 5, text: 'Exceeded our expectations! Highly recommend.', date: '4 months ago' },
+                          { author: 'Neha R.', rating: 5, text: 'Stress-free planning process. Everything perfect!', date: '5 months ago' }
+                      ]
+                  },
+                  {
+                      id: 'wedding',
+                      name: 'Royal Wedding',
+                      price: 150000,
+                      desc: 'Full-service planning with luxury arrangements and catering',
+                      capacity: '100 - 1000 Guests',
+                      rating: 4.8,
+                      reviewCount: 32,
+                      reviews: [
+                          { author: 'Deepak J.', rating: 5, text: 'Absolutely magnificent! Every detail was perfect.', date: '1 week ago' },
+                          { author: 'Isha T.', rating: 5, text: 'Dream wedding executed flawlessly!', date: '2 weeks ago' },
+                          { author: 'Arjun S.', rating: 5, text: 'Top-notch professionalism and attention to detail.', date: '1 month ago' },
+                          { author: 'Divya M.', rating: 4, text: 'Excellent service with minor hiccups on the day.', date: '6 weeks ago' },
+                          { author: 'Rohan G.', rating: 5, text: 'Couldn\'t ask for better! Thank you!', date: '2 months ago' }
+                      ]
+                  },
+                  {
+                      id: 'wedding-royal',
+                      name: 'Luxury Royal Wedding',
+                      price: 250000,
+                      desc: 'Premium everything - orchestration, luxury catering, exclusive venues',
+                      capacity: '200 - 2000 Guests',
+                      rating: 4.9,
+                      reviewCount: 28,
+                      reviews: [
+                          { author: 'Meera D.', rating: 5, text: 'Quintessential luxury wedding! Unforgettable!', date: '10 days ago' },
+                          { author: 'Aditya P.', rating: 5, text: 'Perfect execution of a grand vision.', date: '3 weeks ago' },
+                          { author: 'Shreya K.', rating: 5, text: 'Absolutely stunning! Best money spent ever.', date: '1 month ago' },
+                          { author: 'Nikhil R.', rating: 5, text: 'Premium experience throughout. Highly satisfied!', date: '6 weeks ago' },
+                          { author: 'Pooja V.', rating: 5, text: 'Magical wedding. Exceeded all expectations!', date: '2 months ago' }
+                      ]
+                  }
+              ]
           },
-          {
-              id: 'corporate',
-              title: 'Corporate Summit',
-              price: 80000,
-              image: 'https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-              desc: 'Professional conference setup with high-tech AV support, breakout rooms, and executive networking luncheons.',
-              capacity: '50 - 2000 Attendees'
+          corporate: {
+              name: 'Corporate Summit',
+              icon: 'briefcase',
+              color: 'blue',
+              description: 'Professional conferences and business events with high-tech support.',
+              hero_image: 'https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              packages: [
+                  {
+                      id: 'corporate-standard',
+                      name: 'Standard Summit',
+                      price: 60000,
+                      desc: 'Basic conference setup with AV support',
+                      capacity: '50 - 200 Attendees',
+                      rating: 4.4,
+                      reviewCount: 18,
+                      reviews: [
+                          { author: 'Rajesh B.', rating: 5, text: 'Professional setup, responsive team. Great value!', date: '2 weeks ago' },
+                          { author: 'Suresh K.', rating: 4, text: 'Good service with decent AV support. Could be better.', date: '1 month ago' },
+                          { author: 'Vikas M.', rating: 4, text: 'Reliable and professional. Met our requirements.', date: '2 months ago' },
+                          { author: 'Prakash R.', rating: 5, text: 'Excellent value for money!', date: '3 months ago' },
+                          { author: 'Sanjay N.', rating: 4, text: 'Solid conference support. Recommended.', date: '4 months ago' }
+                      ]
+                  },
+                  {
+                      id: 'corporate',
+                      name: 'Corporate Summit',
+                      price: 80000,
+                      desc: 'Professional setup with breakout rooms and networking sessions',
+                      capacity: '50 - 2000 Attendees',
+                      rating: 4.7,
+                      reviewCount: 26,
+                      reviews: [
+                          { author: 'Harish P.', rating: 5, text: 'Excellent networking setup! Very impressed.', date: '1 week ago' },
+                          { author: 'Ananya S.', rating: 5, text: 'Seamless coordination of breakout sessions.', date: '3 weeks ago' },
+                          { author: 'Vivek M.', rating: 5, text: 'Professional team. Perfect execution!', date: '1 month ago' },
+                          { author: 'Priya G.', rating: 4, text: 'Very good. Minor technical glitches.', date: '2 months ago' },
+                          { author: 'Karthik R.', rating: 5, text: 'Top-notch corporate event planning!', date: '3 months ago' }
+                      ]
+                  },
+                  {
+                      id: 'corporate-premium',
+                      name: 'Premium Conference',
+                      price: 120000,
+                      desc: 'Full-service with advanced AV, green room, and executive lounge',
+                      capacity: '100 - 5000 Attendees',
+                      rating: 4.8,
+                      reviewCount: 22,
+                      reviews: [
+                          { author: 'Vikram C.', rating: 5, text: 'Premium experience! Executive lounge was perfect.', date: '5 days ago' },
+                          { author: 'Nisha K.', rating: 5, text: 'Advanced AV capabilities exceeded expectations.', date: '2 weeks ago' },
+                          { author: 'Anil V.', rating: 5, text: 'Truly premium service throughout.', date: '1 month ago' },
+                          { author: 'Sneha J.', rating: 5, text: 'Impeccable conference management!', date: '2 months ago' },
+                          { author: 'Rajiv M.', rating: 4, text: 'Excellent overall. Minor room setup delays.', date: '3 months ago' }
+                      ]
+                  }
+              ]
           },
-          {
-              id: 'birthday',
-              title: 'Milestone Birthday',
-              price: 50000,
-              image: 'https://images.unsplash.com/photo-1530103862676-de3c9a59af57?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-              desc: 'Celebrate in style. Includes thematic decor, custom cake design, DJ services, and interactive photo booths.',
-              capacity: '20 - 150 Guests'
+          birthday: {
+              name: 'Milestone Birthday',
+              icon: 'cake',
+              color: 'amber',
+              description: 'Celebrate special moments with themed decorations and entertainment.',
+              hero_image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              packages: [
+                  {
+                      id: 'birthday-fun',
+                      name: 'Fun Birthday',
+                      price: 30000,
+                      desc: 'Decorations, DJ, and basic catering',
+                      capacity: '15 - 100 Guests',
+                      rating: 4.5,
+                      reviewCount: 21,
+                      reviews: [
+                          { author: 'Kavya M.', rating: 5, text: 'Kids had a blast! Amazing DJ and decorations!', date: '1 week ago' },
+                          { author: 'Arjun P.', rating: 4, text: 'Fun party setup. Could have had more decoration options.', date: '2 weeks ago' },
+                          { author: 'Sneha D.', rating: 5, text: 'Perfect birthday celebration for my daughter!', date: '1 month ago' },
+                          { author: 'Rohan K.', rating: 5, text: 'Great memories created. Highly satisfied!', date: '2 months ago' },
+                          { author: 'Divya R.', rating: 4, text: 'Good value. Catering was decent.', date: '3 months ago' }
+                      ]
+                  },
+                  {
+                      id: 'birthday',
+                      name: 'Milestone Birthday',
+                      price: 50000,
+                      desc: 'Thematic decor, custom cake, DJ, and photo booth',
+                      capacity: '20 - 150 Guests',
+                      rating: 4.7,
+                      reviewCount: 27,
+                      reviews: [
+                          { author: 'Shreya S.', rating: 5, text: 'Incredible themed party! Everyone loved it!', date: '3 days ago' },
+                          { author: 'Neeraj K.', rating: 5, text: 'Custom cake was delicious and beautiful!', date: '1 week ago' },
+                          { author: 'Pooja G.', rating: 5, text: 'Photo booth was a hit! Memories captured perfectly.', date: '2 weeks ago' },
+                          { author: 'Ajay M.', rating: 5, text: 'Best birthday ever! Thank you!', date: '1 month ago' },
+                          { author: 'Neha V.', rating: 4, text: 'Great event. Minor delays in setup.', date: '2 months ago' }
+                      ]
+                  },
+                  {
+                      id: 'birthday-premium',
+                      name: 'Premium Celebration',
+                      price: 80000,
+                      desc: 'Full theming, luxury catering, entertainment, and photo/video package',
+                      capacity: '50 - 300 Guests',
+                      rating: 4.8,
+                      reviewCount: 25,
+                      reviews: [
+                          { author: 'Isha R.', rating: 5, text: 'Absolutely incredible! Premium experience throughout!', date: '5 days ago' },
+                          { author: 'Vikram S.', rating: 5, text: 'Professional videography captured perfect moments!', date: '2 weeks ago' },
+                          { author: 'Priya M.', rating: 5, text: 'Luxury catering was exceptional!', date: '3 weeks ago' },
+                          { author: 'Rahul K.', rating: 5, text: 'Unforgettable celebration for my milestone birthday!', date: '1 month ago' },
+                          { author: 'Deepa N.', rating: 5, text: 'Premium quality at every level. Highly recommend!', date: '2 months ago' }
+                      ]
+                  }
+              ]
           },
-          {
-              id: 'engagement',
-              title: 'Engagement Party',
-              price: 60000,
-              image: 'https://images.unsplash.com/photo-1522673607200-1645062cd958?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-              desc: 'Intimate and elegant. Cocktail hour setup, ambient lighting, and acoustic music for the perfect proposal celebration.',
-              capacity: '30 - 100 Guests'
+          engagement: {
+              name: 'Engagement Party',
+              icon: 'ring',
+              color: 'pink',
+              description: 'Intimate and elegant celebrations for your engagement.',
+              hero_image: 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              packages: [
+                  {
+                      id: 'engagement-basic',
+                      name: 'Simple Engagement',
+                      price: 40000,
+                      desc: 'Venue setup with ambient lighting and basic catering',
+                      capacity: '20 - 75 Guests',
+                      rating: 4.5,
+                      reviewCount: 19,
+                      reviews: [
+                          { author: 'Anand K.', rating: 5, text: 'Perfect for intimate celebration! Loved the ambiance!', date: '2 weeks ago' },
+                          { author: 'Ritika P.', rating: 4, text: 'Good service. Setup could have been quicker.', date: '1 month ago' },
+                          { author: 'Saurabh M.', rating: 5, text: 'Elegant and romantic. Great value!', date: '2 months ago' },
+                          { author: 'Simran R.', rating: 5, text: 'Beautiful event! Very satisfied.', date: '3 months ago' },
+                          { author: 'Nikhil G.', rating: 4, text: 'Solid engagement party. Lighting was excellent.', date: '4 months ago' }
+                      ]
+                  },
+                  {
+                      id: 'engagement',
+                      name: 'Engagement Party',
+                      price: 60000,
+                      desc: 'Elegant setup with cocktail hour, ambient music, and photography',
+                      capacity: '30 - 100 Guests',
+                      rating: 4.7,
+                      reviewCount: 23,
+                      reviews: [
+                          { author: 'Arushi S.', rating: 5, text: 'Spectacular cocktail setup! Photographer was amazing!', date: '1 week ago' },
+                          { author: 'Karan M.', rating: 5, text: 'Professional team. Elegant throughout.', date: '2 weeks ago' },
+                          { author: 'Aarti D.', rating: 5, text: 'Ambient music created perfect atmosphere!', date: '1 month ago' },
+                          { author: 'Varun K.', rating: 4, text: 'Very good. Minor photography delays.', date: '2 months ago' },
+                          { author: 'Jasmine R.', rating: 5, text: 'Made our engagement day truly special!', date: '3 months ago' }
+                      ]
+                  },
+                  {
+                      id: 'engagement-premium',
+                      name: 'Premium Engagement',
+                      price: 100000,
+                      desc: 'Luxury venue, gourmet catering, live band, and full event planning',
+                      capacity: '50 - 200 Guests',
+                      rating: 4.9,
+                      reviewCount: 24,
+                      reviews: [
+                          { author: 'Priyanka V.', rating: 5, text: 'Absolutely magical! Live band was spectacular!', date: '3 days ago' },
+                          { author: 'Siddharth K.', rating: 5, text: 'Luxury gourmet catering exceeded expectations!', date: '1 week ago' },
+                          { author: 'Meera T.', rating: 5, text: 'Perfect engagement celebration! Dream come true!', date: '2 weeks ago' },
+                          { author: 'Roshan M.', rating: 5, text: 'Premium at every detail. Highly recommended!', date: '1 month ago' },
+                          { author: 'Aditi R.', rating: 5, text: 'Unforgettable evening with perfect planning!', date: '2 months ago' }
+                      ]
+                  }
+              ]
           }
+      };
+
+      // Category-Specific Vendors
+      const categoryVendors = {
+          wedding: [
+              { id: 'w-planner', name: 'Wedding Planner', price: 50000, icon: 'users' },
+              { id: 'w-catering', name: 'Gourmet Catering', price: 2500, icon: 'utensils' },
+              { id: 'w-florist', name: 'Premium Florals', price: 80000, icon: 'flower-2' },
+              { id: 'w-photo', name: 'Professional Photography', price: 40000, icon: 'camera' },
+              { id: 'w-band', name: 'Live Orchestra', price: 100000, icon: 'music' }
+          ],
+          corporate: [
+              { id: 'c-tech', name: 'AV & Tech Support', price: 35000, icon: 'monitor' },
+              { id: 'c-catering', name: 'Corporate Catering', price: 1500, icon: 'utensils' },
+              { id: 'c-setup', name: 'Stage & Setup', price: 60000, icon: 'layers' },
+              { id: 'c-stream', name: 'Live Streaming', price: 25000, icon: 'video' }
+          ],
+          birthday: [
+              { id: 'b-decor', name: 'Themed Decorations', price: 40000, icon: 'flower-2' },
+              { id: 'b-cake', name: 'Custom Cake Design', price: 15000, icon: 'cake' },
+              { id: 'b-dj', name: 'DJ & Sound', price: 25000, icon: 'music' },
+              { id: 'b-photo', name: 'Photo Booth', price: 20000, icon: 'camera' },
+              { id: 'b-catering', name: 'Party Catering', price: 1200, icon: 'utensils' }
+          ],
+          engagement: [
+              { id: 'e-decor', name: 'Elegant Decor', price: 35000, icon: 'flower-2' },
+              { id: 'e-catering', name: 'Gourmet Catering', price: 2000, icon: 'utensils' },
+              { id: 'e-music', name: 'Live Music', price: 40000, icon: 'music' },
+              { id: 'e-photo', name: 'Professional Photography', price: 30000, icon: 'camera' }
+          ]
+      };
+
+      // Generic vendors (fallback)
+      const vendors = [
+          { id: 'catering', name: 'Premium Catering', price: 1500, icon: 'utensils' },
+          { id: 'decor', name: 'Floral & Decor', price: 50000, icon: 'flower-2' },
+          { id: 'photo', name: 'Photography', price: 30000, icon: 'camera' },
+          { id: 'music', name: 'DJ & Sound System', price: 25000, icon: 'music' },
+          { id: 'light', name: 'Ambient Lighting', price: 15000, icon: 'lightbulb' }
       ];
 
-      const vendors = [
-          { id: 'catering', name: 'Premium Catering', price: 1500, icon: 'utensils' }, // per head
-          { id: 'decor', name: 'Floral & Decor', price: 50000, icon: 'flower-2' }, // fixed
-          { id: 'photo', name: 'Photography', price: 30000, icon: 'camera' }, // fixed
-          { id: 'music', name: 'DJ & Sound System', price: 25000, icon: 'music' }, // fixed
-          { id: 'light', name: 'Ambient Lighting', price: 15000, icon: 'lightbulb' } // fixed
-      ];
+      // Helper: Get all packages as flat events array
+      function getAllPackages() {
+          const allPackages = [];
+          Object.keys(categories).forEach(catId => {
+              categories[catId].packages.forEach(pkg => {
+                  allPackages.push({
+                      ...pkg,
+                      category: catId,
+                      category_name: categories[catId].name
+                  });
+              });
+          });
+          return allPackages;
+      }
+
+      const events = getAllPackages();
 
       // State
       let currentEvent = null;
       let bookingData = {};
+      let currentCategory = null;
+      let currentVendors = vendors;
+
+      // Search & Filter State
+      let searchQuery = '';
+      let priceRange = { min: 30000, max: 250000 };
+      let minCapacity = 0;
+      let filteredResults = [];
 
       // DOM Elements
-      const grid = document.getElementById('events-grid');
+      const grid = document.getElementById('categories-grid') || document.getElementById('events-grid');
       const vendorList = document.getElementById('vendor-list');
 
       // --- Initialization ---
       function init() {
-          renderEvents();
+          renderCategoryCards();
+          currentVendors = vendors;
           renderVendors();
+          initSearchFilters();
       }
 
       function renderEvents() {
@@ -813,7 +1068,7 @@
       }
 
       function renderVendors() {
-          vendorList.innerHTML = vendors.map(v => `
+          vendorList.innerHTML = currentVendors.map(v => `
               <label class="relative border border-zinc-200 rounded-lg p-3 flex items-center gap-3 cursor-pointer hover:border-violet-300 hover:bg-violet-50/50 transition-all select-none">
                   <input type="checkbox" name="vendor" value="${v.id}" class="w-4 h-4 text-violet-600 rounded focus:ring-violet-500 border-zinc-300">
                   <div class="flex-1">
@@ -821,7 +1076,7 @@
                           <span class="text-sm font-medium text-zinc-800 flex items-center gap-2">
                               <i data-lucide="${v.icon}" class="w-3.5 h-3.5 text-zinc-400"></i> ${v.name}
                           </span>
-                          <span class="text-xs font-semibold text-zinc-500">₹${v.price.toLocaleString()}${v.id === 'catering' ? '/pp' : ''}</span>
+                          <span class="text-xs font-semibold text-zinc-500">₹${v.price.toLocaleString()}${v.id.includes('catering') ? '/pp' : ''}</span>
                       </div>
                   </div>
               </label>
@@ -829,29 +1084,450 @@
           lucide.createIcons();
       }
 
+      function renderCategoryCards() {
+          const grid = document.getElementById('categories-grid');
+          if (!grid) return;
+
+          grid.innerHTML = Object.keys(categories).map(catId => {
+              const cat = categories[catId];
+              const minPrice = Math.min(...cat.packages.map(p => p.price));
+              const avgRating = (cat.packages.reduce((sum, p) => sum + p.rating, 0) / cat.packages.length).toFixed(1);
+              return `
+                  <div class="group bg-white rounded-2xl border border-zinc-200 overflow-hidden hover:shadow-2xl hover:border-violet-300 transition-all duration-300 cursor-pointer" onclick="navigateToCategory('${catId}')">
+                      <div class="h-64 overflow-hidden relative">
+                          <img src="${cat.hero_image}" alt="${cat.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                          <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                              <h3 class="text-3xl font-bold mb-2">${cat.name}</h3>
+                              <p class="text-sm opacity-90 line-clamp-2">${cat.description}</p>
+
+                              <!-- Category Average Rating -->
+                              <div class="flex items-center gap-2 mt-3 mb-2">
+                                  <span class="flex gap-0.5 text-sm">
+                                      ${Array(Math.floor(avgRating)).fill('★').map(() => '<span class="text-yellow-300">★</span>').join('')}${avgRating % 1 >= 0.5 && Math.floor(avgRating) < 5 ? '<span class="text-yellow-300">★</span>' : ''}
+                                  </span>
+                                  <span class="text-sm font-semibold">${avgRating}</span>
+                              </div>
+
+                              <p class="text-lg font-semibold">From ₹${minPrice.toLocaleString()}</p>
+                          </div>
+                      </div>
+                  </div>
+              `;
+          }).join('');
+          lucide.createIcons();
+      }
+
+      function renderCategoryPage(categoryId) {
+          const cat = categories[categoryId];
+          if (!cat) return;
+
+          // Set up current category and vendors
+          currentCategory = categoryId;
+          currentVendors = categoryVendors[categoryId] || vendors;
+
+          // Create HTML for category packages
+          const packagesHtml = cat.packages.map(pkg => `
+              <div class="bg-white rounded-xl border border-zinc-200 p-6 hover:shadow-lg transition-all">
+                  <div class="mb-4">
+                      <h4 class="text-xl font-bold text-zinc-900 mb-2">${pkg.name}</h4>
+                      <p class="text-sm text-zinc-500 mb-4">${pkg.desc}</p>
+
+                      <!-- Rating Display -->
+                      <div class="flex items-center gap-2 mb-3">
+                          <span class="flex gap-0.5 text-xs">
+                              ${Array(Math.floor(pkg.rating)).fill('★').map(() => '<span class="text-yellow-400">★</span>').join('')}${pkg.rating % 1 >= 0.5 && Math.floor(pkg.rating) < 5 ? '<span class="text-yellow-400">★</span>' : ''}${Array(5 - Math.ceil(pkg.rating)).fill('<span class="text-gray-300">☆</span>').join('')}
+                          </span>
+                          <span class="text-xs font-semibold text-zinc-700">${pkg.rating.toFixed(1)}</span>
+                          <span class="text-xs text-zinc-500">(${pkg.reviewCount})</span>
+                      </div>
+
+                      <p class="text-xs text-zinc-400">Capacity: ${pkg.capacity}</p>
+                  </div>
+                  <div class="border-t border-zinc-100 pt-4 flex items-center justify-between">
+                      <p class="text-2xl font-bold text-violet-600">₹${pkg.price.toLocaleString()}</p>
+                      <div class="flex gap-2">
+                          <button onclick="openDetails('${pkg.id}')" class="px-4 py-2 text-xs font-semibold text-zinc-600 bg-zinc-100 rounded-lg hover:bg-zinc-200 transition-colors">
+                              Details
+                          </button>
+                          <button onclick="quickPlan('${pkg.id}')" class="px-4 py-2 text-xs font-semibold text-white bg-zinc-900 rounded-lg hover:bg-zinc-800 transition-colors">
+                              Book Now
+                          </button>
+                      </div>
+                  </div>
+              </div>
+          `).join('');
+
+          // Show the packages in an alert for now (we'll add proper pages later)
+          console.log(`Navigating to ${categoryId} category. Packages: `, cat.packages);
+      }
+
+      function navigateToCategory(categoryId) {
+          currentCategory = categoryId;
+          const cat = categories[categoryId];
+          
+          if (!cat) return;
+
+          // Update vendors for this category
+          if (categoryVendors[categoryId]) {
+              currentVendors = categoryVendors[categoryId];
+          }
+          
+          // Create category packages view
+          const grid = document.getElementById('categories-grid');
+          grid.innerHTML = `
+              <div class="col-span-full mb-6">
+                  <button onclick="navigateTo('home'); renderCategoryCards();" class="mb-4 text-sm font-medium text-zinc-500 hover:text-zinc-900 flex items-center gap-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-left" class="lucide lucide-arrow-left w-4 h-4"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+                      Back to Categories
+                  </button>
+                  <h2 class="text-3xl font-bold text-zinc-900">${cat.name}</h2>
+                  <p class="text-zinc-500 mt-2">${cat.description}</p>
+              </div>
+          `;
+          
+          // Render all packages for this category
+          grid.innerHTML += cat.packages.map(pkg => `
+              <div class="bg-white rounded-xl border border-zinc-200 p-6 hover:shadow-lg transition-all">
+                  <div class="mb-4">
+                      <h4 class="text-xl font-bold text-zinc-900 mb-2">${pkg.name}</h4>
+                      <p class="text-sm text-zinc-500 mb-4">${pkg.desc}</p>
+
+                      <!-- Rating Display -->
+                      <div class="flex items-center gap-2 mb-3">
+                          <span class="flex gap-0.5 text-xs">
+                              ${Array(Math.floor(pkg.rating)).fill('★').map(() => '<span class="text-yellow-400">★</span>').join('')}${pkg.rating % 1 >= 0.5 && Math.floor(pkg.rating) < 5 ? '<span class="text-yellow-400">★</span>' : ''}${Array(5 - Math.ceil(pkg.rating)).fill('<span class="text-gray-300">☆</span>').join('')}
+                          </span>
+                          <span class="text-xs font-semibold text-zinc-700">${pkg.rating.toFixed(1)}</span>
+                          <span class="text-xs text-zinc-500">(${pkg.reviewCount})</span>
+                      </div>
+
+                      <p class="text-xs text-zinc-400">Capacity: ${pkg.capacity}</p>
+                  </div>
+                  <div class="border-t border-zinc-100 pt-4 flex items-center justify-between">
+                      <p class="text-2xl font-bold text-violet-600">₹${pkg.price.toLocaleString()}</p>
+                      <div class="flex gap-2">
+                          <button onclick="openDetails('${pkg.id}')" class="px-4 py-2 text-xs font-semibold text-zinc-600 bg-zinc-100 rounded-lg hover:bg-zinc-200 transition-colors">
+                              Details
+                          </button>
+                          <button onclick="quickPlan('${pkg.id}')" class="px-4 py-2 text-xs font-semibold text-white bg-zinc-900 rounded-lg hover:bg-zinc-800 transition-colors">
+                              Book Now
+                          </button>
+                      </div>
+                  </div>
+              </div>
+          `).join('');
+          
+          lucide.createIcons();
+      }
+
+      // --- Search & Filter Functions ---
+      function renderSearchResults() {
+          const container = document.getElementById('search-results-grid');
+          if (!container) return;
+
+          if (filteredResults.length === 0) {
+              container.innerHTML = `
+                  <div class="col-span-full text-center py-20">
+                      <h3 class="text-xl font-semibold text-zinc-900 mb-2">No packages found</h3>
+                      <p class="text-zinc-500">Try adjusting your filters</p>
+                  </div>
+              `;
+              const resultCount = document.getElementById('result-count');
+              if (resultCount) resultCount.textContent = '(0 packages)';
+              return;
+          }
+
+          const catColor = {
+              wedding: '#ec4899',
+              corporate: '#3b82f6',
+              birthday: '#f59e0b',
+              engagement: '#db2777'
+          };
+
+          container.innerHTML = filteredResults.map(pkg => `
+              <div class="bg-white rounded-xl border border-zinc-200 overflow-hidden hover:shadow-lg transition-all">
+                  <div class="h-40 overflow-hidden relative bg-gradient-to-br from-zinc-200 to-zinc-300 flex items-center justify-center">
+                      <span class="text-zinc-500 text-sm">Event Image</span>
+                  </div>
+                  <div class="p-5">
+                      <div class="flex items-start justify-between mb-2">
+                          <div>
+                              <span class="inline-block px-2.5 py-1 rounded-full text-xs font-bold text-white mb-2"
+                                    style="background-color: ${catColor[pkg.category] || '#999'}">
+                                  ${pkg.category_name}
+                              </span>
+                          </div>
+                          <span class="text-lg font-bold text-violet-600">₹${pkg.price.toLocaleString()}</span>
+                      </div>
+                      <h3 class="text-lg font-bold text-zinc-900 mb-1">${pkg.name}</h3>
+                      <p class="text-sm text-zinc-500 mb-3 line-clamp-2">${pkg.desc}</p>
+
+                      <!-- Rating Display -->
+                      <div class="flex items-center gap-2 mb-3">
+                          <span class="flex gap-0.5 text-sm">
+                              ${Array(Math.floor(pkg.rating)).fill('★').map(() => '<span class="text-yellow-400">★</span>').join('')}${pkg.rating % 1 >= 0.5 && Math.floor(pkg.rating) < 5 ? '<span class="text-yellow-400">★</span>' : ''}${Array(5 - Math.ceil(pkg.rating)).fill('<span class="text-gray-300">☆</span>').join('')}
+                          </span>
+                          <span class="text-sm font-semibold text-zinc-700">${pkg.rating.toFixed(1)}</span>
+                          <span class="text-sm text-zinc-500">(${pkg.reviewCount})</span>
+                      </div>
+
+                      <div class="flex items-center gap-2 text-xs text-zinc-600 mb-4">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                          <span>${pkg.capacity}</span>
+                      </div>
+                      <div class="flex gap-2">
+                          <button onclick="openDetails('${pkg.id}')" class="flex-1 px-3 py-2 text-xs font-semibold text-zinc-600 bg-zinc-100 rounded-lg hover:bg-zinc-200 transition-colors">
+                              View Details
+                          </button>
+                          <button onclick="quickPlan('${pkg.id}')" class="flex-1 px-3 py-2 text-xs font-semibold text-white bg-violet-600 rounded-lg hover:bg-violet-700 transition-colors">
+                              Book Now
+                          </button>
+                      </div>
+                  </div>
+              </div>
+          `).join('');
+
+          const resultCount = document.getElementById('result-count');
+          if (resultCount) resultCount.textContent = `(${filteredResults.length} package${filteredResults.length === 1 ? '' : 's'})`;
+
+          lucide.createIcons();
+      }
+
+      function filterByPrice(results) {
+          return results.filter(pkg => pkg.price >= priceRange.min && pkg.price <= priceRange.max);
+      }
+
+      function filterByCapacity(results) {
+          if (minCapacity === 0) return results;
+
+          return results.filter(pkg => {
+              const match = pkg.capacity.match(/(\d+)\s*-/);
+              if (match) {
+                  const maxCapacity = parseInt(match[1]);
+                  return maxCapacity >= minCapacity;
+              }
+              return true;
+          });
+      }
+
+      function filterBySearch(results) {
+          if (!searchQuery.trim()) return results;
+
+          const query = searchQuery.toLowerCase();
+          return results.filter(pkg =>
+              pkg.name.toLowerCase().includes(query) ||
+              pkg.desc.toLowerCase().includes(query) ||
+              pkg.category_name.toLowerCase().includes(query)
+          );
+      }
+
+      function applyAllFilters() {
+          let results = [...events];
+
+          results = filterByPrice(results);
+          results = filterByCapacity(results);
+          results = filterBySearch(results);
+
+          filteredResults = results;
+          renderSearchResults();
+      }
+
+      function clearFilters() {
+          searchQuery = '';
+          priceRange = { min: 30000, max: 250000 };
+          minCapacity = 0;
+
+          // Reset UI
+          const searchInput = document.querySelector('input[placeholder="What are you planning?"]');
+          if (searchInput) searchInput.value = '';
+
+          const priceMinInput = document.getElementById('price-min');
+          const priceMaxInput = document.getElementById('price-max');
+          if (priceMinInput) priceMinInput.value = '30000';
+          if (priceMaxInput) priceMaxInput.value = '250000';
+
+          const capacitySelect = document.getElementById('capacity-filter');
+          if (capacitySelect) capacitySelect.value = '0';
+
+          applyAllFilters();
+      }
+
+      function handleSearchSubmit() {
+          const searchInput = document.querySelector('input[placeholder="What are you planning?"]');
+          searchQuery = searchInput ? searchInput.value : '';
+          
+          // Apply filters and navigate to search view
+          applyAllFilters();
+          navigateTo('search');
+      }
+
+      // --- Star Rating Display Function ---
+      function renderStarRating(rating, reviewCount) {
+          const fullStars = Math.floor(rating);
+          const hasHalfStar = rating % 1 >= 0.5;
+          let starsHtml = '';
+
+          // Add full stars
+          for (let i = 0; i < fullStars; i++) {
+              starsHtml += '<span class="text-yellow-400">★</span>';
+          }
+
+          // Add half star if needed
+          if (hasHalfStar && fullStars < 5) {
+              starsHtml += '<span class="text-yellow-400">★</span>';
+          }
+
+          // Add empty stars
+          const emptyStars = 5 - Math.ceil(rating);
+          for (let i = 0; i < emptyStars; i++) {
+              starsHtml += '<span class="text-gray-300">☆</span>';
+          }
+
+          return `
+              <div class="flex items-center gap-2">
+                  <span class="flex gap-0.5 text-sm">${starsHtml}</span>
+                  <span class="text-sm font-semibold text-zinc-700">${rating.toFixed(1)}</span>
+                  <span class="text-sm text-zinc-500">(${reviewCount})</span>
+              </div>
+          `;
+      }
+
+      function initSearchFilters() {
+          const searchInput = document.querySelector('input[placeholder="What are you planning?"]');
+          const priceMinInput = document.getElementById('price-min');
+          const priceMaxInput = document.getElementById('price-max');
+          const capacitySelect = document.getElementById('capacity-filter');
+          const searchButton = document.querySelector('button[onclick="handleSearchSubmit()"]');
+
+          if (searchInput) {
+              searchInput.addEventListener('input', (e) => {
+                  searchQuery = e.target.value;
+              });
+
+              searchInput.addEventListener('keypress', (e) => {
+                  if (e.key === 'Enter') {
+                      handleSearchSubmit();
+                  }
+              });
+          }
+
+          if (searchButton) {
+              searchButton.addEventListener('click', handleSearchSubmit);
+          }
+
+          if (priceMinInput) {
+              priceMinInput.addEventListener('input', (e) => {
+                  priceRange.min = parseInt(e.target.value) || 30000;
+                  applyAllFilters();
+              });
+          }
+
+          if (priceMaxInput) {
+              priceMaxInput.addEventListener('input', (e) => {
+                  priceRange.max = parseInt(e.target.value) || 250000;
+                  applyAllFilters();
+              });
+          }
+
+          if (capacitySelect) {
+              capacitySelect.addEventListener('change', (e) => {
+                  minCapacity = parseInt(e.target.value) || 0;
+                  applyAllFilters();
+              });
+          }
+      }
+
       // --- Navigation Logic ---
       function navigateTo(viewId) {
           // Hide all views
-          ['home-view', 'details-view', 'booking-view', 'payment-view', 'success-view'].forEach(id => {
-              document.getElementById(id).classList.add('hidden');
+          ['home-view', 'details-view', 'booking-view', 'payment-view', 'success-view', 'vendors-view', 'bookings-view', 'search-view'].forEach(id => {
+              const el = document.getElementById(id);
+              if (el) el.classList.add('hidden');
           });
           // Show target view
           const target = document.getElementById(viewId + '-view');
-          target.classList.remove('hidden');
+          if (target) target.classList.remove('hidden');
 
           // Scroll to top
           window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // --- Reviews Display Function ---
+      function displayReviews(pkg) {
+          const reviewsList = document.getElementById('detail-reviews-list');
+          const ratingDisplay = document.getElementById('detail-rating');
+          const starsDisplay = document.getElementById('detail-rating-stars');
+          const reviewCountDisplay = document.getElementById('detail-review-count');
+
+          if (!pkg.reviews) return;
+
+          // Update rating summary
+          ratingDisplay.textContent = pkg.rating.toFixed(1);
+          reviewCountDisplay.textContent = `${pkg.reviewCount} verified reviews`;
+
+          // Generate star display for rating box
+          const fullStars = Math.floor(pkg.rating);
+          const hasHalfStar = pkg.rating % 1 >= 0.5;
+          let starsHtml = '';
+
+          for (let i = 0; i < fullStars; i++) {
+              starsHtml += '<span class="text-yellow-400 text-2xl">★</span>';
+          }
+          if (hasHalfStar && fullStars < 5) {
+              starsHtml += '<span class="text-yellow-400 text-2xl">★</span>';
+          }
+          const emptyStars = 5 - Math.ceil(pkg.rating);
+          for (let i = 0; i < emptyStars; i++) {
+              starsHtml += '<span class="text-gray-300 text-2xl">☆</span>';
+          }
+          starsDisplay.innerHTML = starsHtml;
+
+          // Render individual reviews
+          reviewsList.innerHTML = pkg.reviews.map(review => `
+              <div class="bg-white border border-zinc-200 rounded-lg p-5 hover:shadow-md transition-shadow">
+                  <div class="flex items-start justify-between mb-3">
+                      <div>
+                          <h4 class="font-semibold text-zinc-900">${review.author}</h4>
+                          <p class="text-xs text-zinc-500">${review.date}</p>
+                      </div>
+                      <div class="text-yellow-400 text-sm flex gap-0.5">
+                          ${Array(review.rating).fill('★').join('')}${Array(5 - review.rating).fill('☆').join('')}
+                      </div>
+                  </div>
+                  <p class="text-sm text-zinc-700 leading-relaxed">"${review.text}"</p>
+              </div>
+          `).join('');
+
+          lucide.createIcons();
       }
 
       // --- Details Logic ---
       function openDetails(id) {
           currentEvent = events.find(e => e.id === id);
 
-          document.getElementById('detail-img').src = currentEvent.image;
-          document.getElementById('detail-title').textContent = currentEvent.title;
+          if (!currentEvent) return;
+
+          // Update current vendors to category-specific ones
+          if (currentEvent.category && categoryVendors[currentEvent.category]) {
+              currentVendors = categoryVendors[currentEvent.category];
+              currentCategory = currentEvent.category;
+          }
+
+          // Get image from category if available
+          let image = currentEvent.image || 'https://via.placeholder.com/800x600';
+          if (currentEvent.category && categories[currentEvent.category]) {
+              image = categories[currentEvent.category].hero_image;
+          }
+
+          document.getElementById('detail-img').src = image;
+          document.getElementById('detail-title').textContent = currentEvent.name;
           document.getElementById('detail-price').textContent = '₹' + currentEvent.price.toLocaleString();
-          document.getElementById('detail-desc').textContent = currentEvent.desc;
+          document.getElementById('detail-desc').textContent = currentEvent.desc || (currentEvent.category ? categories[currentEvent.category].description : '');
           document.getElementById('detail-capacity').textContent = currentEvent.capacity;
+
+          // Display reviews for this package
+          displayReviews(currentEvent);
 
           navigateTo('details');
       }
@@ -867,11 +1543,23 @@
       }
 
       function startBooking() {
-          document.getElementById('booking-event-name').textContent = currentEvent.title;
+          const name = currentEvent.name || currentEvent.title || 'Event';
+          const image = currentEvent.image || (currentEvent.category && categories[currentEvent.category] ? categories[currentEvent.category].hero_image : 'https://via.placeholder.com/200');
+
+          document.getElementById('booking-event-name').textContent = name;
           document.getElementById('booking-base-price').textContent = '₹' + currentEvent.price.toLocaleString();
-          document.getElementById('booking-img-preview').src = currentEvent.image;
+          document.getElementById('booking-img-preview').src = image;
 
           document.getElementById('progress-bar').style.width = '50%';
+
+          // Update vendor list to category-specific vendors
+          if (currentEvent.category && categoryVendors[currentEvent.category]) {
+              currentVendors = categoryVendors[currentEvent.category];
+              currentCategory = currentEvent.category;
+          } else {
+              currentVendors = vendors;
+          }
+          renderVendors();
 
           // Set today's date + 1 month as default
           const d = new Date();
@@ -899,10 +1587,12 @@
           const checkboxes = document.querySelectorAll('input[name="vendor"]:checked');
 
           checkboxes.forEach(cb => {
-              const vendor = vendors.find(v => v.id === cb.value);
+              // Search in currentVendors (category-specific) first, then generic vendors as fallback
+              const vendor = currentVendors.find(v => v.id === cb.value) || vendors.find(v => v.id === cb.value);
               if (vendor) {
                   selectedVendors.push(vendor);
-                  if (vendor.id === 'catering') {
+                  // Apply per-guest pricing for catering vendors (contains 'catering' in ID or name)
+                  if (vendor.id.includes('catering') || vendor.name.toLowerCase().includes('catering')) {
                       vendorTotal += vendor.price * guestCount;
                   } else {
                       vendorTotal += vendor.price;
@@ -965,7 +1655,7 @@
               const date = document.getElementById('event-date').value;
 
               document.getElementById('success-id').textContent = bookingId;
-              document.getElementById('success-event').textContent = currentEvent.title;
+              document.getElementById('success-event').textContent = currentEvent.name;
               document.getElementById('success-date').textContent = date;
               document.getElementById('success-guests').textContent = bookingData.guestCount;
               document.getElementById('success-amount').textContent = `₹${bookingData.total.toLocaleString()}`;
