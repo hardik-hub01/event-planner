@@ -19,6 +19,13 @@ export const generateOTP = () => {
 // Send verification email
 export const sendVerificationEmail = async (email, otp) => {
   try {
+    // In development mode without valid email config, log OTP instead of sending
+    if (process.env.NODE_ENV === 'development' && (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD)) {
+      console.warn(`⚠️  [TEST MODE] OTP for ${email}: ${otp}`);
+      console.log(`📧 Email service skipped (no credentials configured). Use OTP: ${otp} to complete signup.`);
+      return true;
+    }
+
     const mailOptions = {
       from: process.env.EMAIL_FROM || 'noreply@luminaevents.com',
       to: email,
@@ -35,6 +42,12 @@ export const sendVerificationEmail = async (email, otp) => {
     await transporter.sendMail(mailOptions);
     return true;
   } catch (error) {
+    // In development, don't crash - log and continue
+    if (process.env.NODE_ENV === 'development') {
+      console.warn(`⚠️  Email service failed (development mode): ${error.message}`);
+      console.warn(`📧 [TEST MODE] OTP for ${email}: ${otp}`);
+      return true; // Silently continue in dev
+    }
     console.error('Failed to send verification email:', error);
     throw error;
   }

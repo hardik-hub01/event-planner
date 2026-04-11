@@ -13,9 +13,9 @@ export default {
       secret: process.env.JWT_SECRET || 'dev-secret-key-change-in-production',
       expiresIn: '7d',
     },
-    stripe: {
-      secretKey: process.env.STRIPE_SECRET_KEY || 'sk_test_dev',
-      publishableKey: process.env.STRIPE_PUBLISHABLE_KEY || 'pk_test_dev',
+    razorpay: {
+      keyId: process.env.RAZORPAY_KEY_ID || 'rzp_test_dev',
+      keySecret: process.env.RAZORPAY_KEY_SECRET || 'razorpay_secret_dev',
     },
     email: {
       host: process.env.EMAIL_HOST || 'smtp.gmail.com',
@@ -52,9 +52,9 @@ export default {
       secret: process.env.JWT_SECRET,
       expiresIn: '7d',
     },
-    stripe: {
-      secretKey: process.env.STRIPE_SECRET_KEY,
-      publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+    razorpay: {
+      keyId: process.env.RAZORPAY_KEY_ID,
+      keySecret: process.env.RAZORPAY_KEY_SECRET,
     },
     email: {
       host: process.env.EMAIL_HOST,
@@ -91,9 +91,9 @@ export default {
       secret: process.env.JWT_SECRET,
       expiresIn: '7d',
     },
-    stripe: {
-      secretKey: process.env.STRIPE_SECRET_KEY,
-      publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+    razorpay: {
+      keyId: process.env.RAZORPAY_KEY_ID,
+      keySecret: process.env.RAZORPAY_KEY_SECRET,
     },
     email: {
       host: process.env.EMAIL_HOST,

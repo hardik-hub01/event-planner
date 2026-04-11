@@ -7,6 +7,41 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @keyframes pulseSoft {
+            0% {
+                opacity: 1;
+                box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.35);
+            }
+            70% {
+                opacity: 0.92;
+                box-shadow: 0 0 0 10px rgba(225, 29, 72, 0);
+            }
+            100% {
+                opacity: 1;
+                box-shadow: 0 0 0 0 rgba(225, 29, 72, 0);
+            }
+        }
+
+        .sync-pulse {
+            animation: pulseSoft 1.5s infinite;
+        }
+
+        .sync-toast {
+            animation: fadeSlideIn 180ms ease-out;
+        }
+
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
 <body class="bg-zinc-50">
     <div id="app" class="min-h-screen">
@@ -20,6 +55,7 @@
                     <span class="font-bold text-lg">Lumina Admin</span>
                 </div>
                 <div class="flex items-center gap-4">
+                    <span id="adminRoleBadge" class="hidden px-2 py-1 text-xs font-semibold rounded bg-blue-100 text-blue-700"></span>
                     <button onclick="location.href='/'" class="text-sm text-zinc-600 hover:text-zinc-900">
                         Back to App
                     </button>
@@ -84,6 +120,82 @@
                 </div>
             </div>
 
+            <!-- Sync Health -->
+            <section id="sync-health" class="bg-white rounded-lg border border-zinc-200 p-6 mb-8">
+                <h2 class="text-xl font-bold mb-4">Sync Health</h2>
+
+                <div id="sync-cards" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div class="p-4 rounded border border-zinc-200 bg-zinc-50">
+                        <p class="text-xs uppercase tracking-wide text-zinc-500">Synced</p>
+                        <div class="flex items-end gap-2">
+                            <p id="syncCountSynced" class="text-2xl font-bold text-emerald-700">0</p>
+                            <span id="syncDeltaSynced" class="text-xs font-semibold text-emerald-700"></span>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded border border-zinc-200 bg-zinc-50">
+                        <p class="text-xs uppercase tracking-wide text-zinc-500">Pending</p>
+                        <div class="flex items-end gap-2">
+                            <p id="syncCountPending" class="text-2xl font-bold text-amber-600">0</p>
+                            <span id="syncDeltaPending" class="text-xs font-semibold text-amber-700"></span>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded border border-zinc-200 bg-zinc-50">
+                        <p class="text-xs uppercase tracking-wide text-zinc-500">Failed</p>
+                        <div class="flex items-end gap-2">
+                            <p id="syncCountFailed" class="text-2xl font-bold text-rose-600">0</p>
+                            <span id="syncDeltaFailed" class="text-xs font-semibold text-rose-700"></span>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded border border-zinc-200 bg-zinc-50">
+                        <p class="text-xs uppercase tracking-wide text-zinc-500">Dead Letter</p>
+                        <div class="flex items-end gap-2">
+                            <p id="syncCountDead" class="text-2xl font-bold text-zinc-900">0</p>
+                            <span id="syncDeltaDead" class="text-xs font-semibold text-zinc-700"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+                    <div class="md:col-span-1">
+                        <label class="block text-xs font-semibold text-zinc-600 mb-1" for="syncFilter">Filter</label>
+                        <select id="syncFilter" class="w-full px-3 py-2 border border-zinc-300 rounded text-sm">
+                            <option value="all">All</option>
+                            <option value="failed">Failed</option>
+                            <option value="dead">Dead</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-semibold text-zinc-600 mb-1" for="syncSearch">Search Booking Ref</label>
+                        <input id="syncSearch" type="text" placeholder="Type booking reference..." class="w-full px-3 py-2 border border-zinc-300 rounded text-sm" />
+                    </div>
+                </div>
+
+                <div class="border border-zinc-200 rounded p-4 mb-4">
+                    <h3 class="text-sm font-semibold text-zinc-700 mb-3">Failure Trend (Last 12 Hours)</h3>
+                    <canvas id="syncTrendChart" height="90"></canvas>
+                </div>
+
+                <div class="overflow-x-auto border border-zinc-200 rounded">
+                    <table class="w-full text-sm">
+                        <thead class="bg-zinc-50">
+                            <tr class="border-b border-zinc-200">
+                                <th class="text-left py-3 px-4 font-semibold">Booking</th>
+                                <th class="text-left py-3 px-4 font-semibold">Status</th>
+                                <th class="text-left py-3 px-4 font-semibold">Retries</th>
+                                <th class="text-left py-3 px-4 font-semibold">Next Retry</th>
+                                <th class="text-left py-3 px-4 font-semibold">Error</th>
+                                <th class="text-left py-3 px-4 font-semibold">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sync-table">
+                            <tr>
+                                <td colspan="6" class="py-4 px-4 text-zinc-500">Loading sync failures...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
             <!-- Bookings Management -->
             <div class="bg-white rounded-lg border border-zinc-200 p-6 mb-8">
                 <h2 class="text-xl font-bold mb-4">Recent Bookings</h2>
@@ -103,17 +215,48 @@
     </div>
 
     <script type="module">
-        import { apiClient } from '../js/api-enhanced.js';
+        import { apiClient } from './js/api-enhanced.js';
+        import { firebaseEnabled } from './js/firebase/config.js';
+        import { dbOnValue } from './js/firebase/realtime-db.js';
+
+        const ADMIN_TOKEN_KEY = 'luminaAdminToken';
+        const ADMIN_USER_KEY = 'luminaAdminUser';
+        let firebaseUnsubscribe = null;
+        let syncRefreshTimeout = null;
+        let syncTrendChart = null;
+        let syncFailuresCache = [];
+        let prevSyncStats = null;
+        let newFailureIds = new Set();
+
+        function getAdminToken() {
+            return localStorage.getItem(ADMIN_TOKEN_KEY) || localStorage.getItem('luminaToken');
+        }
+
+        function setAdminToken(token) {
+            localStorage.setItem(ADMIN_TOKEN_KEY, token);
+            apiClient.setToken(token);
+        }
+
+        function showRoleBadge(role) {
+            const badge = document.getElementById('adminRoleBadge');
+            badge.textContent = `Role: ${role.toUpperCase()}`;
+            badge.classList.remove('hidden');
+        }
 
         // Initialize dashboard
         async function loadDashboard() {
             try {
-                // Check auth
-                const token = localStorage.getItem('luminaToken');
+                const token = getAdminToken();
                 if (!token) {
                     location.href = '/';
                     return;
                 }
+
+                setAdminToken(token);
+
+                const profile = await apiClient.getAdminProfile();
+                localStorage.setItem(ADMIN_USER_KEY, JSON.stringify(profile.admin));
+                showRoleBadge(profile.admin.role);
 
                 // Load stats
                 const stats = await apiClient.getAdminStats();
@@ -130,9 +273,334 @@
                 const users = await apiClient.getAdminUsers();
                 renderUsersTable(users.users);
 
+                // Load sync health
+                await loadSyncFailures();
+
+                // Realtime refresh from Firebase projection updates
+                setupRealtimeSyncRefresh();
+
             } catch (error) {
                 console.error('Dashboard load error:', error);
                 location.href = '/';
+            }
+        }
+
+        function renderSyncCards({ synced = 0, pending = 0, failed = 0, dead = 0 }) {
+            document.getElementById('syncCountSynced').textContent = synced;
+            document.getElementById('syncCountPending').textContent = pending;
+            document.getElementById('syncCountFailed').textContent = failed;
+            document.getElementById('syncCountDead').textContent = dead;
+
+            const nextStats = { synced, pending, failed, dead };
+            renderSyncDelta('syncDeltaSynced', synced, prevSyncStats?.synced ?? null, 'text-emerald-700', 'text-rose-700');
+            renderSyncDelta('syncDeltaPending', pending, prevSyncStats?.pending ?? null, 'text-amber-700', 'text-blue-700');
+            renderSyncDelta('syncDeltaFailed', failed, prevSyncStats?.failed ?? null, 'text-rose-700', 'text-emerald-700');
+            renderSyncDelta('syncDeltaDead', dead, prevSyncStats?.dead ?? null, 'text-zinc-700', 'text-emerald-700');
+            prevSyncStats = nextStats;
+        }
+
+        function renderSyncDelta(elementId, currentValue, previousValue, riseClass, fallClass) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+
+            if (previousValue === null || previousValue === undefined) {
+                el.textContent = '';
+                el.classList.remove(riseClass, fallClass);
+                return;
+            }
+
+            const delta = Number(currentValue || 0) - Number(previousValue || 0);
+            if (delta === 0) {
+                el.textContent = '';
+                el.classList.remove(riseClass, fallClass);
+                return;
+            }
+
+            const sign = delta > 0 ? '+' : '';
+            el.textContent = `${sign}${delta}`;
+            el.classList.remove(riseClass, fallClass);
+            el.classList.add(delta > 0 ? riseClass : fallClass);
+        }
+
+        function getSyncFilterState() {
+            const filter = document.getElementById('syncFilter')?.value || 'all';
+            const searchTerm = (document.getElementById('syncSearch')?.value || '').trim().toLowerCase();
+            return { filter, searchTerm };
+        }
+
+        function applySyncFilters(items) {
+            const { filter, searchTerm } = getSyncFilterState();
+            return items.filter((item) => {
+                const itemStatus = item.isDead ? 'dead' : 'failed';
+                const filterMatch = filter === 'all' || filter === itemStatus;
+                const ref = String(item.bookingRef || item.bookingId || '').toLowerCase();
+                const searchMatch = !searchTerm || ref.includes(searchTerm);
+                return filterMatch && searchMatch;
+            });
+        }
+
+        function formatNextRetry(value) {
+            if (!value) return '-';
+            return new Date(value).toLocaleString();
+        }
+
+        function getBookingSyncId(item) {
+            return String(item.bookingId || item.id || item._id || '');
+        }
+
+        function escapeHtml(value) {
+            return String(value || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function showToast(message, tone = 'info') {
+            const toast = document.createElement('div');
+            const toneClasses = {
+                info: 'bg-zinc-900 text-white',
+                success: 'bg-emerald-600 text-white',
+                error: 'bg-rose-600 text-white'
+            };
+
+            toast.className = `sync-toast fixed bottom-4 right-4 z-50 px-4 py-2 rounded text-sm shadow-lg ${toneClasses[tone] || toneClasses.info}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 2200);
+        }
+
+        function renderSyncTable(items) {
+            const table = document.getElementById('sync-table');
+
+            if (!items.length) {
+                table.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="py-4 px-4 text-zinc-500">No failed or dead sync records</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            table.innerHTML = items.map((item) => {
+                const rowStatus = item.isDead ? 'dead' : 'failed';
+                const statusClass = item.isDead
+                    ? 'bg-zinc-200 text-zinc-900'
+                    : 'bg-rose-100 text-rose-700';
+                const maxRetries = Number(item.maxRetries || 10);
+                const retryCount = Number(item.retryCount || 0);
+                const canRetry = item.isDead || retryCount >= maxRetries;
+                const bookingId = getBookingSyncId(item);
+                const isNewFailure = bookingId && newFailureIds.has(bookingId);
+                const rowClass = isNewFailure ? 'bg-rose-50' : 'hover:bg-zinc-50';
+                const badgePulse = isNewFailure && !item.isDead ? 'sync-pulse' : '';
+                const safeError = escapeHtml(item.error || '');
+
+                return `
+                    <tr class="border-b border-zinc-100 ${rowClass}" data-booking-id="${bookingId}">
+                        <td class="py-3 px-4 font-mono text-xs">${item.bookingRef || item.bookingId}</td>
+                        <td class="py-3 px-4 sync-status-cell">
+                            <span class="px-2 py-1 rounded text-xs font-medium ${statusClass} ${badgePulse}">${rowStatus.toUpperCase()}</span>
+                        </td>
+                        <td class="py-3 px-4">${retryCount}/${maxRetries}</td>
+                        <td class="py-3 px-4 text-xs text-zinc-600">${formatNextRetry(item.nextRetryAt)}</td>
+                        <td class="py-3 px-4 text-xs text-zinc-600 max-w-xs truncate" title="${safeError}">${safeError || '-'}</td>
+                        <td class="py-3 px-4">
+                            ${canRetry ? `<button data-retry-id="${bookingId}" class="retry-sync-btn bg-blue-600 text-white px-3 py-1 rounded text-xs hover:bg-blue-700 disabled:bg-blue-300">Retry</button>` : '<span class="text-zinc-400 text-xs">Auto retry</span>'}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            bindRetryButtons();
+        }
+
+        function renderSyncTrend(items) {
+            const canvas = document.getElementById('syncTrendChart');
+            if (!canvas) return;
+
+            const now = new Date();
+            const buckets = [];
+            for (let i = 11; i >= 0; i -= 1) {
+                const slot = new Date(now);
+                slot.setMinutes(0, 0, 0);
+                slot.setHours(slot.getHours() - i);
+                const key = slot.toISOString().slice(0, 13);
+                buckets.push({ key, label: `${slot.getHours().toString().padStart(2, '0')}:00`, count: 0 });
+            }
+
+            const bucketMap = new Map(buckets.map((b) => [b.key, b]));
+
+            items.forEach((item) => {
+                if (!item.updatedAt) return;
+                const t = new Date(item.updatedAt);
+                const key = t.toISOString().slice(0, 13);
+                const bucket = bucketMap.get(key);
+                if (bucket) bucket.count += 1;
+            });
+
+            const labels = buckets.map((b) => b.label);
+            const values = buckets.map((b) => b.count);
+
+            if (syncTrendChart) {
+                syncTrendChart.data.labels = labels;
+                syncTrendChart.data.datasets[0].data = values;
+                syncTrendChart.update();
+                return;
+            }
+
+            syncTrendChart = new Chart(canvas, {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: 'Failed/Dead Updates',
+                        data: values,
+                        borderColor: '#e11d48',
+                        backgroundColor: 'rgba(225, 29, 72, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.35,
+                        pointRadius: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { precision: 0 }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderSyncHealthFromCache(stats) {
+            const filtered = applySyncFilters(syncFailuresCache);
+            renderSyncCards({
+                synced: stats.synced || 0,
+                pending: stats.pending || 0,
+                failed: stats.failed || 0,
+                dead: stats.dead || 0
+            });
+            renderSyncTable(filtered);
+            renderSyncTrend(syncFailuresCache);
+        }
+
+        function updateRowStatus(bookingId, status) {
+            const row = document.querySelector(`tr[data-booking-id="${bookingId}"]`);
+            if (!row) return;
+
+            const cell = row.querySelector('.sync-status-cell');
+            if (!cell) return;
+
+            const statusMap = {
+                retrying: { text: 'RETRYING...', cls: 'bg-amber-100 text-amber-700 sync-pulse' },
+                pending: { text: 'PENDING', cls: 'bg-amber-100 text-amber-700' },
+                failed: { text: 'FAILED', cls: 'bg-rose-100 text-rose-700' }
+            };
+
+            const view = statusMap[status];
+            if (!view) return;
+
+            cell.innerHTML = `<span class="px-2 py-1 rounded text-xs font-medium ${view.cls}">${view.text}</span>`;
+        }
+
+        function bindRetryButtons() {
+            const buttons = document.querySelectorAll('.retry-sync-btn');
+            buttons.forEach((button) => {
+                button.addEventListener('click', async () => {
+                    const bookingId = button.getAttribute('data-retry-id');
+                    if (!bookingId) return;
+
+                    button.disabled = true;
+                    button.textContent = 'Retrying...';
+                    updateRowStatus(bookingId, 'retrying');
+
+                    try {
+                        await apiClient.retryAdminBookingSync(bookingId);
+                        showToast('Retry triggered', 'success');
+                        updateRowStatus(bookingId, 'pending');
+                        await loadSyncFailures();
+                    } catch (error) {
+                        console.error('Retry sync failed:', error);
+                        showToast('Retry failed. Please try again.', 'error');
+                        updateRowStatus(bookingId, 'failed');
+                        button.disabled = false;
+                        button.textContent = 'Retry';
+                    }
+                });
+            });
+        }
+
+        async function loadSyncFailures() {
+            try {
+                const health = await apiClient.getAdminSyncHealth(200);
+                const previousIds = new Set(syncFailuresCache.map((item) => getBookingSyncId(item)).filter(Boolean));
+                syncFailuresCache = health.failures || [];
+                newFailureIds = new Set(
+                    syncFailuresCache
+                        .map((item) => getBookingSyncId(item))
+                        .filter((id) => id && !previousIds.has(id))
+                );
+                renderSyncHealthFromCache(health.stats || {});
+            } catch (error) {
+                console.error('Failed loading sync failures:', error);
+                renderSyncCards({ synced: 0, pending: 0, failed: 0, dead: 0 });
+                showToast('Failed to load sync health data', 'error');
+                document.getElementById('sync-table').innerHTML = `
+                    <tr>
+                        <td colspan="6" class="py-4 px-4 text-rose-600">Failed to load sync health data</td>
+                    </tr>
+                `;
+            }
+        }
+
+        function scheduleSyncRefresh() {
+            if (syncRefreshTimeout) {
+                clearTimeout(syncRefreshTimeout);
+            }
+
+            syncRefreshTimeout = setTimeout(() => {
+                loadSyncFailures();
+            }, 1000);
+        }
+
+        function setupRealtimeSyncRefresh() {
+            if (!firebaseEnabled || firebaseUnsubscribe) return;
+
+            try {
+                firebaseUnsubscribe = dbOnValue('bookings', () => {
+                    scheduleSyncRefresh();
+                }, (error) => {
+                    console.error('Realtime sync listener error:', error);
+                });
+            } catch (error) {
+                console.error('Unable to start realtime sync listener:', error);
+            }
+        }
+
+        function bindSyncControls() {
+            const filterEl = document.getElementById('syncFilter');
+            const searchEl = document.getElementById('syncSearch');
+
+            if (filterEl) {
+                filterEl.addEventListener('change', () => {
+                    renderSyncTable(applySyncFilters(syncFailuresCache));
+                });
+            }
+
+            if (searchEl) {
+                searchEl.addEventListener('input', () => {
+                    renderSyncTable(applySyncFilters(syncFailuresCache));
+                });
             }
         }
 
@@ -215,13 +683,23 @@
         }
 
         async function logout() {
-            localStorage.removeItem('luminaToken');
-            localStorage.removeItem('luminaUser');
+            if (typeof firebaseUnsubscribe === 'function') {
+                firebaseUnsubscribe();
+                firebaseUnsubscribe = null;
+            }
+            if (syncRefreshTimeout) {
+                clearTimeout(syncRefreshTimeout);
+                syncRefreshTimeout = null;
+            }
+            localStorage.removeItem(ADMIN_TOKEN_KEY);
+            localStorage.removeItem(ADMIN_USER_KEY);
             location.href = '/';
         }
 
         // Load dashboard on startup
+        bindSyncControls();
         loadDashboard();
     </script>
 </body>
 </html>
+*

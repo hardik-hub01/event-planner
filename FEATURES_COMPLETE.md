@@ -2,6 +2,45 @@
 
 ## ✅ ALL 7 CRITICAL FEATURES COMPLETED
 
+## ✅ Additional Progress (April 10, 2026)
+
+### 8. ✅ Admin Authorization Enforcement
+**What's Built:**
+- Admin API now checks active admin identity from `AdminUser`
+- Non-admin users receive `403 Admin access required`
+- Admin context is attached to requests (`req.admin`)
+- Owner/Staff/Support role permissions enforced per endpoint
+
+**File:**
+- `backend/routes/admin.js` - role check middleware implementation
+
+---
+
+### 9. ✅ Automated Test Baseline
+**What's Built:**
+- Node built-in test runner configured
+- Auth middleware tests (valid/missing JWT)
+- AdminUser model tests (enum/defaults)
+
+**Files:**
+- `backend/package.json` - test script
+- `backend/tests/auth-middleware.test.js`
+- `backend/tests/admin-user.model.test.js`
+
+---
+
+### 10. ✅ Razorpay Payment Gateway Migration
+**What's Built:**
+- Payment order creation via Razorpay
+- Payment signature verification via HMAC
+- Booking model stores Razorpay order/payment references
+- Legacy payment endpoints retained for frontend compatibility
+
+**Files:**
+- `backend/routes/payments.js`
+- `backend/models/Booking.js`
+- `backend/.env.example`
+
 ### 1. ✅ Email Verification System
 **What's Built:**
 - OTP-based email verification (6-digit codes)

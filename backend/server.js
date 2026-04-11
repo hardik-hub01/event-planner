@@ -3,6 +3,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
 import { connectDB } from './config/database.js';
+import { firebaseAdminApp } from './config/firebaseAdmin.js';
+import { startFirebaseRetryWorker } from './services/firebaseRetry.js';
 import { initSentry, logger, requestLogger, errorLogger } from './services/logger.js';
 import { apiLimiter } from './middleware/rateLimiter.js';
 
@@ -37,9 +39,6 @@ app.use('/api/', apiLimiter);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
-// Connect to database
-connectDB();
-
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/bookings', bookingRoutes);
@@ -57,6 +56,9 @@ app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 
+// Structured error logging middleware
+app.use(errorLogger);
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Error:', err);
@@ -67,7 +69,29 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`✓ Server running on http://localhost:${PORT}`);
-  console.log(`✓ Environment: ${process.env.NODE_ENV}`);
-});
+
+// Initialize server with async startup
+async function startServer() {
+  try {
+    // Connect to database
+    await connectDB();
+    console.log('✓ Database connection established');
+
+    if (firebaseAdminApp) {
+      startFirebaseRetryWorker(30000);
+      console.log('✓ Firebase retry worker started');
+    }
+
+    app.listen(PORT, () => {
+      console.log(`✓ Server running on http://localhost:${PORT}`);
+      console.log(`✓ Environment: ${process.env.NODE_ENV}`);
+      console.log(`✓ Firebase Admin: ${firebaseAdminApp ? 'Initialized' : 'Not configured'}`);
+    });
+  } catch (error) {
+    console.error('✗ Failed to start server:', error.message);
+    process.exit(1);
+  }
+}
+
+// Start the server
+startServer();

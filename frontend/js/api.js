@@ -1,5 +1,7 @@
 // API Client Module
-const API_BASE_URL = process.env.API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.DEV
+  ? 'http://localhost:5000/api'
+  : '/api';
 
 class APIClient {
   constructor() {
@@ -124,10 +126,10 @@ class APIClient {
     });
   }
 
-  async confirmPayment(bookingId, paymentIntentId) {
+  async confirmPayment(bookingId, paymentPayload) {
     return this.request('/payments/confirm', {
       method: 'POST',
-      body: JSON.stringify({ bookingId, paymentIntentId })
+      body: JSON.stringify({ bookingId, ...paymentPayload })
     });
   }
 

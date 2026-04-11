@@ -154,10 +154,10 @@ class APIClient {
     });
   }
 
-  async confirmPayment(bookingId, paymentIntentId) {
+  async confirmPayment(bookingId, paymentPayload) {
     return this.request('/payments/confirm', {
       method: 'POST',
-      body: JSON.stringify({ bookingId, paymentIntentId })
+      body: JSON.stringify({ bookingId, ...paymentPayload })
     });
   }
 
@@ -166,6 +166,10 @@ class APIClient {
   }
 
   // ============ Admin ============
+  async getAdminProfile() {
+    return this.request('/admin/me');
+  }
+
   async getAdminStats() {
     return this.request('/admin/stats');
   }
@@ -180,6 +184,24 @@ class APIClient {
 
   async getAdminLogs(page = 1, limit = 10) {
     return this.request(`/admin/logs?page=${page}&limit=${limit}`);
+  }
+
+  async getAdminSyncFailures(limit = 50) {
+    return this.request(`/admin/sync-failures?limit=${limit}`);
+  }
+
+  async getAdminSyncStats() {
+    return this.request('/admin/sync-stats');
+  }
+
+  async getAdminSyncHealth(limit = 100) {
+    return this.request(`/admin/sync-health?limit=${limit}`);
+  }
+
+  async retryAdminBookingSync(id) {
+    return this.request(`/admin/retry-booking/${id}`, {
+      method: 'POST'
+    });
   }
 }
 

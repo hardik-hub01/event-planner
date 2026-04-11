@@ -32,7 +32,7 @@
 - [x] Access token validation
 
 ### Payments
-- [x] Stripe integration
+- [x] Razorpay integration
 - [x] Payment intent creation
 - [x] Payment confirmation
 - [x] Booking update on payment
@@ -51,11 +51,13 @@
 ## 📋 Remaining Steps for Production
 
 ### Immediate (Week 1)
-- [ ] Environment configuration per deployment environment
-- [ ] Stripe live keys integration
-- [ ] Email verification system
-- [ ] Password reset functionality
-- [ ] Admin dashboard
+- [x] Environment configuration per deployment environment
+- [ ] Razorpay live keys integration
+- [x] Email verification system
+- [x] Password reset functionality
+- [x] Admin dashboard
+- [x] Admin route authorization middleware
+- [x] Owner/Staff/Support access model
 
 ### Short Term (Week 2-3)
 - [ ] Frontend build pipeline (Vite/Webpack)
@@ -63,6 +65,7 @@
 - [ ] Performance optimization
 - [ ] SEO optimization
 - [ ] Mobile responsiveness testing
+- [ ] Automated backend tests coverage expansion
 
 ### Medium Term (Month 1)
 - [ ] CI/CD pipeline setup

@@ -1,20 +1,74 @@
 import express from 'express';
 import Booking from '../models/Booking.js';
 import User from '../models/User.js';
+import AdminUser from '../models/AdminUser.js';
 import AuditLog from '../models/AuditLog.js';
 import { authMiddleware } from '../middleware/auth.js';
+import { syncBookingToFirebase } from '../services/firebaseSync.js';
 
 const router = express.Router();
 
-// Admin middleware - check if user is admin
-const isAdmin = async (req, res, next) => {
-  // TODO: Implement proper admin role checking
-  // For now, we'll implement in full version
+const normalizeRole = (role) => {
+  if (role === 'superadmin') return 'owner';
+  if (role === 'admin' || role === 'vendor_manager' || role === 'booking_manager') return 'staff';
+  return role;
+};
+
+const requireAdminRoles = (allowedRoles) => (req, res, next) => {
+  if (!req.admin?.role) {
+    return res.status(403).json({ error: 'Admin access required' });
+  }
+
+  if (!allowedRoles.includes(req.admin.role)) {
+    return res.status(403).json({ error: 'Insufficient role permissions' });
+  }
+
   next();
 };
 
+// Admin middleware - check if user is admin
+const isAdmin = async (req, res, next) => {
+  try {
+    if (!req.user?.email) {
+      return res.status(401).json({ error: 'Authentication required' });
+    }
+
+    const admin = await AdminUser.findOne({
+      email: req.user.email.toLowerCase(),
+      isActive: true
+    }).lean();
+
+    if (!admin) {
+      return res.status(403).json({ error: 'Admin access required' });
+    }
+
+    req.admin = {
+      id: admin._id,
+      role: normalizeRole(admin.role),
+      legacyRole: admin.role,
+      permissions: admin.permissions || []
+    };
+
+    next();
+  } catch (error) {
+    console.error('Admin authorization error:', error);
+    res.status(500).json({ error: 'Server error during admin authorization' });
+  }
+};
+
+router.get('/me', authMiddleware, isAdmin, async (req, res) => {
+  res.json({
+    admin: {
+      id: req.admin.id,
+      role: req.admin.role,
+      legacyRole: req.admin.legacyRole,
+      permissions: req.admin.permissions
+    }
+  });
+});
+
 // Dashboard stats
-router.get('/stats', authMiddleware, isAdmin, async (req, res) => {
+router.get('/stats', authMiddleware, isAdmin, requireAdminRoles(['owner', 'staff', 'support']), async (req, res) => {
   try {
     const totalUsers = await User.countDocuments();
     const totalBookings = await Booking.countDocuments();
@@ -41,7 +95,7 @@ router.get('/stats', authMiddleware, isAdmin, async (req, res) => {
 });
 
 // Get all users
-router.get('/users', authMiddleware, isAdmin, async (req, res) => {
+router.get('/users', authMiddleware, isAdmin, requireAdminRoles(['owner', 'staff', 'support']), async (req, res) => {
   try {
     const { page = 1, limit = 10, search } = req.query;
     
@@ -76,7 +130,7 @@ router.get('/users', authMiddleware, isAdmin, async (req, res) => {
 });
 
 // Get all bookings
-router.get('/bookings', authMiddleware, isAdmin, async (req, res) => {
+router.get('/bookings', authMiddleware, isAdmin, requireAdminRoles(['owner', 'staff', 'support']), async (req, res) => {
   try {
     const { page = 1, limit = 10, status, paymentStatus } = req.query;
     
@@ -105,7 +159,7 @@ router.get('/bookings', authMiddleware, isAdmin, async (req, res) => {
 });
 
 // Get booking details
-router.get('/bookings/:id', authMiddleware, isAdmin, async (req, res) => {
+router.get('/bookings/:id', authMiddleware, isAdmin, requireAdminRoles(['owner', 'staff', 'support']), async (req, res) => {
   try {
     const booking = await Booking.findById(req.params.id)
       .populate('userId', 'name email phone');
@@ -122,7 +176,7 @@ router.get('/bookings/:id', authMiddleware, isAdmin, async (req, res) => {
 });
 
 // Update booking status
-router.put('/bookings/:id', authMiddleware, isAdmin, async (req, res) => {
+router.put('/bookings/:id', authMiddleware, isAdmin, requireAdminRoles(['owner', 'staff']), async (req, res) => {
   try {
     const { status, paymentStatus, notes } = req.body;
     
@@ -155,7 +209,7 @@ router.put('/bookings/:id', authMiddleware, isAdmin, async (req, res) => {
 });
 
 // Cancel booking
-router.delete('/bookings/:id', authMiddleware, isAdmin, async (req, res) => {
+router.delete('/bookings/:id', authMiddleware, isAdmin, requireAdminRoles(['owner']), async (req, res) => {
   try {
     const booking = await Booking.findByIdAndUpdate(
       req.params.id,
@@ -180,7 +234,7 @@ router.delete('/bookings/:id', authMiddleware, isAdmin, async (req, res) => {
 });
 
 // Get audit logs
-router.get('/logs', authMiddleware, isAdmin, async (req, res) => {
+router.get('/logs', authMiddleware, isAdmin, requireAdminRoles(['owner']), async (req, res) => {
   try {
     const { page = 1, limit = 10, userId, action } = req.query;
     
@@ -207,8 +261,131 @@ router.get('/logs', authMiddleware, isAdmin, async (req, res) => {
   }
 });
 
+// Get sync failures for observability
+router.get('/sync-failures', authMiddleware, isAdmin, requireAdminRoles(['owner', 'staff', 'support']), async (req, res) => {
+  try {
+    const limit = Math.min(Number(req.query.limit) || 50, 200);
+
+    const failures = await Booking.find({ syncStatus: 'failed' })
+      .select('_id bookingRef userId status lastSyncError retryCount maxRetries isDead nextRetryAt lastSyncedAt updatedAt')
+      .sort({ updatedAt: -1 })
+      .limit(limit);
+
+    res.json({
+      failures: failures.map((booking) => ({
+        bookingId: booking._id,
+        bookingRef: booking.bookingRef,
+        userId: booking.userId,
+        status: booking.status,
+        error: booking.lastSyncError,
+        retryCount: booking.retryCount,
+        maxRetries: booking.maxRetries,
+        isDead: booking.isDead,
+        nextRetryAt: booking.nextRetryAt,
+        lastSyncedAt: booking.lastSyncedAt,
+        updatedAt: booking.updatedAt
+      })),
+      total: failures.length
+    });
+  } catch (error) {
+    console.error('Sync failures fetch error:', error);
+    res.status(500).json({ error: 'Server error fetching sync failures' });
+  }
+});
+
+router.get('/sync-health', authMiddleware, isAdmin, requireAdminRoles(['owner', 'staff', 'support']), async (req, res) => {
+  try {
+    const limit = Math.min(Number(req.query.limit) || 100, 500);
+
+    const [total, pending, failed, dead, synced, failures] = await Promise.all([
+      Booking.countDocuments(),
+      Booking.countDocuments({ syncStatus: 'pending' }),
+      Booking.countDocuments({ syncStatus: 'failed', isDead: false }),
+      Booking.countDocuments({ syncStatus: 'failed', isDead: true }),
+      Booking.countDocuments({ syncStatus: 'synced' }),
+      Booking.find({ syncStatus: 'failed' })
+        .select('_id bookingRef userId status lastSyncError retryCount maxRetries isDead nextRetryAt lastSyncedAt updatedAt')
+        .sort({ updatedAt: -1 })
+        .limit(limit)
+    ]);
+
+    res.json({
+      stats: { total, synced, pending, failed, dead },
+      failures: failures.map((booking) => ({
+        bookingId: booking._id,
+        bookingRef: booking.bookingRef,
+        userId: booking.userId,
+        status: booking.status,
+        error: booking.lastSyncError,
+        retryCount: booking.retryCount,
+        maxRetries: booking.maxRetries,
+        isDead: booking.isDead,
+        nextRetryAt: booking.nextRetryAt,
+        lastSyncedAt: booking.lastSyncedAt,
+        updatedAt: booking.updatedAt
+      }))
+    });
+  } catch (error) {
+    console.error('Sync health fetch error:', error);
+    res.status(500).json({ error: 'Server error fetching sync health' });
+  }
+});
+
+router.get('/sync-stats', authMiddleware, isAdmin, requireAdminRoles(['owner', 'staff', 'support']), async (req, res) => {
+  try {
+    const total = await Booking.countDocuments();
+    const pending = await Booking.countDocuments({ syncStatus: 'pending' });
+    const failed = await Booking.countDocuments({ syncStatus: 'failed', isDead: false });
+    const dead = await Booking.countDocuments({ syncStatus: 'failed', isDead: true });
+    const synced = await Booking.countDocuments({ syncStatus: 'synced' });
+
+    res.json({ total, synced, pending, failed, dead });
+  } catch (error) {
+    console.error('Sync stats fetch error:', error);
+    res.status(500).json({ error: 'Server error fetching sync stats' });
+  }
+});
+
+// Manual retry for failed/dead sync booking
+router.post('/retry-booking/:id', authMiddleware, isAdmin, requireAdminRoles(['owner', 'staff']), async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.id);
+
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+
+    const canManualRetry = booking.isDead || booking.retryCount >= booking.maxRetries;
+    if (!canManualRetry) {
+      return res.status(409).json({
+        error: 'Manual retry is allowed only for dead-letter or exhausted retry bookings'
+      });
+    }
+
+    booking.retryCount = 0;
+    booking.isDead = false;
+    booking.nextRetryAt = new Date();
+    booking.syncStatus = 'pending';
+    booking.lastSyncError = null;
+    booking.updatedAt = new Date();
+    await booking.save();
+
+    // Non-blocking manual sync trigger
+    syncBookingToFirebase(booking);
+
+    res.json({
+      message: 'Booking sync retry triggered',
+      bookingId: booking._id,
+      syncStatus: booking.syncStatus
+    });
+  } catch (error) {
+    console.error('Manual retry booking sync error:', error);
+    res.status(500).json({ error: 'Server error triggering booking retry' });
+  }
+});
+
 // Get user details
-router.get('/users/:id', authMiddleware, isAdmin, async (req, res) => {
+router.get('/users/:id', authMiddleware, isAdmin, requireAdminRoles(['owner', 'staff', 'support']), async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select('-password');
     const bookings = await Booking.find({ userId: req.params.id });

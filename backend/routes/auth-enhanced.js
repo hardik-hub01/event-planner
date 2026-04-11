@@ -1,4 +1,5 @@
 import express from 'express';
+import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import { validationResult, body } from 'express-validator';
 import User from '../models/User.js';
@@ -218,7 +219,7 @@ router.post('/forgot-password', passwordResetLimiter, validatePasswordReset, asy
     );
 
     // Store token hash
-    const tokenHash = require('crypto').createHash('sha256').update(resetToken).digest('hex');
+    const tokenHash = crypto.createHash('sha256').update(resetToken).digest('hex');
     const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 
     const token = new VerificationToken({

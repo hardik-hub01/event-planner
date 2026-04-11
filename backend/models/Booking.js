@@ -36,7 +36,21 @@ const bookingSchema = new mongoose.Schema({
     enum: ['pending', 'completed', 'failed', 'refunded'],
     default: 'pending'
   },
+  paymentGateway: {
+    type: String,
+    enum: ['stripe', 'razorpay'],
+    default: 'razorpay'
+  },
   stripePaymentId: {
+    type: String
+  },
+  razorpayOrderId: {
+    type: String
+  },
+  razorpayPaymentId: {
+    type: String
+  },
+  razorpaySignature: {
     type: String
   },
   vendors: [{
@@ -49,6 +63,35 @@ const bookingSchema = new mongoose.Schema({
     type: String,
     enum: ['confirmed', 'completed', 'cancelled'],
     default: 'confirmed'
+  },
+  syncStatus: {
+    type: String,
+    enum: ['pending', 'synced', 'failed'],
+    default: 'pending'
+  },
+  lastSyncError: {
+    type: String,
+    default: null
+  },
+  lastSyncedAt: {
+    type: Date,
+    default: null
+  },
+  retryCount: {
+    type: Number,
+    default: 0
+  },
+  maxRetries: {
+    type: Number,
+    default: 10
+  },
+  isDead: {
+    type: Boolean,
+    default: false
+  },
+  nextRetryAt: {
+    type: Date,
+    default: Date.now
   },
   bookingRef: {
     type: String,
