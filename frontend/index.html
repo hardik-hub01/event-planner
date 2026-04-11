@@ -121,7 +121,7 @@
           </div>
 
           <div class="grid grid-cols-3 gap-3">
-            <button type="button" title="Sign in with Google" onclick="handleSocialLogin('Google')" class="py-2.5 border border-zinc-200 rounded-lg hover:bg-zinc-50 transition-colors flex items-center justify-center gap-2">
+            <button type="button" id="googleBtn" title="Sign in with Google" class="py-2.5 border border-zinc-200 rounded-lg hover:bg-zinc-50 transition-colors flex items-center justify-center gap-2">
               <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -2639,6 +2639,132 @@
           return emailRegex.test(email);
       }
 
+        const AUTH_ACCOUNTS_KEY = 'luminaAccounts';
+        const AUTH_ATTEMPTS_KEY = 'luminaLoginAttempts';
+        const LOGIN_ATTEMPT_LIMIT = 5;
+        const LOGIN_LOCK_DURATION_MS = 15 * 60 * 1000;
+
+        function normalizeEmail(email) {
+          return email.trim().toLowerCase();
+        }
+
+        function loadAuthAccounts() {
+          try {
+            return JSON.parse(localStorage.getItem(AUTH_ACCOUNTS_KEY) || '[]');
+          } catch (error) {
+            return [];
+          }
+        }
+
+        function saveAuthAccounts(accounts) {
+          localStorage.setItem(AUTH_ACCOUNTS_KEY, JSON.stringify(accounts));
+        }
+
+        function loadLoginAttempts() {
+          try {
+            return JSON.parse(localStorage.getItem(AUTH_ATTEMPTS_KEY) || '{}');
+          } catch (error) {
+            return {};
+          }
+        }
+
+        function saveLoginAttempts(attempts) {
+          localStorage.setItem(AUTH_ATTEMPTS_KEY, JSON.stringify(attempts));
+        }
+
+        function clearLoginAttempts(email) {
+          const attempts = loadLoginAttempts();
+          const emailKey = normalizeEmail(email);
+          if (attempts[emailKey]) {
+            delete attempts[emailKey];
+            saveLoginAttempts(attempts);
+          }
+        }
+
+        function getLoginAttemptState(email) {
+          const attempts = loadLoginAttempts();
+          const emailKey = normalizeEmail(email);
+          const state = attempts[emailKey];
+
+          if (!state) {
+            return null;
+          }
+
+          if (state.blockedUntil && Date.now() > state.blockedUntil) {
+            delete attempts[emailKey];
+            saveLoginAttempts(attempts);
+            return null;
+          }
+
+          return state;
+        }
+
+        function recordFailedLoginAttempt(email) {
+          const attempts = loadLoginAttempts();
+          const emailKey = normalizeEmail(email);
+          const now = Date.now();
+          const current = attempts[emailKey] || { count: 0, blockedUntil: 0 };
+
+          if (current.blockedUntil && now <= current.blockedUntil) {
+            return current;
+          }
+
+          const nextCount = current.count + 1;
+          const state = {
+            count: nextCount,
+            blockedUntil: nextCount >= LOGIN_ATTEMPT_LIMIT ? now + LOGIN_LOCK_DURATION_MS : 0
+          };
+
+          attempts[emailKey] = state;
+          saveLoginAttempts(attempts);
+          return state;
+        }
+
+        function formatLockoutMessage(state) {
+          const remainingMs = Math.max(0, state.blockedUntil - Date.now());
+          const remainingMinutes = Math.max(1, Math.ceil(remainingMs / 60000));
+          return `Too many login attempts. Please wait ${remainingMinutes} minute${remainingMinutes === 1 ? '' : 's'} and try again.`;
+        }
+
+        function loadAuthAccount(email) {
+          const emailKey = normalizeEmail(email);
+          return loadAuthAccounts().find(account => normalizeEmail(account.email) === emailKey) || null;
+        }
+
+        function upsertAuthAccount(account) {
+          const accounts = loadAuthAccounts();
+          const emailKey = normalizeEmail(account.email);
+          const index = accounts.findIndex(item => normalizeEmail(item.email) === emailKey);
+          const nextAccount = {
+            ...account,
+            email: emailKey
+          };
+
+          if (index >= 0) {
+            accounts[index] = {
+              ...accounts[index],
+              ...nextAccount
+            };
+          } else {
+            accounts.push(nextAccount);
+          }
+
+          saveAuthAccounts(accounts);
+        }
+
+        function createSessionUser(account) {
+          return {
+            name: account.name,
+            email: account.email,
+            eventInterest: account.eventInterest || 'wedding',
+            signedIn: true,
+            loginMethod: account.loginMethod || 'email',
+            isVerified: Boolean(account.isVerified),
+            photoURL: account.photoURL || '',
+            signInTime: new Date().toISOString()
+          };
+        }
+
       function handleSignIn(event) {
           event.preventDefault();
           clearFormErrors();
@@ -2666,15 +2792,23 @@
               showFormError('signin-password', 'Password must be at least 6 characters');
               return;
           }
+
+            const currentLockState = getLoginAttemptState(email);
+            if (currentLockState?.blockedUntil) {
+              showAlert(formatLockoutMessage(currentLockState));
+              return;
+            }
+
+            const storedAccount = loadAuthAccount(email);
+            if (!storedAccount || storedAccount.password !== password) {
+              const failedState = recordFailedLoginAttempt(email);
+              showAlert(failedState.blockedUntil ? formatLockoutMessage(failedState) : 'Invalid email or password.');
+              return;
+            }
+
+            clearLoginAttempts(email);
           
-          // Store user session
-          const user = {
-              email: email,
-              name: email.split('@')[0],
-              signedIn: true,
-              loginMethod: 'email',
-              signInTime: new Date().toISOString()
-          };
+            const user = createSessionUser(storedAccount);
           localStorage.setItem('luminaUser', JSON.stringify(user));
           
           // Update UI
@@ -2688,7 +2822,45 @@
           document.getElementById('signin-form').reset();
       }
 
-      function handleSocialLogin(provider) {
+          async function handleSocialLogin(provider) {
+            if (provider === 'Google' && window.luminaAuth && typeof window.luminaAuth.signInWithGoogle === 'function') {
+              try {
+                  const googleSession = await window.luminaAuth.signInWithGoogle();
+                  const googleUser = googleSession.user;
+                  const existingAccount = loadAuthAccount(googleUser.email);
+                const account = {
+                  ...(existingAccount || {}),
+                    name: googleUser.name,
+                    email: googleUser.email,
+                  loginMethod: 'Google',
+                  isVerified: true,
+                    photoURL: googleUser.photoURL,
+                    firebaseUid: googleUser.firebaseUid || googleSession.firebaseUser?.uid || existingAccount?.firebaseUid || '',
+                  password: existingAccount?.password || '',
+                  createdAt: existingAccount?.createdAt || new Date().toISOString()
+                };
+
+                upsertAuthAccount(account);
+                  clearLoginAttempts(googleUser.email);
+
+                  localStorage.setItem('luminaToken', googleSession.token);
+                  localStorage.setItem('luminaUser', JSON.stringify(googleSession.user));
+
+                updateNavBar();
+                  showAlert(`Successfully signed in with Google! Welcome to Lumina, ${googleUser.name}.`);
+                navigateTo('home');
+
+                if (document.getElementById('signin-form')) {
+                  document.getElementById('signin-form').reset();
+                }
+
+                return;
+              } catch (error) {
+                showAlert(error?.message || 'Google sign-in failed. Please try again.');
+                return;
+              }
+            }
+
           const email = prompt(`Enter your email for ${provider} Sign In:`);
           
           if (!email) {
@@ -2706,9 +2878,18 @@
               name: email.split('@')[0],
               signedIn: true,
               loginMethod: provider,
+              isVerified: false,
               signInTime: new Date().toISOString()
           };
           localStorage.setItem('luminaUser', JSON.stringify(user));
+            upsertAuthAccount({
+              name: user.name,
+              email,
+              loginMethod: provider,
+              isVerified: false,
+              password: loadAuthAccount(email)?.password || '',
+              createdAt: loadAuthAccount(email)?.createdAt || new Date().toISOString()
+            });
           
           // Update UI
           updateNavBar();
@@ -2773,17 +2954,25 @@
               showAlert('You must agree to the Terms of Service and Privacy Policy');
               return;
           }
+
+            if (loadAuthAccount(email)) {
+              showFormError('signup-email', 'An account with this email already exists. Please sign in instead.');
+              return;
+            }
           
           // Create new user
           const user = {
               name: fullname,
               email: email,
+              password: password,
               eventInterest: eventInterest,
               signedIn: true,
               loginMethod: 'email',
+              isVerified: false,
               createdAt: new Date().toISOString()
           };
-          localStorage.setItem('luminaUser', JSON.stringify(user));
+            upsertAuthAccount(user);
+            localStorage.setItem('luminaUser', JSON.stringify(createSessionUser(user)));
           
           // Update UI
           updateNavBar();
@@ -2857,6 +3046,8 @@
       // Run Init
       init();
     </script>
+
+    <script type="module" src="/js/main.js"></script>
 
     <script>
       function navigateTo(viewId){document.querySelectorAll('.view-section').forEach(el=>el.classList.add('hidden'));const t=document.getElementById(viewId+'-view');if(t){t.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});if(typeof lucide!=='undefined')lucide.createIcons();}else{console.warn('View not found:',viewId);}}

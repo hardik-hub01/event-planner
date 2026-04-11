@@ -23,12 +23,14 @@ function hasRequiredFirebaseConfig() {
 
 export const firebaseEnabled = hasRequiredFirebaseConfig();
 
-export const firebaseApp = firebaseEnabled
+export const app = firebaseEnabled
   ? (getApps().length ? getApp() : initializeApp(firebaseConfig))
   : null;
 
+export const firebaseApp = app;
+
 export async function initFirebaseAnalytics() {
-  if (!firebaseEnabled || !firebaseConfig.measurementId || !firebaseApp) {
+  if (!firebaseEnabled || !firebaseConfig.measurementId || !app) {
     return null;
   }
 
@@ -41,5 +43,5 @@ export async function initFirebaseAnalytics() {
     return null;
   }
 
-  return getAnalytics(firebaseApp);
+  return getAnalytics(app);
 }

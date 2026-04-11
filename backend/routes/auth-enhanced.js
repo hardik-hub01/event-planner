@@ -7,6 +7,7 @@ import VerificationToken from '../models/VerificationToken.js';
 import { authLimiter, passwordResetLimiter, emailVerificationLimiter } from '../middleware/rateLimiter.js';
 import { generateOTP, sendVerificationEmail, sendPasswordResetEmail } from '../services/emailService.js';
 import { authMiddleware } from '../middleware/auth.js';
+import { getFirebaseAuth } from '../config/firebaseAdmin.js';
 
 const router = express.Router();
 
@@ -357,6 +358,72 @@ router.post('/social-login', async (req, res) => {
   } catch (error) {
     console.error('Social login error:', error);
     res.status(500).json({ error: 'Server error during social login' });
+  }
+});
+
+// Firebase Google login exchange
+router.post('/firebase-login', async (req, res) => {
+  try {
+    const { idToken } = req.body;
+
+    if (!idToken) {
+      return res.status(400).json({ error: 'Firebase ID token is required' });
+    }
+
+    const decodedToken = await getFirebaseAuth().verifyIdToken(idToken);
+    const email = decodedToken.email?.toLowerCase().trim();
+    const firebaseUid = decodedToken.uid;
+    const name = decodedToken.name || decodedToken.email?.split('@')[0] || 'Google User';
+    const photoURL = decodedToken.picture || '';
+
+    if (!email) {
+      return res.status(400).json({ error: 'Firebase account does not include an email address' });
+    }
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      user = new User({
+        name,
+        email,
+        password: crypto.randomBytes(32).toString('hex'),
+        loginMethod: 'Google',
+        authProvider: 'google',
+        firebaseUid,
+        isVerified: true
+      });
+    } else {
+      user.name = name;
+      user.loginMethod = 'Google';
+      user.authProvider = 'google';
+      user.firebaseUid = firebaseUid;
+      user.isVerified = true;
+    }
+
+    await user.save();
+
+    const token = jwt.sign(
+      { userId: user._id, email: user.email, authProvider: 'google' },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    res.json({
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        isVerified: user.isVerified,
+        loginMethod: user.loginMethod,
+        authProvider: user.authProvider,
+        firebaseUid: user.firebaseUid,
+        photoURL
+      }
+    });
+  } catch (error) {
+    console.error('Firebase login error:', error);
+    res.status(401).json({ error: 'Invalid or expired Firebase token' });
   }
 });
 

@@ -23,6 +23,16 @@ const userSchema = new mongoose.Schema({
     enum: ['email', 'Google', 'Apple', 'GitHub'],
     default: 'email'
   },
+  firebaseUid: {
+    type: String,
+    trim: true,
+    default: ''
+  },
+  authProvider: {
+    type: String,
+    trim: true,
+    default: 'email'
+  },
   eventInterest: {
     type: String,
     enum: ['wedding', 'corporate', 'birthday', 'engagement', 'anniversary', 'babySplit', 'productLaunch', 'housewarming', 'concert', 'standup', 'musicFestival', 'other'],
